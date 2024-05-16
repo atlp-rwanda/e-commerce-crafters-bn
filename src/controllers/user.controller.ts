@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User from "../database/models/User";
+import User from "../database/models/user";
 import { saveUser } from "../services/userService";
 
 export const Welcome = async (req: Request, res: Response) => {
@@ -14,12 +14,11 @@ export const Welcome = async (req: Request, res: Response) => {
   }
 };
 
-export const register = async (req:Request,res:Response)=>{
-    try {
-        const  senddata= await saveUser(req.body)
-        res.status(201).json({message:"User created",user: senddata})  
-    } catch (error:any) {
-        res.status(500).json({ error: error.message });
-        
-    }
-}
+export const register = async (req: Request, res: Response) => {
+  try {
+    const senddata = await saveUser(req.body);
+    res.status(201).json({ message: "User created", user: senddata });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
