@@ -3,7 +3,13 @@
 
 name: Code Crafters E-commerce CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - ft-friday-demo
+  pull_request:
+    branches:
+      - ft-friday-demo
 
 jobs:
   build:
