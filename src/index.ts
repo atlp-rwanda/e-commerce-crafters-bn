@@ -20,8 +20,8 @@ app.use("/api-docs", swaggerRoute);
 
 
 
-  app.listen(PORT, () => {
+ const server = app.listen(PORT, () => {
     console.log(`Server running on Port ${PORT}`);
   });
 
-export { app };
+export { app,server };
