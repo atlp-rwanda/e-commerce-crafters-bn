@@ -1,6 +1,6 @@
 'use strict';
 import { Model,DataTypes } from "sequelize";
-import connectSequelize from "../config/db.config";
+import connectSequelize from "../config/dbconfig";
 
   class Subscription  extends Model  {
     public roleId?: number
