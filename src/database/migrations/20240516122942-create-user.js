@@ -26,7 +26,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       role: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'buyer'
       },
       contactInfo: {
         type: Sequelize.STRING
@@ -45,6 +47,11 @@ module.exports = {
       },
       orderHistory: {
         type: Sequelize.INTEGER
+      },
+      isVerified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       },
       dateJoined: {
         type: Sequelize.DATE

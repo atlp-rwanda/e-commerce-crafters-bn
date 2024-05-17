@@ -4,24 +4,25 @@ import connectSequelize from "../config/db.config";
 
 
 
-  class Cart  extends Model  {
-    public cartId?: number
+  class Rating  extends Model  {
+    public ratingId?: number
     public userId!: number;
+    public ratingScore!: number;
     static associate(models: any) {
-      Cart.belongsTo(models.User,{
+      Rating.belongsTo(models.User,{
         foreignKey: 'userId',
         as: 'users'
       })
     }
   }
-  Cart.init({
+  Rating.init({
     cartId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
     userId: {type:DataTypes.INTEGER,allowNull: false},
 
   }, {
     sequelize: connectSequelize,
-    modelName: 'Cart',
-    tableName: 'cart'
+    modelName: 'Rating',
+    tableName: 'ratings'
   });
 
-  export default Cart
+  export default Rating

@@ -12,6 +12,11 @@ import connectSequelize from "../config/db.config";
     public discount?: number;
     public vendorId?: number;
     static associate(models: any) {
+      Product.belongsTo(models.Vendor,{
+        foreignKey:'vendorId',
+        as: 'vendor'
+      })
+      Product.hasMany(models.CartItem)
     }
   }
   Product.init({
@@ -20,6 +25,7 @@ import connectSequelize from "../config/db.config";
     description: {type:DataTypes.STRING,allowNull: false},
     price: {type:DataTypes.INTEGER,allowNull: false},
     discount: {type:DataTypes.INTEGER,allowNull: false},
+    vendorId: {type:DataTypes.INTEGER,allowNull: false},
 
   }, {
     sequelize: connectSequelize,

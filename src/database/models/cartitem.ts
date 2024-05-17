@@ -6,7 +6,7 @@ import connectSequelize from "../config/db.config";
 
   class CartItem  extends Model  {
     public cartItemId?: number
-    public cartId?: number
+    public cartId!: number
     public productId!: number;
     public quantity!: number;
     static associate(models: any) {
@@ -26,10 +26,11 @@ import connectSequelize from "../config/db.config";
     productId: {type:DataTypes.INTEGER,allowNull: false},
     quantity: {type:DataTypes.INTEGER,allowNull: false},
 
+
   }, {
     sequelize: connectSequelize,
     modelName: 'CartItem',
-    tableName: 'cartitem'
+    tableName: 'cartitems'
   });
 
   export default CartItem

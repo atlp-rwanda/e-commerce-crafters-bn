@@ -2,11 +2,13 @@ const dotenv = require('dotenv')
 dotenv.config()
 module.exports = {
   "development": {
-    "database": 'postgres',
-    "username": 'postgres',
-    "password": 'sevelin123',
+    "url": process.env.DATABASE_DEVELOPMENT_URL,
     "dialect": "postgres",
     "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": true
+      }
     }
   },
   "test": {
