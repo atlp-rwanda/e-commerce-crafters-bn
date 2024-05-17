@@ -1,6 +1,6 @@
 'use strict';
 import { Model,DataTypes } from "sequelize";
-import connectSequelize from "../config/db.config";
+import connectSequelize from "../config/dbconfig";
   class Payment  extends Model  {
     public paymentId?: number
     public orderId!: number
