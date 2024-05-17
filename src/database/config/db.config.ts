@@ -8,12 +8,8 @@ const MODE:any = process.env.MODE || 'development'
 
 
 const connectSequelize:Sequelize = new Sequelize(config[`${MODE}`].url,{
-    dialect: 'postgres',
+    dialect: config[`${MODE}`].dialect,
     dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: true
-        }
       }
   
 }) 
