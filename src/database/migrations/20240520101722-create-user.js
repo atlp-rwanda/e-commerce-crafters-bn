@@ -2,42 +2,39 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('orders', {
-      orderId: {
+    await queryInterface.createTable('Users', {
+      userId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references:{
-          model: 'users',
-          key: 'userId'
-        }
-      },
-      address: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      orderDate:{
-        type: Sequelize.DATE,
+      email:{
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      password:{
+        type: Sequelize.STRING,
         allowNull: false
       },
       status:{
         type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: 'pending'
-
+        defaultValue: 'active'  
       },
-      orderItems:{
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      totalAmount:{
+      wishlistId:{
         type: Sequelize.INTEGER,
-        allowNull: false
+      },
+      cartId: {
+        type: Sequelize.INTEGER
+      },
+      role: {
+        type: Sequelize.STRING,
+        defaultValue: 'buyer'
+
       },
       createdAt: {
         allowNull: false,
@@ -50,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('orders');
+    await queryInterface.dropTable('Users');
   }
 };

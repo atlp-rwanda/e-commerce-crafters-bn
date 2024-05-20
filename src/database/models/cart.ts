@@ -2,26 +2,25 @@
 import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
-
-
   class Cart  extends Model  {
     public cartId?: number
-    public userId!: number;
+    public userId!: number
     static associate(models: any) {
-      Cart.belongsTo(models.User,{
-        foreignKey: 'userId',
-        as: 'users'
-      })
+       Cart.hasMany(models.CartItem,{
+        foreignKey: 'cartId',
+        as: 'cartItems'
+       })
     }
   }
   Cart.init({
     cartId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
-    userId: {type:DataTypes.INTEGER,allowNull: false},
-
+    userId: {type:DataTypes.STRING,allowNull: false},
+  
   }, {
     sequelize: connectSequelize,
     modelName: 'Cart',
-    tableName: 'cart'
+    tableName: 'Carts',
+    timestamps: true
   });
 
   export default Cart

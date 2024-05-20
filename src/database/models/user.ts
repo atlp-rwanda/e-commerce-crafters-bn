@@ -1,60 +1,45 @@
-"use strict";
-import { Model, DataTypes } from "sequelize";
+'use strict';
+import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
-class User extends Model {
-  public userId?: number;
-  public firstName!: string;
-  public lastName!: string;
-  public userName!: string;
-  public email!: string;
-  public password!: string;
-  public role!: string;
-  public contactInfo!: string;
-  public address?: string;
-  public totalSpent?: string;
-  public wishlist?: string;
-  public shoppingCart?: number;
-  public orderHistory?: string;
-  public isVerfied?: boolean;
-  public dateJoined?: Date;
-  public lastLogin?: Date;
+  class User  extends Model  {
+    public userId?: number
+    public name!: string
+    public email!: string
+    public password!: string
+    public status!: string
+    public wishlistId!: number
+    public cartId!: number
+    public role!: string
 
-  static associate(models: any) {
-    User.hasOne(models.Cart, {
-      foreignKey: "userId",
-      as: "carts",
-    });
-    User.hasOne(models.Wishlist, {
-      foreignKey: "userId",
-      as: "wish",
-    });
+    static associate(models: any) {
+       User.hasMany(models.Rating,{
+        foreignKey: 'userId',
+        as: 'rating'
+       })
+       User.hasOne(models.Cart,{
+        foreignKey: 'userId',
+        as: 'cart'
+       })
+       User.hasOne(models.Wishlist,{
+        foreignKey: 'userId',
+        as: 'wishlist'
+       })
+    }
   }
-}
-User.init(
-  {
-    userId: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    firstName: { type: DataTypes.STRING, allowNull: false, },
-    lastName: { type: DataTypes.STRING, allowNull: false },
-    userName: { type: DataTypes.STRING, allowNull: false },
-    email: { type: DataTypes.STRING, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false },
-    role: { type: DataTypes.STRING, allowNull: false,defaultValue: 'buyer' },
-    contactInfo: { type: DataTypes.STRING, allowNull: false },
-    address: { type: DataTypes.STRING, allowNull: true },
-    totalSpent: { type: DataTypes.STRING, allowNull: false },
-    wishlist: { type: DataTypes.STRING, allowNull: false },
-    shoppingCart: { type: DataTypes.STRING, allowNull: false },
-    orderHistory: { type: DataTypes.STRING, allowNull: false },
-    isVerfied: { type: DataTypes.BOOLEAN, allowNull: false,defaultValue: false },
-    dateJoined: { type: DataTypes.DATE, allowNull: true },
-    lastLogin: { type: DataTypes.DATE, allowNull: true },
-  },
-  {
+  User.init({
+    userId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
+    name: {type:DataTypes.STRING,allowNull: false},
+    email: {type:DataTypes.STRING,allowNull: false},
+    status: {type:DataTypes.STRING,defaultValue: 'active'},
+    wishlistId: {type:DataTypes.INTEGER},
+    cartId: {type:DataTypes.INTEGER},
+    role: {type:DataTypes.STRING,defaultValue:'buyer'},
+  }, {
     sequelize: connectSequelize,
-    modelName: "User",
-    tableName: "users",
-  }
-);
+    modelName: 'User',
+    tableName: 'Users',
+    timestamps: true
+  });
 
-export default User;
+  export default User
