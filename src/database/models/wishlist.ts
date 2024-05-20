@@ -5,27 +5,22 @@ import connectSequelize from "../config/db.config";
   class Wishlist  extends Model  {
     public wishlistId?: number
     public userId!: number;
-    public productId!: any;
-
     static associate(models: any) {
-      Wishlist.belongsTo(models.User,{
-        foreignKey: 'userId',
-        as: 'user'
-      })
-      Wishlist.belongsTo(models.Product,{
-        foreignKey: 'productId',
-        as:'product'
+      Wishlist.hasMany(models.WishlistItem,{
+        foreignKey:'WishlistItemId',
+        as: 'WhislistItem'
       })
     }
   }
   Wishlist.init({
     wishlistId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
     userId: {type:DataTypes.INTEGER,allowNull: false},
-    productId: {type:DataTypes.STRING,allowNull: false},
+    productId: {type:DataTypes.INTEGER,allowNull: false},
   }, {
     sequelize: connectSequelize,
     modelName: 'Wishlist',
-    tableName: 'wishlists'
+    tableName: 'wishlists',
+    timestamps: true
   });
 
   export default Wishlist

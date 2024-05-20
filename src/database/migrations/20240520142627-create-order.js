@@ -2,21 +2,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('admins', {
-      adminId: {
+    await queryInterface.createTable('Orders', {
+      orderId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
+      deliveryAddress: {
+        type: Sequelize.JSONB
+      },
+      userId:{
+        type: Sequelize.INTEGER,
+        references:{
+          model: 'Users',
+          key: 'userId'
+        }
+
+      },
+      paymentMethod:{
         type: Sequelize.STRING,
         allowNull: false
       },
-      permission: {
+      status:{
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: 'admnistrator'
+        defaultValue: 'pending'
+      },
+      products:{
+        type: Sequelize.JSONB
       },
       createdAt: {
         allowNull: false,
@@ -29,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('admins');
+    await queryInterface.dropTable('Orders');
   }
 };

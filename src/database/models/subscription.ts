@@ -3,22 +3,20 @@ import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
   class Subscription  extends Model  {
-    public roleId?: number
-    public roleName!: string;
+    public subscriptionId?: number
+    public email!: number;
     static associate(models: any) {
-      Subscription.belongsTo(models.User,{
-        foreignKey: 'userId',
-        as: 'user'
-      })
     }
   }
   Subscription.init({
-    roleId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
-    roleName: {type:DataTypes.STRING,allowNull: false}
+    subscriptionId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
+    email: {type:DataTypes.STRING,allowNull: false},
+
   }, {
     sequelize: connectSequelize,
     modelName: 'Subscription',
-    tableName: 'subscription'
+    tableName: 'Subscriptions',
+    timestamps: true
   });
 
   export default Subscription

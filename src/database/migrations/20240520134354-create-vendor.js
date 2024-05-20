@@ -2,24 +2,38 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('messages', {
-      id: {
+    await queryInterface.createTable('Vendors', {
+      vendorId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      senderName: {
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model: 'Users',
+          key: 'userId'
+        }
+      },
+      storeName:{
         type: Sequelize.STRING,
         allowNull: false
       },
-      email: {
-        type: Sequelize.STRING,
+      address:{
+        type: Sequelize.JSONB,
         allowNull: false
       },
-      content: {
-        type: Sequelize.TEXT,
+      TIN:{
+        type: Sequelize.INTEGER,
         allowNull: false
+      },
+      bankAccount:{
+        type: Sequelize.INTEGER,
+      },
+      paymentDetails: {
+        type: Sequelize.JSONB
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +46,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('messages');
+    await queryInterface.dropTable('Vendors');
   }
 };

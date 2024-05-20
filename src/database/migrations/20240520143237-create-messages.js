@@ -2,24 +2,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('carts', {
-      cartId: {
+    await queryInterface.createTable('Messages', {
+      contactId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references:{
-          model: 'users',
-          key: 'userId' 
-        }
+      name: {
+        type: Sequelize.STRING
       },
-      product:{
-        type: Sequelize.STRING,
-        allowNull: false
+      email: {
+        type: Sequelize.STRING
+      },
+      content: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('carts');
+    await queryInterface.dropTable('Messages');
   }
 };
