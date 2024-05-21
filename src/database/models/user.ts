@@ -32,6 +32,7 @@ import connectSequelize from "../config/db.config";
     userId: {type:DataTypes.UUID,primaryKey: true,defaultValue: DataTypes.UUIDV4},
     name: {type:DataTypes.STRING,allowNull: false},
     email: {type:DataTypes.STRING,allowNull: false},
+    password: {type:DataTypes.STRING,allowNull: false},
     status: {type:DataTypes.STRING,defaultValue: 'active'},
     wishlistId: {type:DataTypes.STRING},
     cartId: {type:DataTypes.STRING},
