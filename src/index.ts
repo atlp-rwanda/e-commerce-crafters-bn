@@ -26,6 +26,7 @@ const PORT = process.env.PORT;
 
 import userRoute from "./routes/user.route";
 import forgetPassword from "./routes/forget.password.router"
+import vendorRoute from "./routes/vendor.route";
 import swaggerRoute from "./config/SwaggerConfig";
 import productRoute from "./routes/product.route";
 
@@ -35,6 +36,7 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use("/", userRoute);
 app.use("/", productRoute);
+app.use("/", vendorRoute);
 app.use("/api-docs", swaggerRoute);
 app.use("/", forgetPassword);
 
