@@ -17,6 +17,7 @@ app.use(express.json());
 app.use("/", userRoute);
 app.use("/", vendorRoute);
 app.use("/", productRoute);
+app.use("/", vendorRoute);
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 
