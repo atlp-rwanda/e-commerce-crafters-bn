@@ -7,6 +7,7 @@ const PORT = process.env.PORT;
 
 
 import userRoute from "./routes/user.route";
+import vendorRoute from "./routes/vendor.route";
 import swaggerRoute from "./config/SwaggerConfig";
 
 
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json())
 app.use("/", userRoute);
+app.use("/", vendorRoute);
 app.use("/api-docs", swaggerRoute);
 
 
