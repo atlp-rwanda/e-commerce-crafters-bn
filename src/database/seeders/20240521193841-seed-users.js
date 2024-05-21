@@ -43,7 +43,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-       {
+      {
         userId: Sequelize.UUIDV4(),
         name: 'User4',
         email: 'user4@email.com',
@@ -56,7 +56,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-        {
+      {
         userId: Sequelize.UUIDV4(),
         name: 'User5',
         email: 'user5@email.com',
@@ -84,7 +84,7 @@ module.exports = {
     ], {});
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     // @ts-ignore
     await queryInterface.bulkDelete('Users', null, {});
   }
