@@ -7,7 +7,8 @@ import { ftruncate } from "fs";
     public productId?: number
     public name!: string
     public description!: string
-    public discount!: string
+    public image!: string
+    public discount!: number
     public price!: string
     public quantity!: number
     public vendorId: any
@@ -28,14 +29,14 @@ import { ftruncate } from "fs";
     }
   }
   Product.init({
-    vendorId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
-    userId: {type:DataTypes.INTEGER,allowNull: false},
-    storeName: {type:DataTypes.STRING,allowNull: false},
-    address: {type:DataTypes.JSONB,allowNull: false},
-    TIN: {type:DataTypes.INTEGER,allowNull: false},
-    bankAccount: {type:DataTypes.INTEGER,allowNull: false},
-    paymentDetails: {type:DataTypes.JSONB,allowNull: true},
-  
+    productId: {type:DataTypes.UUID,primaryKey: true,defaultValue: DataTypes.UUIDV4},
+    name: {type:DataTypes.STRING,allowNull: false},
+    description: {type:DataTypes.STRING,allowNull: false},
+    image: {type:DataTypes.STRING,allowNull: false},
+    discount: {type:DataTypes.INTEGER,allowNull: false},
+    price: {type:DataTypes.INTEGER,allowNull: false},
+    quantity: {type:DataTypes.INTEGER,allowNull: true},
+   
   }, {
     sequelize: connectSequelize,
     modelName: 'Product',

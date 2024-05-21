@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('Ratings', {
       ratingId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
       },
       ratingScore:{
         type: Sequelize.INTEGER
@@ -20,7 +20,7 @@ module.exports = {
         }
       },
       vendorId:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references:{
           model: 'Vendors',
           key: 'vendorId'

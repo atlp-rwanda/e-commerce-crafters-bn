@@ -5,15 +5,15 @@ module.exports = {
     await queryInterface.createTable('Orders', {
       orderId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
       },
       deliveryAddress: {
         type: Sequelize.JSONB
       },
       userId:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references:{
           model: 'Users',
           key: 'userId'

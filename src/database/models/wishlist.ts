@@ -3,8 +3,9 @@ import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
   class Wishlist  extends Model  {
-    public wishlistId?: number
-    public userId!: number;
+    public wishlistId?: string
+    public userId!: string;
+    public productId!: string;
     static associate(models: any) {
       Wishlist.hasMany(models.WishlistItem,{
         foreignKey:'WishlistItemId',
@@ -13,9 +14,9 @@ import connectSequelize from "../config/db.config";
     }
   }
   Wishlist.init({
-    wishlistId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
-    userId: {type:DataTypes.INTEGER,allowNull: false},
-    productId: {type:DataTypes.INTEGER,allowNull: false},
+    wishlistId: {type:DataTypes.UUID,primaryKey: true,defaultValue: DataTypes.UUIDV4},
+    userId: {type:DataTypes.STRING,allowNull: false},
+    productId: {type:DataTypes.STRING,allowNull: false},
   }, {
     sequelize: connectSequelize,
     modelName: 'Wishlist',

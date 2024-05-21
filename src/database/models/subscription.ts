@@ -3,13 +3,13 @@ import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
   class Subscription  extends Model  {
-    public subscriptionId?: number
-    public email!: number;
+    public subscriptionId?: string
+    public email!: string;
     static associate(models: any) {
     }
   }
   Subscription.init({
-    subscriptionId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
+    subscriptionId: {type:DataTypes.STRING,primaryKey: true,defaultValue: DataTypes.UUIDV4},
     email: {type:DataTypes.STRING,allowNull: false},
 
   }, {
