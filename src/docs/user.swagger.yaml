@@ -1,0 +1,11 @@
+/:
+  get:
+    summary: welcome endpoint
+    responses:
+      200:
+        description: server running
+      500:
+        description: sorry
+  
+  
+ 
