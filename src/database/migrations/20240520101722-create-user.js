@@ -26,10 +26,10 @@ module.exports = {
         defaultValue: 'active'  
       },
       wishlistId:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       cartId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       role: {
         type: Sequelize.STRING,
