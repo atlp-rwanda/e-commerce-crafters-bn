@@ -3,8 +3,8 @@ import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
   class Cart  extends Model  {
-    public cartId?: number
-    public userId!: number
+    public cartId?: string
+    public userId!: string
     static associate(models: any) {
        Cart.hasMany(models.CartItem,{
         foreignKey: 'cartId',
@@ -13,7 +13,7 @@ import connectSequelize from "../config/db.config";
     }
   }
   Cart.init({
-    cartId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
+    cartId: {type:DataTypes.UUID,primaryKey: true,defaultValue:DataTypes.UUIDV4},
     userId: {type:DataTypes.STRING,allowNull: false},
   
   }, {

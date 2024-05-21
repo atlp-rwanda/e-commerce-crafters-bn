@@ -3,9 +3,9 @@ import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
   class Order  extends Model  {
-    public orderId?: number
+    public orderId?: string
     public deliveryAddress!: any
-    public userId!: number
+    public userId!: string
     public paymentMethod!: string
     public status!: string
     public products!: any
@@ -15,7 +15,7 @@ import connectSequelize from "../config/db.config";
   Order.init({
     orderId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
     deliveryAddress: {type:DataTypes.JSONB,allowNull: false},
-    userId: {type:DataTypes.INTEGER,allowNull: false},
+    userId: {type:DataTypes.STRING,allowNull: false},
     paymentMethod: {type:DataTypes.INTEGER,allowNull: false},
     status: {type:DataTypes.STRING,allowNull: false},
     products: {type:DataTypes.JSONB,allowNull: false},
