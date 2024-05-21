@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('Messages', {
       contactId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
       },
       name: {
         type: Sequelize.STRING

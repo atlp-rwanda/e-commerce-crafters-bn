@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('Subscriptions', {
       subscriptionId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
       },
       email: {
         type: Sequelize.STRING

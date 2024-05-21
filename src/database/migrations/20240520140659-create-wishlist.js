@@ -5,19 +5,19 @@ module.exports = {
     await queryInterface.createTable('Wishlists', {
       wishlistId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
       },
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references:{
           model: 'Users',
           key: 'userId'
         }
       },
       productId:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references:{
           model: 'Products',
           key: 'productId'
