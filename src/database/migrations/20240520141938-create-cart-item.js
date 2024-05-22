@@ -11,24 +11,23 @@ module.exports = {
       },
       cartId: {
         type: Sequelize.STRING,
-        references:{
+        references: {
           model: 'Carts',
           key: 'cartId'
         }
       },
-      productId:{
+      productId: {
         type: Sequelize.STRING,
-        references:{
+        references: {
           model: 'Products',
           key: 'productId'
         }
 
       },
-      quantinty:{
+      quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 1
-
       },
       price: {
         type: Sequelize.INTEGER,
