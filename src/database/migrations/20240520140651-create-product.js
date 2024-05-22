@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      discount: {
+      discount:{
         type: Sequelize.DOUBLE,
         allowNull: false
       },
@@ -61,3 +61,4 @@ module.exports = {
     await queryInterface.dropTable('Products');
   }
 };
+
