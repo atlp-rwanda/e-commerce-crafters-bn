@@ -40,6 +40,11 @@ module.exports = {
       profile:{
         type: Sequelize.STRING
       },
+      isVerfied:{
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
