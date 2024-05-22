@@ -3,14 +3,15 @@ import { Model,DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
   class User  extends Model  {
-    public userId?: number
+    public userId?: string
     public name!: string
     public email!: string
     public password!: string
     public status!: string
-    public wishlistId!: number
-    public cartId!: number
+    public wishlistId?: string
+    public cartId?: string
     public role!: string
+    public profile?: string
 
     static associate(models: any) {
        User.hasMany(models.Rating,{
@@ -28,13 +29,15 @@ import connectSequelize from "../config/db.config";
     }
   }
   User.init({
-    userId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
+    userId: {type:DataTypes.UUID,primaryKey: true,defaultValue: DataTypes.UUIDV4},
     name: {type:DataTypes.STRING,allowNull: false},
     email: {type:DataTypes.STRING,allowNull: false},
+    password: {type:DataTypes.STRING,allowNull: false},
     status: {type:DataTypes.STRING,defaultValue: 'active'},
-    wishlistId: {type:DataTypes.INTEGER},
-    cartId: {type:DataTypes.INTEGER},
-    role: {type:DataTypes.STRING,defaultValue:'buyer'},
+    wishlistId: {type:DataTypes.STRING},
+    cartId: {type:DataTypes.STRING},
+    role: {type:DataTypes.STRING,defaultValue:'buyer'},  
+    profile: {type:DataTypes.STRING,defaultValue: "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"},  
   }, {
     sequelize: connectSequelize,
     modelName: 'User',

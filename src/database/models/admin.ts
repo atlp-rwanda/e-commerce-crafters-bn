@@ -1,16 +1,16 @@
 'use strict';
-import { Model,DataTypes } from "sequelize";
+import { Model,DataTypes, UUIDV4 } from "sequelize";
 import connectSequelize from "../config/db.config";
 
   class Admin  extends Model  {
-    public adminId?: number
+    public adminId?: string
     public email!: string;
     public password!: string;
     static associate(models: any) {
     }
   }
   Admin.init({
-    adminId: {type:DataTypes.INTEGER,primaryKey: true,autoIncrement: true},
+    adminId: {type:DataTypes.UUID,primaryKey: true,defaultValue: UUIDV4},
     email: {type:DataTypes.STRING,allowNull: false},
     password: {type:DataTypes.STRING,allowNull: false},
 

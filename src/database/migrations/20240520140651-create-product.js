@@ -5,26 +5,31 @@ module.exports = {
     await queryInterface.createTable('Products', {
       productId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
       },
       vendorId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         references:{
           model: 'Vendors',
           key: 'vendorId'
         }
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      image:{
+        type: Sequelize.STRING,
+        allowNull: false
       },
       description:{
         type: Sequelize.STRING,
         allowNull: false
       },
       discount:{
-        type: Sequelize.STRING,
+        type: Sequelize.DOUBLE,
         allowNull: false
       },
       price:{
@@ -33,6 +38,9 @@ module.exports = {
       },
       quantity:{
         type: Sequelize.INTEGER
+      },
+      category:{
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

@@ -5,12 +5,12 @@ module.exports = {
     await queryInterface.createTable('Vendors', {
       vendorId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: Sequelize.UUIDV4
       },
       userId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         references:{
           model: 'Users',
@@ -26,14 +26,20 @@ module.exports = {
         allowNull: false
       },
       TIN:{
-        type: Sequelize.INTEGER,
-        allowNull: false
+        type: Sequelize.BIGINT,
+        allowNull: false,
+        unique: true
       },
       bankAccount:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
+        unique: true
       },
       paymentDetails: {
         type: Sequelize.JSONB
+      },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "pending"
       },
       createdAt: {
         allowNull: false,
