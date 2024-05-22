@@ -12,23 +12,24 @@ module.exports = {
       cartId: {
         type: Sequelize.STRING,
         references: {
-          model: "Carts",
-          key: "cartId",
-        },
-        onDelete: "CASCADE",
+          model: 'Carts',
+          key: 'cartId'
+        }
       },
+      productId: {
       productId: {
         type: Sequelize.STRING,
         references: {
-          model: "Products",
-          key: "productId",
-        },
-        onDelete: "CASCADE",
+          model: 'Products',
+          key: 'productId'
+        }
+
       },
+      quantity: {
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 1,
+        defaultValue: 1
       },
       price: {
         type: Sequelize.INTEGER,
@@ -48,3 +49,4 @@ module.exports = {
     await queryInterface.dropTable('CartItems');
   }
 };
+
