@@ -10,7 +10,8 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       createdAt: {
         allowNull: false,
