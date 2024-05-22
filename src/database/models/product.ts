@@ -13,7 +13,7 @@ import { ftruncate } from "fs";
     public price!: string
     public quantity!: number
     public category!: string
-    public isVerfied?: boolean
+   
     static associate(models: any) {
        Product.hasMany(models.Wishlist,{
         foreignKey: 'productId',
@@ -37,7 +37,7 @@ import { ftruncate } from "fs";
     price: {type:DataTypes.INTEGER,allowNull: false},
     quantity: {type:DataTypes.INTEGER,allowNull: true},
     category: {type:DataTypes.STRING,allowNull: true},
-    isVerfied: {type:DataTypes.BOOLEAN,defaultValue: false}
+    
    
   }, {
     sequelize: connectSequelize,
