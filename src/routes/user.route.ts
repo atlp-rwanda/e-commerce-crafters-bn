@@ -1,10 +1,7 @@
 import express from "express"
-const route = express.Router()
-import { Welcome  } from "../controllers/user.controller";
-import express from "express";
-const route = express.Router();
-import { Welcome, deleteUser, editUser, register, updatePassword } from "../controllers/user.controller";
+import { Welcome, deleteUser, editUser, login, register, updatePassword } from "../controllers/user.controller";
 
+const route = express.Router();
 
 route.get("/", Welcome);
 
@@ -12,5 +9,6 @@ route.post("/register", register);
 route.patch("/updateuser/:id", editUser)
 route.patch("/updatepassword/:id", updatePassword)
 route.delete("/deleteuser/:id", deleteUser);
+route.delete("/deleteuser/:id", login);
 
 export default route;
