@@ -1,12 +1,15 @@
-const dotenv = require("dotenv");
-dotenv.config();
-
+const dotenv = require('dotenv')
+dotenv.config()
 module.exports = {
   "development": {
-    "database": 'e-comandela',
-    "username": 'postgres',
-    "password": 'christian',
+    "url": process.env.DATABASE_TEST_URL,
     "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": true
+      }
+    }
   },
   "test": {
     "url": process.env.DATABASE_TEST_URL,
