@@ -18,14 +18,14 @@ import connectSequelize from "../config/db.config";
         foreignKey: 'userId',
         as: 'rating'
        })
-       User.hasOne(models.Cart,{
-        foreignKey: 'userId',
-        as: 'cart'
-       })
-       User.hasOne(models.Wishlist,{
-        foreignKey: 'userId',
-        as: 'wishlist'
-       })
+       User.hasOne(models.Cart, {
+         foreignKey: "userId",
+         as: "cart"
+       });
+       User.hasOne(models.Wishlist, {
+         foreignKey: "userId",
+         as: "wishlist"
+       });
     }
   }
   User.init({
