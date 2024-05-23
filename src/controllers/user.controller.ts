@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User from "../database/models/user";
-import { saveUser } from "../services/userService";
+import { deleteUserById, saveUser } from "../services/userService";
 
 export const Welcome = async (req: Request, res: Response) => {
   try {
@@ -29,5 +29,16 @@ export const register = async (req: Request, res: Response) => {
     res.status(201).json({ message: "User created", user: senddata });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  const userId = req.params.id;
+  try {
+    await deleteUserById(userId);
+    res.status(200).json({ message: "User deleted successful" });
+  } catch (error:any) {
+    res.status(500).json({ error:error.message });
+    console.log(error.message)
   }
 };

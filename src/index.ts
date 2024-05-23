@@ -34,20 +34,14 @@ const app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
+app.use(express.json());
 app.use("/", userRoute);
 app.use("/", productRoute);
 app.use("/", vendorRoute);
 app.use("/api-docs", swaggerRoute);
-app.use("/", forgetPassword);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);
 });
 
-export { app };
-connectSequelize.authenticate()
-  .then(() => {
-    console.log('connected to the database')
-  }).catch((error: any) => {
-    console.log(error.message)
-  })
+export { app, server };
