@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { saveProduct } from "../services/productService";
+import { saveProduct, getProductById, searchProducts} from "../services/productService";
 import Vendor from "../database/models/vendor";
+import Product from "../database/models/product";
 import Product from "../database/models/product";
 
 export const createProduct = async (req: Request, res: Response) => {
