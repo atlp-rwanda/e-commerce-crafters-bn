@@ -32,6 +32,8 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
+
+// Deleting User 
 export const deleteUser = async (req: Request, res: Response) => {
   const userId = req.params.id;
   try {
