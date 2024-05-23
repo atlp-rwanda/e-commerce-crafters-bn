@@ -44,6 +44,40 @@ export const createProduct = async(req:Request,res:Response)=>{
     }
 
 };
+export const readProduct = async (req: Request, res: Response) => {
+  try {
+      const productId = req.params.id;
+      const product = await Product.findByPk(productId);
+      if (!product) {
+          return res.status(404).json({ error: "Product not found" });
+      }
+      return res.status(200).json(product);
+  } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+  }
+};
+
+export const searchProduct = async (req: Request, res: Response) => {
+  try {
+      const { name, category } = req.query;
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const criteria: any = {};
+      if (name) criteria.name = name;
+      if (category) criteria.category = category;
+
+      const products = await searchProducts(criteria, page, limit);
+      
+      if (products.length === 0) {
+          return res.status(404).json({ error: "No products found" });
+      }
+      
+      return res.status(200).json(products);
+  } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+  }
+};
 
 // update product
 
