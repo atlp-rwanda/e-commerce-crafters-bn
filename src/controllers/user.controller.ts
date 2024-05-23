@@ -17,6 +17,31 @@ export const Welcome = async (req: Request, res: Response) => {
   }
 };
 
+
+export const login = async (req: Request, res: Response) => {
+  try {
+    const existUser = await loginFunc(req.body);
+    if (!existUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(req.body.password, existUser.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid credentials. Try again' });
+    }
+
+    const token = await generateToken(existUser);
+    res.cookie('token',token,{httpOnly:true})
+    return res.status(200).json({
+      message: "Login successfull",
+      token,
+      user: existUser
+    });
+  } catch (error) {
+    return res.status(500).json({ message: 'Unable to log in' });
+  }
+};
+
 export const register = async (req: Request, res: Response) => {
 
   const {name, email, password} = req.body
