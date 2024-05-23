@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User from "../database/models/user";
-import { deleteUserById, saveUser, updateUser } from "../services/userService";
+import { comparePassword, deleteUserById, hashPassword, saveUser, updateUser, updateUserPassword } from "../services/userService";
 
 export const Welcome = async (req: Request, res: Response) => {
   try {
@@ -51,7 +51,6 @@ export const editUser = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    console.log(user)
 
     if (email) {
       const duplicate: any = await User.findOne({ where: { email } });
@@ -70,7 +69,39 @@ export const editUser = async (req: Request, res: Response) => {
     }
 
     const updatedUser = await updateUser(user);
-    res.status(200).json({ message: 'User updated', user: updatedUser });
+    res.status(200).json({ message: 'User update success', user: updatedUser });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const updatePassword = async (req: Request, res: Response) => {
+  const { password, newPassword, confirmPassword } = req.body;
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findOne({ where: { userId } });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!password || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: 'Please fill all fields' })
+    }
+
+    const checkPassword = await comparePassword(password, user.password);
+    if (!checkPassword) {
+      return res.status(400).json({ message: 'Wrong password' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: 'Passwords don\'t match' })
+    }
+
+    const hashedPassword = await hashPassword(newPassword);
+    const updatedUser = await updateUserPassword(user, hashedPassword);
+
+    res.status(200).json({ message: 'Password updated successfully', user: updatedUser });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
