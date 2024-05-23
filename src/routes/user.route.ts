@@ -1,3 +1,6 @@
+import express from "express"
+const route = express.Router()
+import { Welcome  } from "../controllers/user.controller";
 import express from "express";
 const route = express.Router();
 import { Welcome, deleteUser, editUser, register, updatePassword } from "../controllers/user.controller";
