@@ -21,9 +21,23 @@ export const deleteUserById = async (userId: any) => {
 
 export const updateUser = async (user: any) => {
   try {
-    await user.update();
+    await user.save();
     return user;
   } catch (error) {
     throw new Error('Error updating user');
-  }  
+  }
 }
+
+export const comparePassword = async (password: string, hashedPassword: string) => {
+  return await bcrypt.compare(password, hashedPassword);
+};
+
+export const hashPassword = async (password: string) => {
+  return bcrypt.hashSync(password, 10)
+};
+
+export const updateUserPassword = async (user: any, hashedPassword: string) => {
+  user.password = hashedPassword;
+  await user.save();
+  return user;
+};
