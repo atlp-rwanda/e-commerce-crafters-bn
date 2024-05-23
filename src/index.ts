@@ -19,6 +19,7 @@ app.use("/", productRoute);
 app.use("/", vendorRoute);
 app.use("/", productRoute);
 app.use("/", vendorRoute);
+app.use("/", productRoute);
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 
