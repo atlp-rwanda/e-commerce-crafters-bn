@@ -11,7 +11,7 @@ module.exports = {
       },
       vendorId: {
         type: Sequelize.STRING,
-        references:{
+        references: {
           model: 'Vendors',
           key: 'vendorId'
         }
@@ -20,26 +20,26 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      image:{
+      image: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      description:{
+      description: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      discount:{
+      discount: {
         type: Sequelize.DOUBLE,
         allowNull: false
       },
-      price:{
+      price: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      quantity:{
+      quantity: {
         type: Sequelize.INTEGER
       },
-      category:{
+      category: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -49,6 +49,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      expiringDate: {
+        allowNull: true,
+        type: Sequelize.STRING
       }
     });
   },
