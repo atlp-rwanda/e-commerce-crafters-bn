@@ -11,6 +11,18 @@ export const saveUser = async (data: any) => {
   return insertUser;
 };
 
+export const loginFunc = async (userData: { email: string; password: string }) => {
+  const { email} = userData;
+  try {
+    const existUser = await User.findOne({ where: { email } });
+    console.log(existUser)
+    return existUser; 
+  } catch (error) {
+
+    throw new Error('Unable to log in, may be user not found');
+  }
+};
+
 export const deleteUserById = async (userId: any) => {
   const user = await User.findByPk(userId);
   if (!user) {
