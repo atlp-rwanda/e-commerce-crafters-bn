@@ -1,9 +1,15 @@
+
 import express from "express"
-import { deleteProduct, updateProduct, viewProducts } from "../controllers/product.controller"
+import { deleteProduct, updateProduct,readProduct, searchProduct } from "../controllers/product.controller"
+const router = express.Router()
 
-const route = express.Router()
 
-route.put('/updateProduct/:id', updateProduct);
-route.delete('/deleteProduct/:id', deleteProduct);
-route.get('/products', viewProducts)
 
+
+router.get("/readAllProducts", readAllProducts);
+router.get("/readProduct/:id", readProduct);
+router.get("/products/search", searchProduct)
+router.put('/updateProduct/:id', updateProduct);
+router.delete('/deleteProduct/:id', deleteProduct);
+
+export default router;
