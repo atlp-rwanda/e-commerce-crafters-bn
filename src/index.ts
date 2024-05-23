@@ -38,6 +38,7 @@ app.use(express.json());
 app.use("/", userRoute);
 app.use("/", productRoute);
 app.use("/", vendorRoute);
+app.use("/", productRoute);
 app.use("/api-docs", swaggerRoute);
 
 const server = app.listen(PORT, () => {
