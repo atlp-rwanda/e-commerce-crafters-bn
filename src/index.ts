@@ -8,6 +8,7 @@ const PORT = process.env.PORT;
 
 import userRoute from "./routes/user.route";
 import swaggerRoute from "./config/SwaggerConfig";
+import productRoute from "./routes/product.route";
 
 
 const app = express();
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.static("public"));
 app.use(express.json())
 app.use("/", userRoute);
+app.use("/", productRoute);
 app.use("/api-docs", swaggerRoute);
 
 
