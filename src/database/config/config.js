@@ -2,10 +2,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 module.exports = {
   development: {
-    database: "reset",
-    username: "postgres",
-    password: "postgres",
-    dialect: "postgres",
+    database: "",
+    username: "",
+    password: "",
+    dialect: "",
   },
   test: {
     url: process.env.DATABASE_TEST_URL,
