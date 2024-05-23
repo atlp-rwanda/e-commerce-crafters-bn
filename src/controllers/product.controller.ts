@@ -9,7 +9,7 @@ export const createProduct = async(req:Request,res:Response)=>{
         let existVendor = await Vendor.findByPk(tokenData.vendorId)
         if(existVendor){
 
-            const {name,image,description,discount,price,quantity,category} = req.body
+            const {name,image,description,discount,price,quantity,category,expiringDate} = req.body
             if(!name || !image || !description || !price || !quantity || !category){
                 return res.status(200).json("All Field are required")
             }
@@ -21,7 +21,8 @@ export const createProduct = async(req:Request,res:Response)=>{
                 price,
                 quantity,
                 category,
-                vendorId: tokenData.id
+                vendorId: tokenData.id,
+                expiringDate
             }
             const save = await saveProduct(data) 
             if(!save){
