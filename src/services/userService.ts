@@ -1,11 +1,19 @@
-import User from "../database/models/user";
+import User from '../database/models/user';
+import bcrypt from 'bcrypt';
 
-export const saveUser = async (data: any) => {
-  const { username, email, password } = data;
-  const insertUser = await User.create({
-    username: username,
-    email: email,
-    password: password,
-  });
-  return insertUser;
+export const loginFunc = async (userData: { email: string; password: string }) => {
+  const { email} = userData;
+  try {
+    const existUser = await User.findOne({ where: { email } });
+    console.log(existUser)
+    return existUser; 
+  } catch (error) {
+
+    throw new Error('Unable to log in, may be user not found');
+  }
 };
+
+
+
+
+
