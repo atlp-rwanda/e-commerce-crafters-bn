@@ -12,24 +12,25 @@ module.exports = {
       cartId: {
         type: Sequelize.STRING,
         references: {
-          model: 'Carts',
-          key: 'cartId'
-        }
+          model: "Carts",
+          key: "cartId",
+        },
+        onDelete: "CASCADE",
       },
       productId: {
       productId: {
         type: Sequelize.STRING,
         references: {
-          model: 'Products',
-          key: 'productId'
-        }
-
+          model: "Products",
+          key: "productId",
+        },
+        onDelete: "CASCADE",
       },
       quantity: {
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: 1
+        defaultValue: 1,
       },
       price: {
         type: Sequelize.INTEGER,

@@ -11,6 +11,15 @@ export const saveUser = async (data: any) => {
   return insertUser;
 };
 
+export const deleteUserById = async (userId: any) => {
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw new Error("user not found");
+  }
+    // await Cart.destroy({ where: { userId: userId } });
+  await user.destroy();
+};
+
 export const loginFunc = async (userData: { email: string; password: string }) => {
   const { email} = userData;
   try {
