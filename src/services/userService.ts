@@ -16,6 +16,14 @@ export const deleteUserById = async (userId: any) => {
   if (!user) {
     throw new Error("user not found");
   }
-    // await Cart.destroy({ where: { userId: userId } });
   await user.destroy();
 };
+
+export const updateUser = async (user: any) => {
+  try {
+    await user.update();
+    return user;
+  } catch (error) {
+    throw new Error('Error updating user');
+  }  
+}
