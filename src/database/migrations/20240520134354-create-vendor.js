@@ -26,11 +26,13 @@ module.exports = {
         allowNull: false
       },
       TIN:{
-        type: Sequelize.INTEGER,
-        allowNull: false
+        type: Sequelize.BIGINT,
+        allowNull: false,
+        unique: true
       },
       bankAccount:{
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
+        unique: true
       },
       paymentDetails: {
         type: Sequelize.JSONB

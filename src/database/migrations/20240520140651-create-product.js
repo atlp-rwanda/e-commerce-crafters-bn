@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false
       },
       discount:{
-        type: Sequelize.STRING,
+        type: Sequelize.DOUBLE,
         allowNull: false
       },
       price:{
