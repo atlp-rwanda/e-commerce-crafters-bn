@@ -7,15 +7,18 @@ dotenv.config()
 const MODE:any = process.env.MODE || 'development'
 
 
-const connectSequelize:Sequelize = new Sequelize(config[`${MODE}`].url,{
-    dialect: config[`${MODE}`].dialect,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: true
-      }
-      }
-  
-}) 
+const currentConfig = config[`${MODE}`];
+
+const connectSequelize: Sequelize = new Sequelize(
+  currentConfig.database,
+  currentConfig.username,
+  currentConfig.password,
+  {
+    host: currentConfig.host,
+    dialect: currentConfig.dialect,
+    dialectOptions: {},
+  }
+);
+
 
 export default connectSequelize
