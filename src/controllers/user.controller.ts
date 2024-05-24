@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import { generateToken } from "../helpers/generateToken";
 import { loginFunc } from "../services/userService";
 import User from "../database/models/user";
-import { saveUser } from "../services/userService";
 import nodemailer from 'nodemailer'
 import { comparePassword, deleteUserById, hashPassword, saveUser, updateUser, updateUserPassword } from "../services/userService";
 
