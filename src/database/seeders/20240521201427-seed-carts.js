@@ -5,7 +5,12 @@ const { v4: uuidv4 } = require('uuid');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    console.log('Getting the users')
     const [users] = await queryInterface.sequelize.query(`SELECT "userId" FROM "Users"`);
+
+    users.map(user => (
+      console.log('The users ', user)
+    ))
 
     const carts = users.map(user => ({
       cartId: uuidv4(),

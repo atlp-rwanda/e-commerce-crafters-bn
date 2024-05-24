@@ -1,5 +1,7 @@
-const dotenv = require('dotenv')
-dotenv.config()
+
+const dotenv = require("dotenv");
+dotenv.config();
+
 module.exports = {
   "development": {
     "url": process.env.DATABASE_TEST_URL,
@@ -32,3 +34,8 @@ module.exports = {
     }
   }
 }
+
+
+
+
+
