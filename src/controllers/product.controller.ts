@@ -89,3 +89,27 @@ export const deleteProduct = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+export const viewProducts = async (req: Request, res: Response) => {
+  try {
+    const tokenData = (req as any).token;
+    let existVendor = await Vendor.findByPk(tokenData.vendorId);
+    if (existVendor) {
+
+      const products = await Product.findAll({
+        where: {vendorId: tokenData.vendorId}
+      });
+
+      if (!products.length) {
+        res.status(404).json({message: "No products found"});
+        return;
+      }
+      res.status(200).json(products);
+    }else {
+      return res.status(500).json({error: "No vendor found"});
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
