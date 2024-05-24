@@ -9,6 +9,6 @@ route.post("/register", register);
 route.patch("/updateuser/:id", editUser)
 route.patch("/updatepassword/:id", updatePassword)
 route.delete("/deleteuser/:id", deleteUser);
-route.delete("/deleteuser/:id", login);
+route.post("/login", login);
 
 export default route;

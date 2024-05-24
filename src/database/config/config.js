@@ -4,11 +4,10 @@ module.exports = {
   "development": {
     "url": process.env.DATABASE_DEVELOPMENT_URL,
     "dialect": "postgres",
+    "username": "postgres",
+    "password": "sevelin123",
     "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": true
-      }
+     
     }
   },
   "test": {
