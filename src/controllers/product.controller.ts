@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { saveProduct, getProductById, searchProducts} from "../services/productService";
+import { saveProduct, getAllProducts, getProductById, searchProducts} from "../services/productService";
 import Vendor from "../database/models/vendor";
 import Product from "../database/models/product";
 import Product from "../database/models/product";
