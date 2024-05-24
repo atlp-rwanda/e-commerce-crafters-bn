@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Vendor from "../database/models/vendor";
 import { deleteVendorById, saveVendor, updateVendor } from "../services/vendorServices";
-import User from "../database/models/user";
 
 export const registerVendor = async (req: Request, res: Response) => {
   const { userId, storeName, address, TIN, bankAccount, paymentDetails } = req.body
