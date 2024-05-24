@@ -30,6 +30,7 @@ export const register = async (req: Request, res: Response) => {
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
+      secure: true,
       auth: {
           user: process.env.EMAIL,
           pass: process.env.EMAIL_PASS
