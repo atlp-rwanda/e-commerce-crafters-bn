@@ -13,4 +13,12 @@ export const saveVendor = async (data: any) => {
     })
 
     return insertVendor;
-}
+
+
+export const deleteVendorById = async (vendorId: any) => {
+  const vendor = await Vendor.findByPk(vendorId);
+  if (!vendor) {
+    throw new Error("vendor not found");
+  }
+  await vendor.destroy();
+};
