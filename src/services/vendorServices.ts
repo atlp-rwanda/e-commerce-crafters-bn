@@ -13,7 +13,6 @@ export const saveVendor = async (data: any) => {
     })
 
     return insertVendor;
-}
 
 
 export const deleteVendorById = async (vendorId: any) => {

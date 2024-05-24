@@ -16,8 +16,7 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.json());
 app.use("/", userRoute);
-app.use("/", productRoute);
-app.use("/", vendorRoute);
+
 app.use("/", productRoute);
 app.use("/", forgotPassword);
 app.use("/", productRoute);
