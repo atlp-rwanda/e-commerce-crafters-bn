@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
 import { saveProduct, getProductById, searchProducts} from "../services/productService";
-import Vendor from "../database/models/vendor";
 import Product from "../database/models/product";
+import { checkVendorModifyPermission, checkVendorPermission } from "../services/PermisionService";
 
 
 export const createProduct = async(req:Request,res:Response)=>{
     try {
         const tokenData = (req as any).token
-        let existVendor = await Vendor.findByPk(tokenData.vendorId)
-        if(existVendor){
-
+        const vendorId: string = req.params.id 
+        const permissionCheck:any =  await checkVendorPermission(tokenData,vendorId)
+        if(!permissionCheck.allowed){
+          return res.status(permissionCheck.status).json({message:permissionCheck.message})
+        }
             const {name,image,description,discount,price,quantity,category,expiringDate} = req.body
             if(!name || !image || !description || !price || !quantity || !category){
                 return res.status(200).json("All Field are required")
@@ -22,18 +24,16 @@ export const createProduct = async(req:Request,res:Response)=>{
                 price,
                 quantity,
                 category,
-                vendorId: tokenData.id,
+                vendorId: vendorId,
                 expiringDate
             }
             const save = await saveProduct(data) 
             if(!save){
                 return res.status(500).json({error: "Failed to save data"})
             }
-            return res.status(201).json({message: "Product Created"})
-        } 
-        else{
-            return res.status(500).json({error: "No vendor found"})
-        }
+            return res.status(201).json({message: "Product Created", data: save})
+        
+      
 
 
 
@@ -84,10 +84,14 @@ export const searchProduct = async (req: Request, res: Response) => {
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     const tokenData = (req as any).token;
-    const existVendor = await Vendor.findByPk(tokenData.vendorId);
+    const {vendorId} = req.body
+    const  productId  = req.params.id;
 
-    if (existVendor) {
-      const { productId } = req.params;
+    const permissionCheck:any =  await checkVendorModifyPermission(tokenData,vendorId)
+    if(!permissionCheck.allowed){
+      return res.status(permissionCheck.status).json({message:permissionCheck.message})
+    }
+ 
       const updateData = req.body;
 
       const product = await Product.findByPk(productId);
@@ -100,9 +104,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       res
         .status(200)
         .json({ message: "Product updated successfully", product });
-    } else{
-        return res.status(500).json({ error: "No vendor found" });
-    }
+
   } catch (error: any) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -113,10 +115,14 @@ export const updateProduct = async (req: Request, res: Response) => {
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const tokenData = (req as any).token;
-    let existVendor = await Vendor.findByPk(tokenData.vendorId);
-    if (existVendor) {
-      const { productId } = req.params;
-
+    const  productId  = req.params.id;
+    const  {vendorId}  = req.body;
+    
+    const permissionCheck:any =  await checkVendorModifyPermission(tokenData,vendorId)
+    if(!permissionCheck.allowed){
+      return res.status(permissionCheck.status).json({message:permissionCheck.message})
+    }
+ 
       const product = await Product.findByPk(productId);
 
       if (!product) {
@@ -125,10 +131,8 @@ export const deleteProduct = async (req: Request, res: Response) => {
       }
       await product.destroy();
       res.status(200).json({ message: "Product deleted successfully" });
-    } else {
-        return res.status(500).json({ error: "No vendor found" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+ 
+  } catch (error:any) {
+    res.status(500).json({ error: error.message });
   }
 };
