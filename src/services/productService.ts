@@ -9,6 +9,19 @@ export const saveProduct = async (data:any)=>{
     }
 }
 
+export const getAllProducts = async (page: number, limit: number) => {
+    try {
+        const offset = (page - 1) * limit;
+        const products = await Product.findAll({
+            offset,
+            limit
+        });
+        return products;
+    } catch (error) {
+        throw new Error('Error while fetching all products');
+    }
+};
+
 export const getProductById = async (productId: string) => {
     try {
         const product = await Product.findByPk(productId);
