@@ -26,6 +26,7 @@ const PORT = process.env.PORT;
 
 import userRoute from "./routes/user.route";
 import forgetPassword from "./routes/forget.password.router"
+import resetPassword from "./routes/reset.password.route"
 import swaggerRoute from "./config/SwaggerConfig";
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(express.json());
 app.use("/", userRoute);
 app.use("/api-docs", swaggerRoute);
 app.use("/", forgetPassword);
+app.use("/", resetPassword);
 
 app.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);

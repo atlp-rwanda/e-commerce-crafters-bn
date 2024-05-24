@@ -10,6 +10,7 @@ module.exports = {
         "rejectUnauthorized": true
       }
     }
+    
   },
   "test": {
     "url": process.env.DATABASE_TEST_URL,

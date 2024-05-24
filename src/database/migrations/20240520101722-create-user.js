@@ -40,7 +40,7 @@ module.exports = {
       profile:{
         type: Sequelize.STRING
       },
-      isVerfied:{
+      isVerified:{
         type: Sequelize.BOOLEAN,
         defaultValue: false
 
