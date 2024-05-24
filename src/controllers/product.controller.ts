@@ -58,6 +58,22 @@ export const readProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const readAllProducts = async (req: Request, res: Response) => {
+  try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const products = await getAllProducts(page, limit);
+      
+      if (products.length === 0) {
+          return res.status(404).json({ error: "No products found" });
+      }
+      
+      return res.status(200).json(products);
+  } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+  }
+};
 export const searchProduct = async (req: Request, res: Response) => {
   try {
       const { name, category } = req.query;
