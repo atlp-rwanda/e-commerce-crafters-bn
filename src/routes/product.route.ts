@@ -7,6 +7,7 @@ const router = express.Router()
 
 
 
+router.get("/create/product/:id", VerifyAccessToken, createProduct);
 router.get("/readAllProducts", readAllProducts);
 router.get("/readProduct/:id", readProduct);
 router.get("/products/search", searchProduct)

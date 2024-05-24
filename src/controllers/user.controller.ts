@@ -17,16 +17,7 @@ export const Welcome = async (req: Request, res: Response) => {
   }
 };
 
-export const register = async (req: Request, res: Response) => {
-
-  const {name, email, password} = req.body
-  if(!name || !email || !password) {
-  return res.status(400).json({message: 'Please fill all fields'})
-  }
-  const duplicate: any = await User.findOne({where: {email: email}})
-  if(duplicate){
-    res.status(409).json({Message: 'Email already exists'})
-  }
+export const login = async (req: Request, res: Response) => {
   try {
     const existUser = await loginFunc(req.body);
     if (!existUser) {

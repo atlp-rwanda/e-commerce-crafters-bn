@@ -8,6 +8,7 @@ import vendorRoute from "./routes/vendor.route";
 import swaggerRoute from "./config/SwaggerConfig";
 import productRoute from "./routes/product.route";
 import adminRoute from "./routes/roles.route";
+import forgotPassword from "./routes/forget.password.router";
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.use("/", userRoute);
 app.use("/", productRoute);
 app.use("/", vendorRoute);
 app.use("/", productRoute);
-app.use("/", vendorRoute);
+app.use("/", forgotPassword);
 app.use("/", productRoute);
 app.use("/", vendorRoute);
 app.use("/api-docs", swaggerRoute);

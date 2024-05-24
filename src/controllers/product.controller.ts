@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { saveProduct, getProductById, searchProducts} from "../services/productService";
+import { saveProduct, getProductById, searchProducts, getAllProducts} from "../services/productService";
 import Product from "../database/models/product";
 import { checkVendorModifyPermission, checkVendorPermission } from "../services/PermisionService";
+import Vendor from "../database/models/vendor";
 
 
 export const createProduct = async(req:Request,res:Response)=>{
@@ -158,11 +159,14 @@ export const deleteProduct = async (req: Request, res: Response) => {
 export const viewProducts = async (req: Request, res: Response) => {
   try {
     const tokenData = (req as any).token;
-    let existVendor = await Vendor.findByPk(tokenData.vendorId);
-    if (existVendor) {
+    const vendorId  = req.params.id
+    const permissionCheck:any =  await checkVendorPermission(tokenData,vendorId)
+    if(!permissionCheck.allowed){
+      return res.status(permissionCheck.status).json({message:permissionCheck.message})
+    }
 
       const products = await Product.findAll({
-        where: {vendorId: tokenData.vendorId}
+        where: {vendorId:vendorId}
       });
 
       if (!products.length) {
@@ -170,9 +174,7 @@ export const viewProducts = async (req: Request, res: Response) => {
         return;
       }
       res.status(200).json(products);
-    }else {
-      return res.status(500).json({error: "No vendor found"});
-    }
+
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

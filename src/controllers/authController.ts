@@ -44,8 +44,8 @@ export const requestPasswordReset = async (req: Request, res: Response) => {
     await transporter.sendMail(mailOptions);
 
     res.status(200).json({ message: 'Password reset email sent' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error requesting password reset', error });
+  } catch (error:any) {
+    res.status(500).json({ message: 'Error requesting password reset',error: error.message });
   }
 };
 
@@ -70,7 +70,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     await user.save();
 
     res.status(200).json({ message: 'Password has been reset' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error resetting password', error });
+  } catch (error:any) {
+    res.status(500).json({ message: 'Error resetting password', error:error.message });
   }
 };

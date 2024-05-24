@@ -18,7 +18,6 @@ module.exports = {
         onDelete: "CASCADE",
       },
       productId: {
-      productId: {
         type: Sequelize.STRING,
         references: {
           model: "Products",
@@ -26,7 +25,7 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      quantity: {
+
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
