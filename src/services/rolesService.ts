@@ -1,5 +1,6 @@
 import Vendor from "../database/models/vendor";
 import User from "../database/models/user";
+
 import nodemailer from "nodemailer";
 
 export const approveVendorRequest = async (userId: string) => {
@@ -116,8 +117,10 @@ export const approveVendorRequest = async (userId: string) => {
 };
 
 export const rejectVendorRequest = async (userId: string) => {
+
   const vendor = await Vendor.findOne({ where: { userId: userId } });
   const user: any = await User.findOne({ where: { userId: userId } });
+
 
   if (!vendor) {
     return { message: "Vendor Request Not Found", status: 404 };
