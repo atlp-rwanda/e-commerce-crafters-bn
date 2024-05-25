@@ -18,7 +18,7 @@ export const requestPasswordReset = async (req: Request, res: Response) => {
     const token = crypto.randomBytes(20).toString('hex');
     const expires = Date.now() + 3600000; 
 
-    const username= user.
+    const username= user.name
     user.resetPasswordToken = token;
     user.resetPasswordExpires = new Date(expires);
     await user.save();
@@ -26,14 +26,14 @@ export const requestPasswordReset = async (req: Request, res: Response) => {
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
       auth: {
-        user: process.env.EMAIL_USER,
+        user: process.env.EMAIL,
         pass: process.env.EMAIL_PASS,
       },
     });
 
     const mailOptions = {
       to: user.email,
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL,
       subject: 'Password Reset',
       text: `You are receiving this because you ${username}have requested the reset of the password for your account.\n\n
         Please click on the following link, or paste this into your browser to complete the process:\n\n
@@ -55,11 +55,9 @@ export const resetPassword = async (req: Request, res: Response) => {
     if(!password) return res.status(400).json({Message:'password is required!'})
     const user = await User.findOne({
       where: {
-        resetPasswordToken: req.params.token,
-        resetPasswordExpires: { $gt: new Date() },
+        resetPasswordToken: req.params.id,
       },
     });
-
     if (!user) {
       return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
     }

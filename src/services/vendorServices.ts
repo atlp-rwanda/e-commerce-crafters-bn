@@ -13,6 +13,7 @@ export const saveVendor = async (data: any) => {
     })
 
     return insertVendor;
+  }
 
 
 export const deleteVendorById = async (vendorId: any) => {
@@ -21,4 +22,4 @@ export const deleteVendorById = async (vendorId: any) => {
     throw new Error("vendor not found");
   }
   await vendor.destroy();
-};
+}

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Vendor from "../database/models/vendor";
-
 import { deleteVendorById, saveVendor } from "../services/vendorServices";
 
 
@@ -15,6 +14,7 @@ export const registerVendor = async (req: Request, res: Response) => {
     } catch (error: any) {
         return res.status(500).json({message: error.message})
     }
+  }
 
 export const deletingVendor = async (req: Request, res: Response) => {
   const vendorId = req.params.id;
