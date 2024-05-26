@@ -12,8 +12,9 @@ export const saveVendor = async (data: any) => {
     paymentDetails
   })
 
-  return insertVendor;
-}
+    return insertVendor;
+  }
+
 
 
 export const deleteVendorById = async (vendorId: any) => {
