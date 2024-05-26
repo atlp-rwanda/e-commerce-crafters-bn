@@ -177,7 +177,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// Deleting User
+
 
 // Deleting User
 export const deleteUser = async (req: Request, res: Response) => {
