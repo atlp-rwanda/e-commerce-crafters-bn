@@ -10,8 +10,8 @@ export const approveVendor = async (req: Request, res: Response) => {
   try {
     const result = await approveVendorRequest(userId);
     res.status(result.status).json({ message: result.message });
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error", error });
+  } catch (error:any) {
+    res.status(500).json({ message: "Internal Server Error", error:error.message });
   }
 };
 

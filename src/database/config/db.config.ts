@@ -9,10 +9,10 @@ const MODE:any = process.env.MODE || 'development'
 const connectSequelize:Sequelize = new Sequelize(config[`${MODE}`].url,{
     dialect: config[`${MODE}`].dialect,
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: true
-      }
+      // ssl: {
+      //   require: true,
+      //   rejectUnauthorized: true
+      // }
       
       }
   
