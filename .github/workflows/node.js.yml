@@ -1,13 +1,9 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Code Crafters E-commerce CI
 
 on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -16,6 +12,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
+
+    - name: Set up environment variables
+      run: |
+        echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
+        echo "MODE=${{ secrets.MODE }}" >> $GITHUB_ENV
+        echo "DATABASE_DEVELOPMENT_URL=${{ secrets.DATABASE_DEVELOPMENT_URL }}" >> $GITHUB_ENV
+        echo "DATABASE_TEST_URL=${{ secrets.DATABASE_TEST_URL }}" >> $GITHUB_ENV
+        echo "DATABASE_PRODUCTION_URL=${{ secrets.DATABASE_PRODUCTION_URL }}" >> $GITHUB_ENV
+        echo "EMAIL=${{ secrets.EMAIL }}" >> $GITHUB_ENV
+        echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> $GITHUB_ENV
 
     - name: install dependencies
       run: npm install
