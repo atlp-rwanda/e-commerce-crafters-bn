@@ -1,6 +1,6 @@
-'use strict';
-import { Model, DataTypes } from 'sequelize';
-import connectSequelize from '../config/db.config';
+"use strict";
+import { Model, DataTypes } from "sequelize";
+import connectSequelize from "../config/db.config";
 
 class User extends Model {
   public userId?: string;
@@ -13,8 +13,8 @@ class User extends Model {
   public role!: string;
   public profile?: string;
   public isVerified?: boolean;
-  public resetPasswordToken!: string | null;
-  public resetPasswordExpires!: Date | null;
+  public resetPasswordToken?: string | null;
+  public resetPasswordExpires?: Date | null;
 
     static associate(models: any) {
        User.hasMany(models.Rating,{
@@ -41,6 +41,8 @@ class User extends Model {
     cartId: {type:DataTypes.STRING},
     role: {type:DataTypes.STRING,defaultValue:'buyer'},  
     profile: {type:DataTypes.STRING,defaultValue: "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"},  
+    resetPasswordToken: {type:DataTypes.STRING,allowNull: true},  
+    resetPasswordExpires: {type:DataTypes.DATE,allowNull: true},  
   }, {
     sequelize: connectSequelize,
     modelName: 'User',
