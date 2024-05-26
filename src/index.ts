@@ -6,16 +6,19 @@ const PORT = process.env.PORT;
 import userRoute from "./routes/user.route";
 import vendorRoute from "./routes/vendor.route";
 import swaggerRoute from "./config/SwaggerConfig";
+
 import productRoute from "./routes/product.route";
 import adminRoute from "./routes/roles.route";
 import forgotPassword from "./routes/forget.password.router";
 import authRoute from "./routes/auth.router";
 import roleRoute from "./routes/roles.route";
 
+
 const app = express();
 
 app.use(express.static("public"));
 app.use(express.json());
+
 app.use(express.json());
 app.use("/", userRoute);
 app.use("/", authRoute);
