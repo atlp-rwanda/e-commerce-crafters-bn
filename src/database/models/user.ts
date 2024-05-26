@@ -1,6 +1,6 @@
-'use strict';
-import { Model, DataTypes } from 'sequelize';
-import connectSequelize from '../config/db.config';
+"use strict";
+import { Model, DataTypes } from "sequelize";
+import connectSequelize from "../config/db.config";
 
 class User extends Model {
   public userId?: string;
