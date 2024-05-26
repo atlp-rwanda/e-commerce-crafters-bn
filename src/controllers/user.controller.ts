@@ -191,7 +191,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 
 export const editUser = async (req: Request, res: Response) => {
-  const { name, email, profile, password } = req.body;
+  const { name, email, profile } = req.body;
   const userId = req.params.id;
 
   try {
@@ -217,10 +217,8 @@ export const editUser = async (req: Request, res: Response) => {
     }
 
     const updatedUser = await updateUser(user);
-    if (password) {
-      return res.json({ message: "You can't update password" });
-    }
-    res.status(200).json({ message: "User update success", user: updatedUser });
+
+    res.status(200).json({ message: 'User update success', user: updatedUser });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

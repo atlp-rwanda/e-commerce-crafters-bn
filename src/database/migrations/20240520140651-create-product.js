@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      discount:{
+      discount: {
         type: Sequelize.DOUBLE,
         allowNull: false
       },
@@ -53,7 +53,7 @@ module.exports = {
       },
       expiringDate: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       }
     });
   },
