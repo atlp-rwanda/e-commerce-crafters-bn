@@ -4,7 +4,7 @@ dotenv.config();
 
 module.exports = {
   "development": {
-    "url": process.env.DATABASE_DEVELOPMENT_UR,
+    "url": process.env.DATABASE_DEVELOPMENT_URL,
     "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
