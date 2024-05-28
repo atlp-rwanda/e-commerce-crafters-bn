@@ -13,6 +13,7 @@ env:
   CLOUDINARY_CLOUD_NAME: ${{secrets.CLOUDINARY_CLOUD_NAME}}
   API_KEY: ${{secrets.CLOUDINARY_API_KEY}}
   API_SECRET: ${{secrets.CLOUDINARY_API_SECRET}}
+  MODE: test
 
 jobs:
   build:
