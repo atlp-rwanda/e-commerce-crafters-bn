@@ -14,7 +14,8 @@ module.exports = {
         references: {
           model: 'Vendors',
           key: 'vendorId'
-        }
+        },
+        onDelete:"CASCADE"
       },
       name: {
         type: Sequelize.STRING,
@@ -60,3 +61,4 @@ module.exports = {
     await queryInterface.dropTable('Products');
   }
 };
+
