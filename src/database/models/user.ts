@@ -40,7 +40,7 @@ class User extends Model {
     wishlistId: {type:DataTypes.STRING},
     cartId: {type:DataTypes.STRING},
     role: {type:DataTypes.STRING,defaultValue:'buyer'},  
-    profile: {type:DataTypes.STRING,defaultValue: "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"},  
+    profile: {type:DataTypes.STRING,defaultValue: "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"}, 
     resetPasswordToken: {type:DataTypes.STRING,allowNull: true},  
     resetPasswordExpires: {type:DataTypes.DATE,allowNull: true},  
   }, {
