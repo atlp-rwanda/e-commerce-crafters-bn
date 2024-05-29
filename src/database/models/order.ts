@@ -9,6 +9,7 @@ import connectSequelize from "../config/db.config";
     public paymentMethod!: string
     public status!: string
     public products!: any
+    public totalAmount!: number
     static associate(models: any) {
     }
   }
@@ -19,6 +20,7 @@ import connectSequelize from "../config/db.config";
     paymentMethod: {type:DataTypes.INTEGER,allowNull: false},
     status: {type:DataTypes.STRING,allowNull: false},
     products: {type:DataTypes.JSONB,allowNull: false},
+    totalAmount: {type:DataTypes.INTEGER,allowNull: false}
   
   }, {
     sequelize: connectSequelize,
