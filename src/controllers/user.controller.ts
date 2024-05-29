@@ -165,19 +165,15 @@ export const register = async (req: Request, res: Response) => {
     </html>`,
     };
     await transporter.sendMail(mailOptions);
-    res
-      .status(201)
-      .json({
-        message: "User created",
-        user: senddata,
-        email: "Email sent to your email address",
-      });
+    res.status(201).json({
+      message: "User created",
+      user: senddata,
+      email: "Email sent to your email address",
+    });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 // Deleting User
 export const deleteUser = async (req: Request, res: Response) => {
@@ -218,7 +214,7 @@ export const editUser = async (req: Request, res: Response) => {
 
     const updatedUser = await updateUser(user);
 
-    res.status(200).json({ message: 'User update success', user: updatedUser });
+    res.status(200).json({ message: "User update success", user: updatedUser });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

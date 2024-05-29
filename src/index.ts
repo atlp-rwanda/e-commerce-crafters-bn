@@ -12,8 +12,7 @@ import adminRoute from "./routes/roles.route";
 import forgotPassword from "./routes/forget.password.router";
 import authRoute from "./routes/auth.router";
 import roleRoute from "./routes/roles.route";
-import cartroute from "./routes/cart.route"
-
+import cartroute from "./routes/cart.route";
 
 const app = express();
 
