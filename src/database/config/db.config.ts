@@ -1,17 +1,18 @@
 import { Sequelize } from "sequelize";
-const config = require('./config')
-import dotenv from "dotenv"
-dotenv.config()
+const config = require("./config");
+import dotenv from "dotenv";
+dotenv.config();
 
+const MODE: any = process.env.MODE || "development";
 
-const MODE:any = process.env.MODE || 'development'
+const connectSequelize: Sequelize = new Sequelize(config[`${MODE}`].url, {
+  dialect: config[`${MODE}`].dialect,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: true,
+    },
+  },
+});
 
-
-const connectSequelize:Sequelize = new Sequelize(config[`${MODE}`].url,{
-    dialect: config[`${MODE}`].dialect,
-    dialectOptions: {
-      }
-  
-}) 
-
-export default connectSequelize
+export default connectSequelize;
