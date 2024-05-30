@@ -3,7 +3,8 @@ import Order from "../database/models/order"
 
 
 import Review from "../database/models/review"
-import { Op } from "sequelize"
+import { Op, where } from "sequelize"
+import models from "../database/models"
 
 export const addReview = async (req:Request,res:Response)=>{
     try {
@@ -37,3 +38,24 @@ export const addReview = async (req:Request,res:Response)=>{
 
 }
 
+export const selectReview = async(req:Request,res:Response)=>{
+    try {
+        const vendorId = req.params.id
+        const review = await Review.findAll({
+            include: [
+                {
+                    model: models.Product,
+                    where: {vendorId: vendorId}
+                }
+            ]
+        })
+        if(!review || review.length === 0){
+            return res.status(400).json({message:"There in no review in your products"})
+        }
+        return res.status(200).json({review: review})
+        
+    } catch (error:any) {
+        res.status(500).json({message: error.message})
+        
+    }
+}
