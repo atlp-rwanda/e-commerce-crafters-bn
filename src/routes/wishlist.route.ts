@@ -3,6 +3,6 @@ import { addToWishlist } from "../controllers/wishlist.controller";
 
 const router = Router();
 
-router.post("toWishlist", addToWishlist);
+router.post("/toWishlist", addToWishlist);
 
 export default router
