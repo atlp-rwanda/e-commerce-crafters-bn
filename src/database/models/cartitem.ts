@@ -4,7 +4,7 @@ import connectSequelize from "../config/db.config";
 import Cart from "./cart";
 
 class CartItem extends Model {
-  public cartitemsId?: string;
+  public cartitemsid?: string;
   public cartId!: string;
   public productId!: string;
   public quantity!: number;
@@ -18,7 +18,7 @@ class CartItem extends Model {
   static initModel(sequelize: Sequelize) {
     CartItem.init(
       {
-        cartitemsId: {
+        cartitemsid: {
           type: DataTypes.UUID,
           primaryKey: true,
           defaultValue: DataTypes.UUIDV4,
