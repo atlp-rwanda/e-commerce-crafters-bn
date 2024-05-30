@@ -9,6 +9,7 @@ const router = express.Router()
 
 router.post("/create/product/:id", VerifyAccessToken, createProduct);
 router.get("/readAllProducts", readAllProducts);
+router.get("/vendorProducts/:id", VerifyAccessToken, viewProducts);
 router.get("/readProduct/:id", readProduct);
 router.get("/products/search", searchProduct)
 router.get("/products/vendor/:id", VerifyAccessToken,viewProducts)

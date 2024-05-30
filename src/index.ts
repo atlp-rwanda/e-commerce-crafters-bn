@@ -19,6 +19,7 @@ import forgotPassword from "./routes/forget.password.router";
 import authRoute from "./routes/auth.router";
 import roleRoute from "./routes/roles.route";
 import googleAuthRoute from './routes/googleAuth.route'
+import cartroute from "./routes/cart.route"
 
 
 const app = express();
@@ -50,6 +51,7 @@ app.use("/", roleRoute);
 app.use('/', googleAuthRoute)
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
+app.use("/", cartroute);
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);
