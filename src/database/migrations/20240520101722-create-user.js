@@ -15,8 +15,7 @@ module.exports = {
       },
       email:{
         type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
+        allowNull: false
       },
       password:{
         type: Sequelize.STRING,
@@ -27,10 +26,10 @@ module.exports = {
         defaultValue: 'active'  
       },
       wishlistId:{
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       cartId: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       role: {
         type: Sequelize.STRING,
@@ -39,19 +38,6 @@ module.exports = {
       },
       profile:{
         type: Sequelize.STRING
-      },
-      isVerfied:{
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-
-      },
-      resetPasswordToken: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      resetPasswordExpires: {
-        type: Sequelize.DATE,
-        allowNull: true,
       },
       createdAt: {
         allowNull: false,
