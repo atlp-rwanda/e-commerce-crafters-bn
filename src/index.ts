@@ -18,6 +18,7 @@ import adminRoute from "./routes/roles.route";
 import forgotPassword from "./routes/forget.password.router";
 import authRoute from "./routes/auth.router";
 import roleRoute from "./routes/roles.route";
+import checkoutRoute from "./routes/checkout.router"
 
 import googleAuthRoute from './routes/googleAuth.route'
 import cartroute from "./routes/cart.route"
@@ -50,6 +51,7 @@ app.use("/", forgotPassword);
 app.use("/", productRoute);
 app.use("/", vendorRoute);
 app.use("/", roleRoute);
+app.use("/", checkoutRoute);
 app.use('/', googleAuthRoute)
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);

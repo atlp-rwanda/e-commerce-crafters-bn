@@ -2,6 +2,7 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import connectSequelize from "../config/db.config";
 
+
 class Order extends Model {
   public orderId?: string;
   public deliveryAddress!: any;
@@ -9,6 +10,7 @@ class Order extends Model {
   public paymentMethod!: string;
   public status!: string;
   public products!: any;
+  public totalAmount!: number
   static associate(models: any) {}
   static initModel(sequelize: Sequelize) {
     Order.init(
@@ -23,6 +25,7 @@ class Order extends Model {
         paymentMethod: { type: DataTypes.INTEGER, allowNull: false },
         status: { type: DataTypes.STRING, allowNull: false },
         products: { type: DataTypes.JSONB, allowNull: false },
+        totalAmount: {type:DataTypes.INTEGER,allowNull: false}
       },
       {
         sequelize: connectSequelize,
