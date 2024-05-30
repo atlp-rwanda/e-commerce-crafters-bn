@@ -2,44 +2,44 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Orders", {
+    await queryInterface.createTable('Orders', {
       orderId: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV4
       },
       deliveryAddress: {
-        type: Sequelize.JSONB,
+        type: Sequelize.JSONB
       },
-      userId: {
+      userId:{
         type: Sequelize.STRING,
-        references: {
-          model: "Users",
-          key: "userId",
-        },
-        onDelete: "CASCADE",
+        references:{
+          model: 'Users',
+          key: 'userId'
+        }
+
       },
-      paymentMethod: {
+      paymentMethod:{
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      status:{
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: 'pending'
       },
-      status: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: "pending",
-      },
-      products: {
-        type: Sequelize.JSONB,
+      products:{
+        type: Sequelize.JSONB
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
+        type: Sequelize.DATE
+      }
     });
   },
   async down(queryInterface, Sequelize) {
