@@ -14,5 +14,5 @@ const connectSequelize: Sequelize = new Sequelize(config[`${MODE}`].url, {
     },
   },
 });
-
+export default connectSequelize
 
