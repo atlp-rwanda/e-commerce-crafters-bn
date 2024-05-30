@@ -1,9 +1,10 @@
 "use strict";
-import { Model, DataTypes } from "sequelize";
+import { Model, DataTypes, Sequelize } from "sequelize";
 import connectSequelize from "../config/db.config";
+import Cart from "./cart";
 
 class CartItem extends Model {
-  public cartitemsId?: string;
+  public cartitemsid?: string;
   public cartId!: string;
   public productId!: string;
   public quantity!: number;
@@ -14,25 +15,30 @@ class CartItem extends Model {
       as: "cart",
     });
   }
-}
-CartItem.init(
-  {
-    cartitemsId: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    cartId: { type: DataTypes.STRING, allowNull: false },
-    productId: { type: DataTypes.STRING, allowNull: false },
-    quantity: { type: DataTypes.INTEGER, allowNull: false },
-    price: { type: DataTypes.INTEGER, allowNull: false },
-  },
-  {
-    sequelize: connectSequelize,
-    modelName: "CartItem",
-    tableName: "CartItems",
-    timestamps: true,
+  static initModel(sequelize: Sequelize) {
+    CartItem.init(
+      {
+        cartitemsid: {
+          type: DataTypes.UUID,
+          primaryKey: true,
+          defaultValue: DataTypes.UUIDV4,
+        },
+        cartId: { type: DataTypes.STRING, allowNull: false },
+        productId: { type: DataTypes.STRING, allowNull: false },
+        quantity: { type: DataTypes.INTEGER, allowNull: false },
+        price: { type: DataTypes.INTEGER, allowNull: false },
+      },
+      {
+        sequelize: connectSequelize,
+        modelName: "CartItem",
+        tableName: "CartItems",
+        timestamps: true,
+      }
+    );
+    return CartItem;
   }
-);
+}
+
+CartItem.initModel(connectSequelize);
 
 export default CartItem;
