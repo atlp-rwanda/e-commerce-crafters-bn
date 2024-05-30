@@ -2,23 +2,23 @@ const dotenv = require('dotenv')
 dotenv.config()
 module.exports = {
   "development": {
-    "url": process.env.DATABASE_TEST_URL,
+    "url": process.env.DATABASE_LOCAL,
     "dialect": "postgres",
     "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": true
-      }
+      // "ssl": {
+      //   "require": true,
+      //   "rejectUnauthorized": true
+      // }
     }
   },
   "test": {
-    "url": process.env.DATABASE_TEST_URL,
+    "url": process.env.DATABASE_LOCAL,
     "dialect": "postgres",
     "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": true
-      }
+      // "ssl": {
+      //   "require": true,
+      //   "rejectUnauthorized": true
+      // }
     }
   },
   "production": {
