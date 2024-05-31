@@ -7,6 +7,9 @@ class Wishlist extends Model {
   public userId!: string;
   public productId!: string;
   static associate(models: any) {
+    Wishlist.hasMany(models.WishlistItem,{
+      foreignKey:"wishlistId"
+    })
   }
   static initModel(sequelize: Sequelize) {
     Wishlist.init(
@@ -17,12 +20,12 @@ class Wishlist extends Model {
           defaultValue: DataTypes.UUIDV4,
         },
         userId: { type: DataTypes.STRING, allowNull: false },
-        productId: { type: DataTypes.STRING, allowNull: false },
+        productId: { type: DataTypes.STRING, allowNull: true },
       },
       {
         sequelize: connectSequelize,
         modelName: "Wishlist",
-        tableName: "wishlists",
+        tableName: "Wishlists",
         timestamps: true,
       }
     );

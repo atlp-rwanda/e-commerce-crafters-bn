@@ -3,10 +3,10 @@ import { Model, DataTypes } from "sequelize";
 import connectSequelize from "../config/db.config";
 
 class WishlistItem extends Model {
-  public wishlistitemsId?: string;
+  public wishlistItemsId?: string;
   public wishlistId!: string;
   public productId!: string;
-  public price!: number;
+
   static associate(models: any) {
     WishlistItem.belongsTo(models.Wishlist, {
       foreignKey: "wishlistId",
@@ -16,14 +16,13 @@ class WishlistItem extends Model {
 }
 WishlistItem.init(
   {
-    wishlistitemsId: {
+    wishlistItemsId: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
     wishlistId: { type: DataTypes.STRING, allowNull: false },
     productId: { type: DataTypes.STRING, allowNull: false },
-    price: { type: DataTypes.INTEGER, allowNull: false },
   },
   {
     sequelize: connectSequelize,

@@ -4,13 +4,13 @@ dotenv.config();
 
 module.exports = {
   "development": {
-    "url": "postgres://postgres:postgres@localhost:5432/postgres",
+    "url": process.env.DATABASE_DEVELOPMENT_URL,
     "dialect": "postgres",
     "dialectOptions": {
-      // "ssl": {
-      //   "require": true,
-      //   "rejectUnauthorized": true
-      // }
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": true
+      }
     }
  
   },
