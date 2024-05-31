@@ -7,9 +7,12 @@ const MODE: any = process.env.MODE || "development";
 
 const connectSequelize: Sequelize = new Sequelize(config[`${MODE}`].url, {
   dialect: config[`${MODE}`].dialect,
-  dialectOptions: {},
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: true,
+    },
+  },
 });
-
-export default connectSequelize;
-
+export default connectSequelize
 

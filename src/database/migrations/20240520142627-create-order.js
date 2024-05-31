@@ -32,6 +32,9 @@ module.exports = {
       products: {
         type: Sequelize.JSONB,
       },
+      totalAmount: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
