@@ -2,7 +2,6 @@ import Product from "../database/models/product";
 import Vendor from "../database/models/vendor";
 import User from "../database/models/user";
 import { Op } from "sequelize";
-import cron from "node-cron";
 import nodemailer from "nodemailer";
 export const checkExpiringProducts = async () => {
  const productsData = await Product.findAll({
@@ -58,7 +57,7 @@ export const checkExpiringProducts = async () => {
  return send;
 };
 
-const sendEmails = async (data) => {
+export const sendEmailsExpiring = async (data) => {
  if (!data) return false;
  const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -174,7 +173,25 @@ const sendEmails = async (data) => {
   return arr;
  });
 };
-cron.schedule("0 0 * * */14", async () => {
- const data = await checkExpiringProducts();
- sendEmails(data);
-});
+export const checkExpiredProducts = async () => {
+ try {
+  const productsData = await Product.findAll({
+   where: {
+    expiringDate: {
+     [Op.lte]: new Date(),
+    },
+    expired: false,
+   },
+  });
+  const jsonProducts = productsData.map((product) => product.toJSON());
+  const productIds = jsonProducts.map((cur) => {
+   const { productId } = cur;
+   return productId;
+  });
+  return productIds;
+ } catch (error) {
+  console.log(error);
+ }
+};
+
+export const UpdateExpiredProduct = async (productIds: string[] | []) => {};

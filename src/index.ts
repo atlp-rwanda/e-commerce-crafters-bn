@@ -1,10 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
-import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import passport from 'passport';
-import cors from 'cors';
-import './config/passport';
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "passport";
+import cors from "cors";
+import cron from "node-cron";
+import "./config/passport";
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -18,30 +19,28 @@ import adminRoute from "./routes/roles.route";
 import forgotPassword from "./routes/forget.password.router";
 import authRoute from "./routes/auth.router";
 import roleRoute from "./routes/roles.route";
-import checkoutRoute from "./routes/checkout.router"
-
-import googleAuthRoute from './routes/googleAuth.route'
-import cartroute from "./routes/cart.route"
-
-
-
+import checkoutRoute from "./routes/checkout.router";
+import googleAuthRoute from "./routes/googleAuth.route";
+import cartroute from "./routes/cart.route";
+import { checkExpiringProducts, sendEmailsExpiring } from "./helpers/expiring";
 const app = express();
 
 app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret:'crafters1234',
-  resave:false,
-  saveUninitialized:true,
-  cookie: { secure: false }
-}))
+app.use(
+ session({
+  secret: "crafters1234",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false },
+ })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
 app.use(express.json());
-
 
 // app.use(express.json());
 app.use("/", userRoute);
@@ -52,13 +51,17 @@ app.use("/", productRoute);
 app.use("/", vendorRoute);
 app.use("/", roleRoute);
 app.use("/", checkoutRoute);
-app.use('/', googleAuthRoute)
+app.use("/", googleAuthRoute);
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
 
 const server = app.listen(PORT, () => {
-  console.log(`Server running on Port ${PORT}`);
+ console.log(`Server running on Port ${PORT}`);
+});
+cron.schedule("0 0 * * */14", async () => {
+ const data = await checkExpiringProducts();
+ sendEmailsExpiring(data);
 });
 
 export { app, server };
