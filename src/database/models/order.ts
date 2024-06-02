@@ -10,8 +10,7 @@ class Order extends Model {
   public paymentMethod!: string;
   public status!: string;
   public products!: any;
-  public totalAmount!: number;
-  public expectedDeliveryDate?: Date;
+  public totalAmount!: number
   static associate(models: any) {}
   static initModel(sequelize: Sequelize) {
     Order.init(
@@ -26,8 +25,7 @@ class Order extends Model {
         paymentMethod: { type: DataTypes.INTEGER, allowNull: false },
         status: { type: DataTypes.STRING, allowNull: false },
         products: { type: DataTypes.JSONB, allowNull: false },
-        totalAmount: {type:DataTypes.INTEGER,allowNull: false},
-        expectedDeliveryDate: {type: DataTypes.DATE, allowNull: true}
+        totalAmount: {type:DataTypes.INTEGER,allowNull: false}
       },
       {
         sequelize: connectSequelize,

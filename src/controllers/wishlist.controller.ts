@@ -19,7 +19,7 @@ export const addToWishlist = async (req: Request, res: Response) => {
       const wishlistItem = await WishlistItem.create({
         wishlistId: wishlist.wishlistId,
         productId,
-        price,
+    
       });
       if (wishlistItem) {
         return res

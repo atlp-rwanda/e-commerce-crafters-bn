@@ -5,10 +5,7 @@ import {
   orderPendingStatus,
   orderCancelledStatus,
 } from "../controllers/orderController";
-import { getOrderStatus, updateOrderStatus } from "../controllers/orderstatus.controller";
 import { VerifyAccessToken } from "../middleware/verfiyToken";
-import { verifyAdmin } from "../middleware/verifyRole";
-
 const router = express.Router();
 
 router.put("/order/:orderId/ship", VerifyAccessToken, orderShippedStatus);
@@ -23,8 +20,5 @@ router.put(
   VerifyAccessToken,
   orderCancelledStatus
 );
-
-router.get('/order/:orderId/status',VerifyAccessToken, getOrderStatus);
-router.put('/order/:orderId/status',VerifyAccessToken, verifyAdmin, updateOrderStatus);
 
 export default router;

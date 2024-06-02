@@ -5,9 +5,6 @@ import session from 'express-session';
 import passport from 'passport';
 import cors from 'cors';
 import './config/passport';
-import http from 'http';
-import { Server as SocketIOServer } from 'socket.io';
-
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -25,16 +22,14 @@ import orderRoute from "./routes/order.route";
 import checkoutRoute from "./routes/checkout.router"
 
 import googleAuthRoute from './routes/googleAuth.route'
-import cartroute from "./routes/cart.route";
+import cartroute from "./routes/cart.route"
+import wishlistroute from "./routes/wishlist.route"
 import subscriptionRoute from "./routes/subscription.route"
 
 import notificationRoute from "./routes/notifications.route"
 
 
 const app = express();
-const httpServer = http.createServer(app);
-const ioServer = new SocketIOServer(httpServer); 
-
 
 app.use(cors());
 app.use(cookieParser());
@@ -68,16 +63,10 @@ app.use('/', notificationRoute)
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
-
-ioServer.on('connection', (socket) => {
-  console.log('user connected')
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  })
-})
+app.use("/", wishlistroute);
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);
 });
 
-export { app, server, httpServer, ioServer };
+export { app, server };
