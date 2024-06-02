@@ -13,7 +13,6 @@ const PORT = process.env.PORT;
 import userRoute from "./routes/user.route";
 import vendorRoute from "./routes/vendor.route";
 import swaggerRoute from "./config/SwaggerConfig";
-
 import productRoute from "./routes/product.route";
 import adminRoute from "./routes/roles.route";
 import forgotPassword from "./routes/forget.password.router";
@@ -22,6 +21,8 @@ import roleRoute from "./routes/roles.route";
 import checkoutRoute from "./routes/checkout.router";
 import googleAuthRoute from "./routes/googleAuth.route";
 import cartroute from "./routes/cart.route";
+import orderRoute from "./routes/order.route";
+import wishlistroute from "./routes/wishlist.route";
 import { checkExpiredsProduct } from "./helpers/expiring";
 
 
@@ -53,11 +54,13 @@ app.use("/", forgotPassword);
 app.use("/", productRoute);
 app.use("/", vendorRoute);
 app.use("/", roleRoute);
+app.use("/", orderRoute);
 app.use("/", checkoutRoute);
 app.use("/", googleAuthRoute);
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
+app.use("/", wishlistroute);
 
 cron.schedule('0 0 * * *', () => {
     checkExpiredsProduct();

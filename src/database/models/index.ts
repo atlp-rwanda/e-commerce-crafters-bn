@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 import Admin from "./admin";
 import Cart from "./cart";
@@ -12,7 +12,7 @@ import Subscription from "./subscription";
 import User from "./user";
 import Vendor from "./vendor";
 import Wishlist from "./wishlist";
-
+import WishlistItem from "./wishlistItem";
 
 const models = {
   User,
@@ -27,9 +27,10 @@ const models = {
   Subscription,
   Rating,
   Review,
+  WishlistItem,
 };
 
-Object.keys(models).forEach(modelName => {
+Object.keys(models).forEach((modelName) => {
   if (models[modelName].associate) {
     models[modelName].associate(models);
   }

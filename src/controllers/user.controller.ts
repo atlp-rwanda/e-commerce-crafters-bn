@@ -61,7 +61,7 @@ export const register = async (req: Request, res: Response) => {
   }
   const duplicate: any = await User.findOne({ where: { email: email } });
   if (duplicate) {
-    res.status(409).json({ Message: "Email already exists" });
+    return res.status(409).json({ Message: "Email already exists" });
   }
   try {
     const senddata = await saveUser(req.body);
