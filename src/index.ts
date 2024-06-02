@@ -22,7 +22,10 @@ import roleRoute from "./routes/roles.route";
 import checkoutRoute from "./routes/checkout.router";
 import googleAuthRoute from "./routes/googleAuth.route";
 import cartroute from "./routes/cart.route";
-import { checkExpiringProducts, sendEmailsExpiring } from "./helpers/expiring";
+import { checkExpiredsProduct } from "./helpers/expiring";
+
+
+
 const app = express();
 
 app.use(cors());
@@ -56,12 +59,13 @@ app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
 
+cron.schedule('0 0 * * *', () => {
+    checkExpiredsProduct();
+});
 const server = app.listen(PORT, () => {
  console.log(`Server running on Port ${PORT}`);
+ checkExpiredsProduct()
 });
-cron.schedule("0 0 * * */14", async () => {
- const data = await checkExpiringProducts();
- sendEmailsExpiring(data);
-});
+
 
 export { app, server };

@@ -15,7 +15,12 @@ class Product extends Model {
  public expiringDate?: Date;
  public expired!: boolean;
  public available!: boolean;
+    Vendor: any;
  static associate(models: any) {
+  Product.belongsTo(models.Vendor,{
+    foreignKey: 'vendorId',
+    as: "Vendor"
+  })
   Product.hasMany(models.Wishlist, {
    foreignKey: "productId",
   });

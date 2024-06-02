@@ -3,6 +3,7 @@ import { saveProduct, getProductById, searchProducts, getAllProducts} from "../s
 import Product from "../database/models/product";
 import { checkVendorModifyPermission, checkVendorPermission } from "../services/PermisionService";
 import Vendor from "../database/models/vendor";
+import models from "../database/models";
 
 
 export const createProduct = async(req:Request,res:Response)=>{
@@ -48,11 +49,11 @@ export const createProduct = async(req:Request,res:Response)=>{
 export const readProduct = async (req: Request, res: Response) => {
   try {
       const productId = req.params.id;
-      const product = await Product.findByPk(productId);
+      const product = await Product.findByPk(productId,{include:{model:models.Vendor,as: "Vendor"}});
       if (!product) {
           return res.status(404).json({ error: "Product not found" });
       }
-      return res.status(200).json(product);
+      return res.status(200).json({product:product});
   } catch (error: any) {
       return res.status(500).json({ error: error.message });
   }
