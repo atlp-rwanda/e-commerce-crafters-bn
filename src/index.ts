@@ -65,17 +65,8 @@ app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
 
-
-ioServer.on('connection', (socket) => {
-  console.log('user connected')
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  })
-})
-
 cron.schedule('0 0 * * *', () => {
     checkExpiredsProduct();
-
 });
 const server = httpServer.listen(PORT, () => {
  console.log(`Server running on Port ${PORT}`);
