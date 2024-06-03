@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { toggle2FAController } from "../controllers/2fa.controller";
+import { enable2FA } from "../controllers/2fa.controller";
 import { VerifyAccessToken } from "../middleware/verfiyToken";
-import { verifyCodeController } from './../controllers/2fa.controller';
+import { verifyCode } from "./../middleware/2fa.middleware";
 import { login } from "../controllers/user.controller";
 
 const router = Router();
 
-router.post("/enable-2fa", VerifyAccessToken, toggle2FAController);
-router.post("/verify-code", verifyCodeController, login);
+router.post("/enable-2fa", VerifyAccessToken, enable2FA);
+router.post("/verify-code", verifyCode, login);
 
 export default router;

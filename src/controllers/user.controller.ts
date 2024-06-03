@@ -40,16 +40,16 @@ export const login = async (req: ExtendedRequest, res: Response) => {
     res.status(401).json({ message: req.session.twoFAError });
   } else {
     try {
-      const { email = req.body.email, password = req.body.password } = req.session;
-      console.log(email);
-      console.log(password);
+      const email = req.session.email || req.body.email;
+      const password = req.session.password || req.body.password;
+
       const existUser = await loginFunc({ email, password });
       if (!existUser) {
         return res.status(404).json({ message: "User not found" });
       }
   
       const isPasswordValid = await bcrypt.compare(
-        req.body.password,
+        password,
         existUser.password
       );
       if (!isPasswordValid) {
@@ -61,15 +61,15 @@ export const login = async (req: ExtendedRequest, res: Response) => {
       const token = await generateToken(existUser);
       res.cookie("token", token, { httpOnly: true });
       return res.status(200).json({
-        message: "Login successfull",
+        message: "Login successful",
         token,
         user: existUser,
       });
     } catch (error) {
+      console.error(error);
       return res.status(500).json({ message: "Unable to log in" });
     }
   }
-
 };
 
 export const register = async (req: Request, res: Response) => {

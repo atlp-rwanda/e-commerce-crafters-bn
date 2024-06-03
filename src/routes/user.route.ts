@@ -1,4 +1,4 @@
-import { twoFAController } from './../controllers/2fa.controller';
+import { twoFAController } from './../middleware/2fa.middleware';
 import express from "express"
 import { Welcome, deleteUser, editUser, login, register, updatePassword } from "../controllers/user.controller";
 import { addFeedback, addReview } from "../controllers/review.controller";
