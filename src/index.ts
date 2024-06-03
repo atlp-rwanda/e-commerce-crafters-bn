@@ -68,7 +68,7 @@ app.use("/", wishlistroute);
 cron.schedule('0 0 * * *', () => {
     checkExpiredsProduct();
 });
-const server = app.listen(PORT, () => {
+const server = httpServer.listen(PORT, () => {
  console.log(`Server running on Port ${PORT}`);
  checkExpiredsProduct()
 });
