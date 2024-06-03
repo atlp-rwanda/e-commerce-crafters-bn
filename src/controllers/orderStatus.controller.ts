@@ -40,13 +40,17 @@ export const updateOrderStatus = async(req: Request, res: Response) => {
 
         order.status = status;
 
-        const currentDate = new Date();
-        const expectedDeliveryDate = new Date(currentDate.getTime() + (14 * 24 * 60 * 60 * 1000));
+        if (status === 'processing'){
+            const currentDate = new Date();
+            const expectedDeliveryDate = new Date(currentDate.getTime() + (14 * 24 * 60 * 60 * 1000));
 
-        order.expectedDeliveryDate = expectedDeliveryDate
+            order.expectedDeliveryDate = expectedDeliveryDate
+        }
+
+        
         await order.save();
 
-        const formattedDate = order.expectedDeliveryDate.toLocaleDateString()
+        const formattedDate = order.expectedDeliveryDate ? order.expectedDeliveryDate.toLocaleDateString() : null;
 
         
 
