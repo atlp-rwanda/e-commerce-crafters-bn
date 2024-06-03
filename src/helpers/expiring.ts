@@ -5,6 +5,7 @@ import { Op } from "sequelize";
 import nodemailer from "nodemailer";
 import models from "../database/models";
 import { Response } from "express";
+import cron from "node-cron"
 
 
 export const checkExpiringProducts = async () => {
@@ -67,7 +68,7 @@ export const checkExpiringProducts = async () => {
 };
 
 
-export const sendEmailsExpiring = async (data) => {
+
 
 const sendEmails = async (data) => {
   if (!data) return false;
