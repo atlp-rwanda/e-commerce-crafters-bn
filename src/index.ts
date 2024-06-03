@@ -6,6 +6,8 @@ import passport from "passport";
 import cors from "cors";
 import cron from "node-cron";
 import "./config/passport";
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -29,6 +31,8 @@ import subscriptionRoute from "./routes/subscription.route"
 
 import notificationRoute from "./routes/notifications.route"
 const app = express();
+const httpServer = http.createServer(app);
+const ioServer = new SocketIOServer(httpServer);
 
 app.use(cors());
 app.use(cookieParser());
@@ -83,4 +87,4 @@ const server = httpServer.listen(PORT, () => {
 });
 
 
-export { app, server };
+export { app, server, ioServer };
