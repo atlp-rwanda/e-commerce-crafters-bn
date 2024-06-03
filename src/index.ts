@@ -71,7 +71,7 @@ ioServer.on('connection', (socket) => {
   })
 })
 
-const server = app.listen(PORT, () => {
+const server = httpServer.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);
 });
 
