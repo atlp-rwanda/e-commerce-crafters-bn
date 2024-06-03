@@ -6,6 +6,7 @@ import nodemailer from "nodemailer";
 import models from "../database/models";
 import { Response } from "express";
 
+
 export const checkExpiringProducts = async () => {
   const productsData = await Product.findAll({
     where: {
@@ -27,11 +28,14 @@ export const checkExpiringProducts = async () => {
     acc[vendorId].push(product.name);
     return acc;
   }, {});
+
   const vendorsData = await Vendor.findAll({
     where: {
       vendorId: Object.keys(organizedProducts),
     },
+
   });
+
   const jsonVendors = vendorsData.map((vendor) => vendor.toJSON());
   const organizedVendors = jsonVendors.reduce((acc, vendor) => {
     const { userId, vendorId } = vendor;
@@ -41,11 +45,13 @@ export const checkExpiringProducts = async () => {
     acc[userId] = vendorId;
     return acc;
   }, {});
+
   const usersData = await User.findAll({
     where: {
       userId: Object.keys(organizedVendors),
     },
   });
+
   let send = {};
   const jsonUsers = usersData.map((user) => user.toJSON());
   jsonUsers.forEach((user) => {
@@ -60,7 +66,10 @@ export const checkExpiringProducts = async () => {
   return send;
 };
 
+
 export const sendEmailsExpiring = async (data) => {
+
+const sendEmails = async (data) => {
   if (!data) return false;
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -167,6 +176,7 @@ export const sendEmailsExpiring = async (data) => {
     </body>
     </html>`,
     };
+
     try {
       await transporter.sendMail(mailOptions);
       arr[i] = "sent";
@@ -176,6 +186,7 @@ export const sendEmailsExpiring = async (data) => {
     return arr;
   });
 };
+
 
 export const checkExpiredsProduct = async(req?:Request,res?:Response)=>{
     try {
@@ -312,3 +323,9 @@ export const checkExpiredsProduct = async(req?:Request,res?:Response)=>{
 
 }
 export const UpdateExpiredProduct = async (productIds: string[] | []) => {};
+
+cron.schedule("0 0 * * */14", async () => {
+  const data = await checkExpiringProducts();
+  sendEmails(data);
+});
+
