@@ -11,20 +11,20 @@ module.exports = {
       LIMIT 3;
     `);
 
-    const [vendors] = await queryInterface.sequelize.query(`
-      SELECT "vendorId"
-      FROM "Vendors"
+    const [products] = await queryInterface.sequelize.query(`
+      SELECT "productId"
+      FROM "Products"
       LIMIT 3;
     `);
 
     const ratings = users.flatMap(user =>
-      vendors.map(vendor => ({
+      products.map(product => ({
         ratingId: uuidv4(),
         ratingScore: 5,
+        feedback: "good product",
         // @ts-ignore
-        userId: user.userId,
+        productId: product.productId,
         // @ts-ignore
-        vendorId: vendor.vendorId,
         createdAt: new Date(),
         updatedAt: new Date()
       })))
