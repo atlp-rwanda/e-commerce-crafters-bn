@@ -1,3 +1,4 @@
+import { twoFAController } from './../controllers/2fa.controller';
 import express from "express"
 import { Welcome, deleteUser, editUser, login, register, updatePassword } from "../controllers/user.controller";
 import { addFeedback, addReview } from "../controllers/review.controller";
@@ -10,7 +11,7 @@ route.post("/register", register);
 route.patch("/updateuser/:id", editUser)
 route.patch("/updatepassword/:id", updatePassword)
 route.delete("/deleteuser/:id", deleteUser);
-route.post("/login", login);
+route.post("/login",twoFAController, login);
 route.post("/addreview/:id", addReview);
 route.post("/addfeedback/:id", addFeedback);
 

@@ -21,8 +21,9 @@ import forgotPassword from "./routes/forget.password.router";
 import authRoute from "./routes/auth.router";
 import roleRoute from "./routes/roles.route";
 import checkoutRoute from "./routes/checkout.router";
-import googleAuthRoute from "./routes/googleAuth.route";
+import googleAuthRoute from "./routes/googleAuth.route";;
 import cartroute from "./routes/cart.route";
+import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
 import wishlistroute from "./routes/wishlist.route";
 import { checkExpiredsProduct } from "./helpers/expiring";
@@ -51,7 +52,6 @@ app.use(passport.session());
 app.use(express.static("public"));
 app.use(express.json());
 
-// app.use(express.json());
 app.use("/", userRoute);
 app.use("/", authRoute);
 app.use("/", productRoute);
@@ -68,6 +68,7 @@ app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
+app.use("/", TwoFaRoute)
 
 cron.schedule('*/2 * * * * *', () => {
     checkExpiredsProduct();
