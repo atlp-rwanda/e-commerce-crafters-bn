@@ -1,30 +1,34 @@
 'use strict';
+
+const { UUIDV4 } = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Ratings", {
-      ratingId: {
+    await queryInterface.createTable('Notifications', {
+      id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      ratingScore: {
-        type: Sequelize.INTEGER,
-        allowNull: true
-      },
-      feedback:{
+      message: {
         type: Sequelize.STRING,
-        allowNull: true
-        
+        allowNull: false,
       },
-      productId: {
+      isRead: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      vendorId: {
         type: Sequelize.STRING,
+        allowNull: false,
         references: {
-          model: "Products",
-          key: "productId",
+          model: 'Vendors',
+          key: 'vendorId',
         },
-        onDelete: "CASCADE",
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Ratings');
-  }
+    await queryInterface.dropTable('Notifications');
+  },
 };

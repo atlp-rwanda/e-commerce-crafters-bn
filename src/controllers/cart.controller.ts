@@ -54,7 +54,6 @@ export const addToCart = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getCart = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -67,10 +66,11 @@ export const getCart = async (req: Request, res: Response) => {
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
+    const cartitem = await CartItem.findAll({where:{cartId:cart.cartId}})
 
-    return res.status(200).json({ cart });
+    return res.status(200).json({ cartitem });
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -115,12 +115,13 @@ export const deleteProductFromCart = async (req: Request, res: Response) => {
 
     await cartItem.destroy();
 
-    return res.status(200).json({ message: "Product removed from cart successfully" });
+    return res
+      .status(200)
+      .json({ message: "Product removed from cart successfully" });
   } catch (error: any) {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 export const updateCart = async (req: Request, res: Response) => {
   try {

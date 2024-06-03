@@ -1,41 +1,41 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Code Crafters E-commerce CI
 
 on: [push, pull_request]
-
-env:
-  DATABASE_DEVELOPMENT_URL: ${{secrets.DATABASE_DEVELOPMENT_URL}}
-  DATABASE_TEST_URL: ${{secrets.DATABASE_TEST_URL}}
-  DATABASE_PRODUCTION_URL: ${{secrets.DATABASE_PRODUCTION_URL}}
-  PORT: 5000
-  CLOUDINARY_CLOUD_NAME: ${{secrets.CLOUDINARY_CLOUD_NAME}}
-  API_KEY: ${{secrets.CLOUDINARY_API_KEY}}
-  API_SECRET: ${{secrets.CLOUDINARY_API_SECRET}}
-  MODE: development
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_TEST_URL: ${{ secrets.DATABASE_TEST_URL }}
+      PORT: 5000
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
+      MODE: ${{ secrets.HOST_MODE }}
+
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
 
-    - name: install dependencies
+    - name: Install dependencies
       run: npm install
     
-    - name: build
+    - name: Build
       run: npm run build --if-present
 
     - name: Verify environment variables
       run: |
         echo "MODE=$MODE"
         echo "DATABASE_TEST_URL=$DATABASE_TEST_URL"
-    - name: run tests
+        echo "GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL"
+        echo "GOOGLE_CALLBACK_ID=$GOOGLE_CLIENT_ID"
+        
+
+    - name: Run tests
       run: npm run test

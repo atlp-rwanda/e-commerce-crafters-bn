@@ -4,10 +4,14 @@ import connectSequelize from "../config/db.config";
 
 class Rating extends Model {
   public ratingId?: string;
-  public ratingScore!: number;
-  public userId!: string;
-  public vendorId!: string;
-  static associate(models: any) {}
+  public ratingScore?: number;
+  public feedback?: string;
+  public productId!: string;
+  static associate(models: any) {
+    Rating.belongsTo(models.Product,{
+      foreignKey: "productId",
+    })
+  }
   static initModel(sequelize: Sequelize) {
     Rating.init(
       {
@@ -16,9 +20,9 @@ class Rating extends Model {
           primaryKey: true,
           defaultValue: DataTypes.UUIDV4,
         },
-        ratingScore: { type: DataTypes.INTEGER, allowNull: false },
-        userId: { type: DataTypes.STRING, allowNull: false },
-        vendorId: { type: DataTypes.STRING, allowNull: false },
+        ratingScore: { type: DataTypes.INTEGER, allowNull: true },
+        feedback: { type: DataTypes.STRING, allowNull: true },
+        productId: { type: DataTypes.STRING, allowNull: false },
       },
       {
         sequelize: connectSequelize,

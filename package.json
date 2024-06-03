@@ -40,7 +40,6 @@
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
     "sequelize-typescript": "^2.1.6",
-    "socket.io": "^4.7.5",
     "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
