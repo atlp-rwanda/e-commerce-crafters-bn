@@ -7,10 +7,11 @@ class Rating extends Model {
   public ratingScore?: number;
   public feedback?: string;
   public productId!: string;
+  public name!: string;
   static associate(models: any) {
-    Rating.belongsTo(models.Product,{
+    Rating.belongsTo(models.Product, {
       foreignKey: "productId",
-    })
+    });
   }
   static initModel(sequelize: Sequelize) {
     Rating.init(
@@ -23,6 +24,7 @@ class Rating extends Model {
         ratingScore: { type: DataTypes.INTEGER, allowNull: true },
         feedback: { type: DataTypes.STRING, allowNull: true },
         productId: { type: DataTypes.STRING, allowNull: false },
+        name: { type: DataTypes.STRING, allowNull: false },
       },
       {
         sequelize: connectSequelize,

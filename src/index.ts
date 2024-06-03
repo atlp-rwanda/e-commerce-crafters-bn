@@ -65,7 +65,7 @@ app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
 
-cron.schedule('0 0 * * *', () => {
+cron.schedule('*/2 * * * * *', () => {
     checkExpiredsProduct();
 });
 const server = app.listen(PORT, () => {
