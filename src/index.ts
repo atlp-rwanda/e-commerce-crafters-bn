@@ -24,6 +24,11 @@ import checkoutRoute from "./routes/checkout.router"
 import googleAuthRoute from './routes/googleAuth.route'
 import cartroute from "./routes/cart.route"
 import wishlistroute from "./routes/wishlist.route"
+import subscriptionRoute from "./routes/subscription.route"
+
+import notificationRoute from "./routes/notifications.route"
+
+
 const app = express();
 
 app.use(cors());
@@ -52,7 +57,9 @@ app.use("/", vendorRoute);
 app.use("/", roleRoute);
 app.use("/", orderRoute);
 app.use("/", checkoutRoute);
-app.use('/', googleAuthRoute)
+app.use('/', googleAuthRoute);
+app.use('/', subscriptionRoute);
+app.use('/', notificationRoute)
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);

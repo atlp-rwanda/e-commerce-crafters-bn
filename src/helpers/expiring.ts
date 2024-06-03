@@ -4,81 +4,89 @@ import User from "../database/models/user";
 import { Op } from "sequelize";
 import cron from "node-cron";
 import nodemailer from "nodemailer";
+
 export const checkExpiringProducts = async () => {
- const productsData = await Product.findAll({
-  where: {
-   expiringDate: {
-    [Op.between]: [
-     new Date(),
-     new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(),
-    ],
-   },
-  },
- });
- const jsonProducts = productsData.map((product) => product.toJSON());
- if (jsonProducts.length === 0) return false;
- const organizedProducts = jsonProducts.reduce((acc, product) => {
-  const { vendorId } = product;
-  if (!acc[vendorId]) {
-   acc[vendorId] = [];
-  }
-  acc[vendorId].push(product.name);
-  return acc;
- }, {});
- const vendorsData = await Vendor.findAll({
-  where: {
-   vendorId: Object.keys(organizedProducts),
-  },
- });
- const jsonVendors = vendorsData.map((vendor) => vendor.toJSON());
- const organizedVendors = jsonVendors.reduce((acc, vendor) => {
-  const { userId, vendorId } = vendor;
-  if (!acc[userId]) {
-   acc[userId] = vendorId;
-  }
-  acc[userId] = vendorId;
-  return acc;
- }, {});
- const usersData = await User.findAll({
-  where: {
-   userId: Object.keys(organizedVendors),
-  },
- });
- let send = {};
- const jsonUsers = usersData.map((user) => user.toJSON());
- jsonUsers.forEach((user) => {
-  const { email } = user;
-  const userIds = Object.keys(organizedVendors);
-  userIds.forEach((id) => {
-   if (id === user.userId) {
-    send[email] = organizedProducts[organizedVendors[id]];
-   }
+  const productsData = await Product.findAll({
+    where: {
+      expiringDate: {
+        [Op.between]: [
+          new Date(),
+          new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(),
+        ],
+      },
+    },
   });
- });
- return send;
+
+  const jsonProducts = productsData.map((product) => product.toJSON());
+  if (jsonProducts.length === 0) return false;
+  const organizedProducts = jsonProducts.reduce((acc, product) => {
+    const { vendorId } = product;
+    if (!acc[vendorId]) {
+      acc[vendorId] = [];
+    }
+    acc[vendorId].push(product.name);
+    return acc;
+  }, {});
+
+  const vendorsData = await Vendor.findAll({
+    where: {
+      vendorId: Object.keys(organizedProducts),
+    },
+  });
+
+  const jsonVendors = vendorsData.map((vendor) => vendor.toJSON());
+  const organizedVendors = jsonVendors.reduce((acc, vendor) => {
+    const { userId, vendorId } = vendor;
+    if (!acc[userId]) {
+      acc[userId] = vendorId;
+    }
+    acc[userId] = vendorId;
+    return acc;
+  }, {});
+
+  const usersData = await User.findAll({
+    where: {
+      userId: Object.keys(organizedVendors),
+    },
+  });
+
+  let send = {};
+  const jsonUsers = usersData.map((user) => user.toJSON());
+  jsonUsers.forEach((user) => {
+    const { email } = user;
+    const userIds = Object.keys(organizedVendors);
+    userIds.forEach((id) => {
+      if (id === user.userId) {
+        send[email] = organizedProducts[organizedVendors[id]];
+      }
+    });
+  });
+  return send;
 };
 
 const sendEmails = async (data) => {
- if (!data) return false;
- const transporter = nodemailer.createTransport({
-  service: "gmail",
-  secure: true,
-  auth: {
-   user: process.env.EMAIL,
-   pass: process.env.EMAIL_PASS,
-  },
- });
- const emails = Object.keys(data);
- emails.map(async (email, i, arr) => {
-  const productsList = data[email].reduce((acc, curr) => {
-   acc += `<li>${curr}</li>`;
-   return acc;
-  }, "");
-  const mailOptions = {
-   from: process.env.EMAIL,
-   to: email,
-   subject: "Reminder: Expiring Product in Store Inventory⚠️⚠️",
-   html: `<!DOCTYPE html>
+  if (!data) return false;
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    secure: true,
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const emails = Object.keys(data);
+  emails.map(async (email, i, arr) => {
+    const productsList = data[email].reduce((acc, curr) => {
+      acc += `<li>${curr}</li>`;
+      return acc;
+    }, "");
+
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Reminder: Expiring Product in Store Inventory⚠️⚠️",
+      html: `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -164,17 +172,19 @@ const sendEmails = async (data) => {
         </div>
     </body>
     </html>`,
-  };
-  try {
-   await transporter.sendMail(mailOptions);
-   arr[i] = "sent";
-  } catch (error) {
-   console.log(error);
-  }
-  return arr;
- });
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+      arr[i] = "sent";
+    } catch (error) {
+      console.log(error);
+    }
+    return arr;
+  });
 };
+
 cron.schedule("0 0 * * */14", async () => {
- const data = await checkExpiringProducts();
- sendEmails(data);
+  const data = await checkExpiringProducts();
+  sendEmails(data);
 });
