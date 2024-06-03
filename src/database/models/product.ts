@@ -3,6 +3,7 @@ import { Model, DataTypes, Sequelize } from "sequelize";
 import connectSequelize from "../config/db.config";
 
 class Product extends Model {
+ [x: string]: any;
  public productId?: string;
  public vendorId: any;
  public name!: string;
@@ -17,7 +18,7 @@ class Product extends Model {
  public available!: boolean;
  static associate(models: any) {
   Product.belongsTo(models.Vendor,{
-    foreignKey: 'vendorId',
+    foreignKey: "vendorId",
     as: "Vendor"
   })
   Product.hasMany(models.Wishlist, {
