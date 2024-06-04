@@ -2,37 +2,37 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Wishlists", {
+    await queryInterface.createTable('Wishlists', {
       wishlistId: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV4
       },
       userId: {
         type: Sequelize.STRING,
-        references: {
-          model: "Users",
-          key: "userId",
-        },
-        onDelete: "CASCADE",
+        references:{
+          model: 'Users',
+          key: 'userId'
+        }
       },
-      productId: {
+      productId:{
         type: Sequelize.STRING,
-        references: {
-          model: "Products",
-          key: "productId",
-        },
-        onDelete: "CASCADE",
+        references:{
+          model: 'Products',
+          key: 'productId'
+          
+        }
+
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
+        type: Sequelize.DATE
+      }
     });
   },
   async down(queryInterface, Sequelize) {

@@ -15,8 +15,7 @@ module.exports = {
         references:{
           model: 'Users',
           key: 'userId'
-        },
-        onDelete: "CASCADE",
+        }
       },
       storeName:{
         type: Sequelize.STRING,
@@ -27,13 +26,11 @@ module.exports = {
         allowNull: false
       },
       TIN:{
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        unique: true
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       bankAccount:{
-        type: Sequelize.BIGINT,
-        unique: true
+        type: Sequelize.INTEGER,
       },
       paymentDetails: {
         type: Sequelize.JSONB

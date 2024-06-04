@@ -11,36 +11,35 @@ module.exports = {
       },
       vendorId: {
         type: Sequelize.STRING,
-        references: {
+        references:{
           model: 'Vendors',
           key: 'vendorId'
-        },
-        onDelete:"CASCADE"
+        }
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      image: {
+      image:{
         type: Sequelize.STRING,
         allowNull: false
       },
-      description: {
+      description:{
         type: Sequelize.STRING,
         allowNull: false
       },
-      discount: {
-        type: Sequelize.DOUBLE,
+      discount:{
+        type: Sequelize.STRING,
         allowNull: false
       },
-      price: {
+      price:{
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      quantity: {
+      quantity:{
         type: Sequelize.INTEGER
       },
-      category: {
+      category:{
         type: Sequelize.STRING
       },
       createdAt: {
@@ -50,10 +49,6 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      expiringDate: {
-        allowNull: true,
-        type: Sequelize.DATE
       }
     });
   },
@@ -61,4 +56,3 @@ module.exports = {
     await queryInterface.dropTable('Products');
   }
 };
-
