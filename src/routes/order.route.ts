@@ -5,7 +5,9 @@ import {
   orderPendingStatus,
   orderCancelledStatus,
 } from "../controllers/orderController";
+
 import { VerifyAccessToken } from "../middleware/verfiyToken";
+
 const router = express.Router();
 
 router.put("/order/:orderId/ship", VerifyAccessToken, orderShippedStatus);

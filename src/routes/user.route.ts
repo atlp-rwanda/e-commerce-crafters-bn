@@ -12,6 +12,6 @@ route.patch("/updateuser/:id", VerifyAccessToken, editUser)
 route.patch("/updatepassword/:id", VerifyAccessToken, updatePassword)
 route.delete("/deleteuser/:id", VerifyAccessToken, deleteUser);
 route.post("/login", login);
-route.post("/addreview/:id", addReview);
+route.post("/addreview/:id", VerifyAccessToken, addReview);
 
 export default route;
