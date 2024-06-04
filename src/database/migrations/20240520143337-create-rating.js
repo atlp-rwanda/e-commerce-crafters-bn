@@ -2,40 +2,39 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Ratings", {
+    await queryInterface.createTable('Ratings', {
       ratingId: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV4
       },
-      ratingScore: {
-        type: Sequelize.INTEGER,
+      ratingScore:{
+        type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.STRING,
-        references: {
-          model: "Users",
-          key: "userId",
-        },
-        onDelete: "CASCADE",
+        type: Sequelize.INTEGER,
+        references:{
+          model: 'Users',
+          key: 'userId'
+        }
       },
-      vendorId: {
+      vendorId:{
         type: Sequelize.STRING,
-        references: {
-          model: "Vendors",
-          key: "vendorId",
-        },
-        onDelete: "CASCADE",
+        references:{
+          model: 'Vendors',
+          key: 'vendorId'
+        }
+
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
+        type: Sequelize.DATE
+      }
     });
   },
   async down(queryInterface, Sequelize) {
