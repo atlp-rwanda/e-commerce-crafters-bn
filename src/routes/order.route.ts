@@ -1,5 +1,5 @@
 import express from "express";
-import { updateOrderStatus } from "../controllers/orderController";
+import { modifyOrderStatus } from "../controllers/orderController";
 import { VerifyAccessToken } from "../middleware/verfiyToken";
 import { getOrderStatus, updateOrderStatus } from "../controllers/orderStatus.controller";
 import { verifyAdmin } from "../middleware/verifyRole";
