@@ -25,12 +25,12 @@ import googleAuthRoute from "./routes/googleAuth.route";;
 import cartroute from "./routes/cart.route";
 import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
+
 import wishlistroute from "./routes/wishlist.route";
+import subscriptionRoute from "./routes/subscription.route";
+import notificationRoute from "./routes/notifications.route";
 import { checkExpiredsProduct } from "./helpers/expiring";
 
-import subscriptionRoute from "./routes/subscription.route"
-
-import notificationRoute from "./routes/notifications.route"
 const app = express();
 const httpServer = http.createServer(app);
 const ioServer = new SocketIOServer(httpServer);
@@ -39,12 +39,14 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
+
  session({
   secret: "crafters1234",
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false },
  })
+
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -61,9 +63,9 @@ app.use("/", vendorRoute);
 app.use("/", roleRoute);
 app.use("/", orderRoute);
 app.use("/", checkoutRoute);
-app.use('/', googleAuthRoute);
-app.use('/', subscriptionRoute);
-app.use('/', notificationRoute)
+app.use("/", googleAuthRoute);
+app.use("/", subscriptionRoute);
+app.use("/", notificationRoute);
 app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
