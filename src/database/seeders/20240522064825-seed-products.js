@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXhCG6nff2emBYOKGHb6jU2zQ4C2m0LBg4Mj-eydwZyg&s'
+    const imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXhCG6nff2emBYOKGHb6jU2zQ4C2m0LBg4Mj-eydwZyg&s';
 
     const [vendors] = await queryInterface.sequelize.query(`
       SELECT "vendorId" 
@@ -26,8 +26,10 @@ module.exports = {
       quantity: 100,
       category: 'Shoes',
       createdAt: new Date(),
-      updatedAt: new Date()
-    }))
+      updatedAt: new Date(),
+      expired: false,
+      available: true
+    }));
 
     await queryInterface.bulkInsert('Products', products, {});
   },
