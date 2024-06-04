@@ -17,6 +17,7 @@ module.exports = {
         cartId: null,
         role: 'buyer',
         profile: profileUrl,
+        isTwoFactorEnabled: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -30,6 +31,7 @@ module.exports = {
         cartId: null,
         role: 'buyer',
         profile: profileUrl,
+        isTwoFactorEnabled: false,
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
@@ -42,6 +44,7 @@ module.exports = {
         cartId: null,
         role: 'buyer',
         profile: profileUrl,
+        isTwoFactorEnabled: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -55,6 +58,7 @@ module.exports = {
         cartId: null,
         role: 'buyer',
         profile: profileUrl,
+        isTwoFactorEnabled: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -68,6 +72,7 @@ module.exports = {
         cartId: null,
         role: 'buyer',
         profile: profileUrl,
+        isTwoFactorEnabled: false,
         createdAt: new Date(),
         updatedAt: new Date()
       }, {
@@ -81,6 +86,7 @@ module.exports = {
         cartId: null,
         role: 'buyer',
         profile: profileUrl,
+        isTwoFactorEnabled: false,
         createdAt: new Date(),
         updatedAt: new Date()
       }
