@@ -16,6 +16,7 @@ class User extends Model {
   public isVerified?: boolean;
   public resetPasswordToken?: string | null;
   public resetPasswordExpires?: Date | null;
+  public isTwoFactorEnabled?: boolean; 
 
   static associate(models: any) {
     User.hasMany(models.Review, {
@@ -44,6 +45,7 @@ class User extends Model {
         },
         resetPasswordToken: { type: DataTypes.STRING, allowNull: true },
         resetPasswordExpires: { type: DataTypes.DATE, allowNull: true },
+        isTwoFactorEnabled: { type: DataTypes.BOOLEAN, defaultValue: false },
       },
       {
         sequelize: connectSequelize,

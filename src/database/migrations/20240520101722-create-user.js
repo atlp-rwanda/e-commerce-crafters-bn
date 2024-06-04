@@ -53,6 +53,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      isTwoFactorEnabled: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

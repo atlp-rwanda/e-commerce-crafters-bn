@@ -9,22 +9,25 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: Sequelize.UUIDV4,
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+
       ratingScore: {
         type: Sequelize.INTEGER,
+        allowNull: true
       },
-      userId: {
+      feedback:{
+        type: Sequelize.STRING,
+        allowNull: true
+        
+      },
+      productId: {
         type: Sequelize.STRING,
         references: {
-          model: "Users",
-          key: "userId",
-        },
-        onDelete: "CASCADE",
-      },
-      vendorId: {
-        type: Sequelize.STRING,
-        references: {
-          model: "Vendors",
-          key: "vendorId",
+          model: "Products",
+          key: "productId",
         },
         onDelete: "CASCADE",
       },

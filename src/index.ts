@@ -21,6 +21,7 @@ import roleRoute from "./routes/roles.route";
 import checkoutRoute from "./routes/checkout.router";
 import googleAuthRoute from "./routes/googleAuth.route";
 import cartroute from "./routes/cart.route";
+import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
 import wishlistroute from "./routes/wishlist.route";
 import {
@@ -31,6 +32,8 @@ import {
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
 const app = express();
+const httpServer = http.createServer(app);
+const ioServer = new SocketIOServer(httpServer);
 
 app.use(cors());
 app.use(cookieParser());
@@ -49,7 +52,6 @@ app.use(passport.session());
 app.use(express.static("public"));
 app.use(express.json());
 
-// app.use(express.json());
 app.use("/", userRoute);
 app.use("/", authRoute);
 app.use("/", productRoute);
@@ -73,7 +75,7 @@ cron.schedule("0 0 * * */14", async () => {
  const data = await checkExpiringProducts();
  sendEmailsExpiring(data);
 });
-const server = app.listen(PORT, () => {
+const server = httpServer.listen(PORT, () => {
  console.log(`Server running on Port ${PORT}`);
 });
 
