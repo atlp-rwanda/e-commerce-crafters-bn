@@ -33,8 +33,6 @@ components:
 
 /:
   get:
-    tags:
-      - Welcome endpoint
     summary: welcome endpoint
     responses:
       200:
@@ -42,10 +40,28 @@ components:
       500:
         description: sorry
 
+/register:
+  post:
+    tags:
+      - User
+    summary: registering a user
+    description: authorizing user to our app
+    operationId: sign-Up
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user'     
+    responses:
+      200:
+        description: success sign up
+      500:
+        description: An error occurred        
+
 /login:
   post:
     tags:
-      - User endpoints
+      - User
     summary: logging in a user
     description: authenticating user to our app
     operationId: log-In
@@ -53,10 +69,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/user'
-      required:
-        - email
-        - password      
+            $ref: '#/components/schemas/user'     
     responses:
       200:
         description: success login
@@ -67,7 +80,7 @@ components:
 /enable-2fa:
   post:
     tags:
-      - User endpoints
+      - User
     summary: enabling 2fa
     description: enabling 2fa for your account
     operationId: enable-2fa
@@ -84,7 +97,7 @@ components:
 /verify-code:
   post:
     tags:
-      - User endpoints
+      - User
     summary: verifying code
     description: getting your code verified and proceed to login
     operationId: verify-code
@@ -103,7 +116,7 @@ components:
 /auth/google:
   get:
     tags:
-      - User endpoints
+      - User
     summary: Sign-In with google
     description: Redirects the user to Google for authentication. After successful authentication, Google will redirect the user back to our application with an authorization code.
     responses:
@@ -115,7 +128,7 @@ components:
 /auth/google/callback:
   get:
     tags:
-      - User endpoints
+      - User
     summary: Google Sign-In Callback
     description: This is The endpoint that Google redirects the user back to after successful authentication.
     responses:
