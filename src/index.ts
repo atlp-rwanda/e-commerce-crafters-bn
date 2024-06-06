@@ -78,5 +78,11 @@ const server = httpServer.listen(PORT, () => {
  checkExpiredsProduct()
 });
 
+if (process.env.NODE_ENV === 'test') {
+    afterAll(() => {
+      server.close();
+    });
+  }
+
 
 export { app, server, ioServer };

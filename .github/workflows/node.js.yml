@@ -9,7 +9,7 @@ jobs:
 
     env:
       DATABASE_TEST_URL: ${{ secrets.DATABASE_TEST_URL }}
-      PORT: 5000
+      PORT: 5001
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
@@ -38,4 +38,4 @@ jobs:
         
 
     - name: Run tests
-      run: npm run test
+      run: PORT=5001 npm run test
