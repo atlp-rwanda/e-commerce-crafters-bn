@@ -73,16 +73,37 @@ app.use("/", wishlistroute);
 cron.schedule('*/2 * * * * *', () => {
     checkExpiredsProduct();
 });
-const server = httpServer.listen(PORT, () => {
- console.log(`Server running on Port ${PORT}`);
- checkExpiredsProduct()
-});
 
-if (process.env.NODE_ENV === 'test') {
-    afterAll(() => {
-      server.close();
+const startServer = () => {
+    return new Promise<void>((resolve, reject) => {
+        const server = httpServer.listen(PORT, () => {
+            console.log(`Server running on Port ${PORT}`);
+            checkExpiredsProduct();
+            resolve();
+        });
+
+        server.on('error', reject);
     });
-  }
+};
+
+const closeServer = () => {
+    return new Promise<void>((resolve, reject) => {
+        httpServer.close((err) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log("Server stopped");
+                resolve();
+            }
+        });
+    });
+};
+
+if (process.env.NODE_ENV !== 'test') {
+    console.log(process.env.NODE_ENV)
+  startServer();
+}
 
 
-export { app, server, ioServer };
+
+export { app, ioServer,startServer,closeServer };

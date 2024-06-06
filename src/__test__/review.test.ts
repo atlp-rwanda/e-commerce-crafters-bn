@@ -1,10 +1,19 @@
 import request from 'supertest';
 import sinon from 'sinon';
-import  {app}  from '../index'; 
+import  {app, closeServer, startServer}  from '../index'; 
 import  Rating  from '../database/models/rating'; 
 import Review from '../database/models/review';
 import Order from '../database/models/order';
 
+beforeAll(async () => {
+  console.log("test starting ..........");
+  await startServer();
+});
+
+afterAll(async () => {
+  await closeServer();
+  console.log("server stop..........");
+});
 
 describe('addReview', () => {
   let findOneOrderStub: sinon.SinonStub;
@@ -22,8 +31,7 @@ describe('addReview', () => {
   });
 
   it('should return 402 if rating is above 5', async () => {
-    const res = await request(app)
-      .post('/addreview/123')
+    const res = await request(app).post('/addreview/123')
       .send({ productId: '456', rating: 6, feedback: 'Great product!' });
 
     expect(res.status).toBe(402);
