@@ -1,0 +1,94 @@
+paths:
+  /product/updateProduct/{productId}:
+    put:
+      summary: This API is for updating a product
+      description: This API is for a vendor to update product details
+      tags:
+        - product
+      parameters:
+        - in: path
+          name: productId 
+          required: true
+          schema:
+            type: string
+          description: ID of the product to update
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Product update payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                vendorId:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                discount:
+                  type: integer
+                price:
+                  type: integer
+                quantity:
+                  type: integer
+                category:
+                  type: string
+                expiringDate:
+                  type: string
+                  format: date-time
+                expired:
+                  type: boolean
+                available:
+                  type: string
+                
+              
+      responses:
+        "200":
+          description: Product updated successfully
+        "404":
+          description: Product not found
+        "500":
+          description: Internal server error
+
+
+
+
+  /product/deleteProduct/{productId}:
+    delete:
+      summary: delete a product
+      description: This API allows a vendor to delete a product
+      tags:
+        - product
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of product to delete
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Product deleted successfully
+        "404":
+          description: Product not found
+        "500":
+          description: Internal server error
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+
+
+                  
