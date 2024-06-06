@@ -15,9 +15,10 @@ describe('addReview', () => {
     createReviewStub = sinon.stub(Review, 'create');
   });
 
-  afterAll(() => {
+  afterAll((done) => {
     findOneOrderStub.restore();
     createReviewStub.restore();
+    done()
   });
 
   it('should return 402 if rating is above 5', async () => {
@@ -80,8 +81,9 @@ describe('addFeedback', () => {
     createStub = sinon.stub(Rating, 'create');
   });
 
-  afterAll(() => {
+  afterAll((done) => {
     createStub.restore();
+    done()
   });
 
   it('should return 402 if name is not provided', async () => {
@@ -150,8 +152,9 @@ describe('selectReview', () => {
     findAllReviewStub = sinon.stub(Review, 'findAll');
   });
 
-  afterAll(() => {
+  afterAll((done) => {
     findAllReviewStub.restore();
+    done()
   });
 
   it('should return 400 if no reviews are found', async () => {
