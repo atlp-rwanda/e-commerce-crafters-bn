@@ -6,6 +6,8 @@ import passport from "passport";
 import cors from "cors";
 import cron from "node-cron";
 import "./config/passport";
+import http from "http";
+import { Server as SocketIOServer } from "socket.io";
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -23,6 +25,7 @@ import googleAuthRoute from "./routes/googleAuth.route";
 import cartroute from "./routes/cart.route";
 import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
+
 import wishlistroute from "./routes/wishlist.route";
 import {
  checkExpiredProducts,
@@ -67,14 +70,17 @@ app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
+app.use("/", TwoFaRoute);
+
+const server = httpServer.listen(PORT, () => {
+ console.log(`Server running on Port ${PORT}`);
+});
+
 cron.schedule("0 0 * * *", () => {
  checkExpiredProducts();
 });
 cron.schedule("0 0 * * */14", () => {
  checkExpiringProducts();
 });
-const server = httpServer.listen(PORT, () => {
- console.log(`Server running on Port ${PORT}`);
-});
 
-export { app, server };
+export { app, server, ioServer };

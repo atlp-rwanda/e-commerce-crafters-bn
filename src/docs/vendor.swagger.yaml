@@ -1,0 +1,27 @@
+paths:
+  /deleteVendor/{vendorId}/:
+    delete:
+      summary: This API is for deleting  vendor
+      description: This API is for deleting vendor
+      tags:
+        - vendor
+      parameters:
+        - in: path
+          name: vendorId
+          required: true
+          schema:
+            type: string
+          description: ID of the vendor to be deleted
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Vendor deleted successfully
+        "500":
+          description: Internal error server
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

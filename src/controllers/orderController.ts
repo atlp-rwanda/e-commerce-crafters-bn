@@ -1,15 +1,18 @@
+
 import { Request, Response } from "express";
 import Order from "../database/models/order";
 
-const updateOrderStatus = async (
-  req: Request,
-  res: Response,
-  newStatus: string,
-  successMessage: string
-) => {
+const allowedStatuses = ["Pending", "Shipped", "Delivered", "Cancelled"];
+
+export const modifyOrderStatus = async (req: Request, res: Response) => {
   try {
     const { orderId } = req.params;
+    const { status } = req.body;
     const userId = (req as any).token.userId;
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ error: "Invalid order status" });
+    }
 
     const order = await Order.findByPk(orderId);
 
@@ -23,28 +26,14 @@ const updateOrderStatus = async (
         .json({ error: "Only the vendor can update the order status" });
     }
 
-    order.status = newStatus;
+    order.status = status;
     await order.save();
 
-    res.status(200).json({ message: successMessage, order });
-  } catch (error) {
+    res
+      .status(200)
+      .json({ message: `Order has been ${status.toLowerCase()}`, order });
+  } catch (error:any) {
     console.error(`Failed to update order status: ${error}`);
-    res.status(500).json({ error: "Failed to update order status" });
+    res.status(500).json({ error: error.message });
   }
-};
-
-export const orderShippedStatus = (req: Request, res: Response) => {
-  updateOrderStatus(req, res, "Shipped", "Order has shipped");
-};
-
-export const orderPendingStatus = (req: Request, res: Response) => {
-  updateOrderStatus(req, res, "Pending", "Order in progress");
-};
-
-export const orderDeliveredStatus = (req: Request, res: Response) => {
-  updateOrderStatus(req, res, "Delivered", "Order has been delivered");
-};
-
-export const orderCancelledStatus = (req: Request, res: Response) => {
-  updateOrderStatus(req, res, "Delivered", "Order has been cancelled");
 };

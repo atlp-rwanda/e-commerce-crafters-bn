@@ -1,27 +1,11 @@
 import express from "express";
-import {
-  orderShippedStatus,
-  orderDeliveredStatus,
-  orderPendingStatus,
-  orderCancelledStatus,
-} from "../controllers/orderController";
+import { modifyOrderStatus } from "../controllers/orderController";
 import { VerifyAccessToken } from "../middleware/verfiyToken";
 import { getOrderStatus, updateOrderStatus } from "../controllers/orderStatus.controller";
 import { verifyAdmin } from "../middleware/verifyRole";
 const router = express.Router();
 
-router.put("/order/:orderId/ship", VerifyAccessToken, orderShippedStatus);
-router.put("/order/:orderId/pending", VerifyAccessToken, orderPendingStatus);
-router.put(
-  "/order/:orderId/delivered",
-  VerifyAccessToken,
-  orderDeliveredStatus
-);
-router.put(
-  "/order/:orderId/cancelled",
-  VerifyAccessToken,
-  orderCancelledStatus
-);
+router.put("/order/:orderId/order-status", VerifyAccessToken, updateOrderStatus);
 
 router.get('/order/:orderId/status',VerifyAccessToken, getOrderStatus);
 router.put('/order/:orderId/status',VerifyAccessToken, verifyAdmin, updateOrderStatus);
