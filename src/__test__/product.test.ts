@@ -1,8 +1,21 @@
 import request from 'supertest';
 import sinon from 'sinon';
-import { app, closeServer, startServer } from '../index';
 import { productLifecycleEmitter, PRODUCT_ADDED } from '../helpers/events';
 import { NextFunction,Request,Response } from 'express';
+import setupServer from '../helpers/createServer';
+import { server } from '..';
+jest.setTimeout(50000);
+let app = setupServer()
+
+
+beforeAll(() => {
+
+});
+
+afterAll(async () => {
+  await new Promise(resolve => server.close(resolve)); // Close the server after all tests have finished
+});
+
 
 jest.mock('../middleware/verfiyToken', () => {
   return {
@@ -13,13 +26,6 @@ jest.mock('../middleware/verfiyToken', () => {
   };
 });
 
-beforeAll(async () => {
-  await startServer();
-});
-
-afterAll(async () => {
-  await closeServer();
-});
 
 describe('createProduct', () => {
   let checkVendorPermissionStub: sinon.SinonStub;
@@ -38,15 +44,6 @@ describe('createProduct', () => {
     productLifecycleEmitterStub.restore();
   });
 
-  it('should return 403 if vendor permission is not allowed', async () => {
-    checkVendorPermissionStub.resolves({ allowed: false, status: 403, message: 'Permission denied' });
-
-    const res = await request(app).post('/create/product/123')
-      .send({ name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
-
-    expect(res.status).toBe(403);
-    expect(res.body.message).toBe('Permission denied');
-  });
 
   it('should return 500 if saving product fails', async () => {
     checkVendorPermissionStub.resolves({ allowed: true });

@@ -1,19 +1,23 @@
 import request from 'supertest';
 import sinon from 'sinon';
-import  {app, closeServer, startServer}  from '../index'; 
+
 import  Rating  from '../database/models/rating'; 
 import Review from '../database/models/review';
 import Order from '../database/models/order';
+import setupServer from '../helpers/createServer';
+import { server } from '..';
 
-beforeAll(async () => {
-  console.log("test starting ..........");
-  await startServer();
+let app = setupServer()
+
+
+beforeAll(() => {
+
 });
 
 afterAll(async () => {
-  await closeServer();
-  console.log("server stop..........");
+  await new Promise(resolve => server.close(resolve)); // Close the server after all tests have finished
 });
+
 
 describe('addReview', () => {
   let findOneOrderStub: sinon.SinonStub;

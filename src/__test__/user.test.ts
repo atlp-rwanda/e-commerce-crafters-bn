@@ -1,16 +1,13 @@
 import request from 'supertest';
-import {app, closeServer, startServer} from '..'
+import {app, server} from '..'
 
-beforeAll(async () => {
-  console.log("test starting ..........");
-  await startServer();
+beforeAll(() => {
+
 });
 
 afterAll(async () => {
-  await closeServer();
-  console.log("server stop..........");
+  await new Promise(resolve => server.close(resolve)); // Close the server after all tests have finished
 });
-
 describe("Welcome endpoint",()=>{
     
     it('should return welcome message and status 200 ', async()=>{
