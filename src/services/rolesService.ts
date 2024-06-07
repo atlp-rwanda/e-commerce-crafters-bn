@@ -117,10 +117,8 @@ export const approveVendorRequest = async (userId: string) => {
 };
 
 export const rejectVendorRequest = async (userId: string) => {
-
   const vendor = await Vendor.findOne({ where: { userId: userId } });
   const user: any = await User.findOne({ where: { userId: userId } });
-
 
   if (!vendor) {
     return { message: "Vendor Request Not Found", status: 404 };
@@ -131,7 +129,7 @@ export const rejectVendorRequest = async (userId: string) => {
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
-        user: process.env.EMAIL_USER,
+        user: process.env.EMAIL,
         pass: process.env.EMAIL_PASS,
       },
     });
@@ -139,13 +137,13 @@ export const rejectVendorRequest = async (userId: string) => {
     const mailOptions = {
       to: user.email,
       from: process.env.EMAIL_USER,
-      subject: "Vendor Request Approved",
+      subject: "Vendor Request Rejected",
       html: ` <!DOCTYPE html>
       <html lang="en">
       <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Vendor Request Approved</title>
+          <title>Vendor Request Rejected</title>
           <style>
               body {
                   font-family: Arial, sans-serif;
