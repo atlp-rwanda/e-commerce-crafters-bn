@@ -1,3 +1,4 @@
+
 openapi: "3.0.0"
 info:
   title: "ATLP Project API"
@@ -98,6 +99,76 @@ paths:
                   message:
                     type: "string"
                     example: "Internal server error"
+
+                    
+ 
+  /getcart/{userId}:
+    get:
+      summary: Get all items in a user's cart
+      tags: 
+        - Cart
+      produces:
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          format: uuid
+          description: ID of the user
+      responses:
+        200:
+          description: Successful retrieval of cart items
+        404:
+          description: Cart not found
+        500:
+          description: Internal Server Error
+
+  /clearcart/{userId}:
+    delete:
+      summary: Remove all items of a specific user from cart
+      tags: 
+        - Cart
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          format: uuid
+          description: ID of the user
+      responses:
+        200:
+          description: Cart cleared successfully
+        404:
+          description: Cart not found
+        500:
+          description: Internal Server Error
+
+  /cart/{userId}/product/{productId}:
+    delete:
+      summary: Remove item from cart
+      tags: 
+        - Cart
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+          format: uuid
+          description: ID of the user
+        - name: productId
+          in: path
+          required: true
+          type: string
+          format: uuid
+          description: ID of the product
+      responses:
+        200:
+          description: Product removed from cart successfully
+        404:
+          description: Product not found in cart
+        500:
+          description: Internal Server Error
   /api/users/request-reset-password:
     post:
       tags:
