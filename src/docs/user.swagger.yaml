@@ -38,25 +38,7 @@ components:
       200:
         description: server running
       500:
-        description: sorry
-
-/register:
-  post:
-    tags:
-      - User
-    summary: registering a user
-    description: authorizing user to our app
-    operationId: sign-Up
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/user'     
-    responses:
-      200:
-        description: success sign up
-      500:
-        description: An error occurred        
+        description: sorry       
 
 /login:
   post:
