@@ -1,0 +1,91 @@
+/updatecart:
+  post:
+    summary: Update cart items
+    tags:
+      - Cart
+    requestBody:
+      description: Cart updates
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              updates:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    cartId:
+                      type: string
+                      example: 456
+                    productId:
+                      type: string
+                      example: 123
+                    quantity:
+                      type: integer
+                      example: 2
+                    price:
+                      type: number
+                      example: 100
+    responses:
+      "200":
+        description: Cart items updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Cart items updated successfully!
+                cartItems:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      cartId:
+                        type: string
+                        example: 456
+                      productId:
+                        type: string
+                        example: 123
+                      quantity:
+                        type: integer
+                        example: 2
+                      price:
+                        type: number
+                        example: 100
+                total:
+                  type: number
+                  example: 200
+      "400":
+        description: Invalid quantity or exceeds available quantity
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Only 5 Test Product available In store
+      "404":
+        description: Product or cart item not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Product 123 Not Found
+      "500":
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Internal server error
