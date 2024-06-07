@@ -32,8 +32,6 @@ import notificationRoute from "./routes/notifications.route";
 import { checkExpiredsProduct } from "./helpers/expiring";
 
 
-import subscriptionRoute from "./routes/subscription.route";
-
 const app = express();
 const httpServer = http.createServer(app);
 const ioServer = new SocketIOServer(httpServer);
