@@ -5,9 +5,8 @@ import  Rating  from '../database/models/rating';
 import Review from '../database/models/review';
 import Order from '../database/models/order';
 import setupServer from '../helpers/createServer';
-import { server } from '..';
+import { app, server } from '..';
 
-let app = setupServer()
 
 
 beforeAll(() => {
@@ -15,7 +14,7 @@ beforeAll(() => {
 });
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve)); // Close the server after all tests have finished
+  await new Promise(resolve => server.close(resolve)); 
 });
 
 

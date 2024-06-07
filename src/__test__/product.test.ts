@@ -3,9 +3,9 @@ import sinon from 'sinon';
 import { productLifecycleEmitter, PRODUCT_ADDED } from '../helpers/events';
 import { NextFunction,Request,Response } from 'express';
 import setupServer from '../helpers/createServer';
-import { server } from '..';
+import { app, server } from '..';
 jest.setTimeout(50000);
-let app = setupServer()
+
 
 
 beforeAll(() => {
@@ -13,7 +13,7 @@ beforeAll(() => {
 });
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve)); // Close the server after all tests have finished
+  await new Promise(resolve => server.close(resolve)); 
 });
 
 

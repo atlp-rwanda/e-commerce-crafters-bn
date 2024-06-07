@@ -6,7 +6,7 @@ beforeAll(() => {
 });
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve)); // Close the server after all tests have finished
+  await new Promise(resolve => server.close(resolve));
 });
 describe("Welcome endpoint",()=>{
     
