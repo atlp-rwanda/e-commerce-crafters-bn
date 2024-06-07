@@ -7,7 +7,7 @@
     "dev": "nodemon src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc -p .",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "migrate": "sequelize-cli db:migrate",
     "seed": "sequelize-cli db:seed:all"
   },
@@ -42,6 +42,7 @@
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
     "sequelize-typescript": "^2.1.6",
+    "sinon": "^18.0.0",
     "socket.io": "^4.7.5",
     "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",

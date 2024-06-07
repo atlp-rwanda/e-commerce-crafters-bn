@@ -6,8 +6,8 @@ import passport from "passport";
 import cors from "cors";
 import cron from "node-cron";
 import "./config/passport";
-import http from 'http';
-import { Server as SocketIOServer } from 'socket.io';
+import http from "http";
+import { Server as SocketIOServer } from "socket.io";
 
 dotenv.config();
 const PORT = process.env.PORT;
@@ -21,7 +21,7 @@ import forgotPassword from "./routes/forget.password.router";
 import authRoute from "./routes/auth.router";
 import roleRoute from "./routes/roles.route";
 import checkoutRoute from "./routes/checkout.router";
-import googleAuthRoute from "./routes/googleAuth.route";;
+import googleAuthRoute from "./routes/googleAuth.route";
 import cartroute from "./routes/cart.route";
 import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
@@ -30,6 +30,9 @@ import wishlistroute from "./routes/wishlist.route";
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
 import { checkExpiredsProduct } from "./helpers/expiring";
+
+
+import subscriptionRoute from "./routes/subscription.route";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -40,12 +43,12 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
 
- session({
-  secret: "crafters1234",
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false },
- })
+  session({
+    secret: "crafters1234",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
 
 );
 app.use(passport.initialize());
@@ -70,15 +73,14 @@ app.use("/api-docs", swaggerRoute);
 app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
-app.use("/", TwoFaRoute)
+app.use("/", TwoFaRoute);
 
-cron.schedule('*/2 * * * * *', () => {
-    checkExpiredsProduct();
+cron.schedule("0 0 * * * *", () => {
+  checkExpiredsProduct();
 });
 const server = httpServer.listen(PORT, () => {
- console.log(`Server running on Port ${PORT}`);
- checkExpiredsProduct()
+  console.log(`Server running on Port ${PORT}`);
+  checkExpiredsProduct();
 });
-
 
 export { app, server, ioServer };
