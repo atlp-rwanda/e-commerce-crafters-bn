@@ -1,0 +1,103 @@
+paths:
+  /updateVendor/{id}:
+    patch:
+      summary: Update Vendor Details
+      tags:
+        - Vendor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the vendor to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                storeName:
+                  type: string
+                  description: New name for the vendor's store
+                  example: "New Store Name"
+                address:
+                  type: string
+                  description: New address for the vendor
+                  example: "2 KN 544 ST, Kigali, Rwanda"
+                TIN:
+                  type: string
+                  description: New Tax Identification Number for the vendor
+                  example: "123456789"
+                bankAccount:
+                  type: string
+                  description: New bank account details for the vendor
+                  example: "9876543210"
+                paymentDetails:
+                  type: string
+                  description: New payment details for the vendor
+                  example: "{\"method\": \"PayPal\", \"account\": \"vendor@paypal.com\"}"
+      responses:
+        200:
+          description: Vendor details updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Vendor update success"
+                  user:
+                    type: object
+                    properties:
+                      vendorId:
+                        type: string
+                        example: "142b7ffd-efff-497a-8ac0-12fff26c38b6"
+                      storeName:
+                        type: string
+                        example: "Updated Store Name"
+                      address:
+                        type: string
+                        example: "2 KN 544 ST, Updated Kigali, Rwanda"
+                      TIN:
+                        type: string
+                        example: "123456789"
+                      bankAccount:
+                        type: string
+                        example: "9876543210"
+                      paymentDetails:
+                        type: string
+                        example: "{\"method\": \"PayPal\", \"account\": \"vendor@paypal.com\"}"
+        400:
+          description: Bad request, missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request parameters"
+        404:
+          description: Vendor not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Vendor not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
