@@ -73,7 +73,6 @@ app.use("/", wishlistroute);
 cron.schedule('*/2 * * * * *', () => {
     checkExpiredsProduct();
 });
-
 const startServer = () => {
     return new Promise<void>((resolve, reject) => {
         const server = httpServer.listen(PORT, () => {
