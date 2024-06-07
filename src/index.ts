@@ -27,7 +27,6 @@ import wishlistroute from "./routes/wishlist.route";
 import {
  checkExpiredProducts,
  checkExpiringProducts,
- sendEmailsExpiring,
 } from "./helpers/expiring";
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
@@ -71,9 +70,8 @@ app.use("/", wishlistroute);
 cron.schedule("0 0 * * *", () => {
  checkExpiredProducts();
 });
-cron.schedule("0 0 * * */14", async () => {
- const data = await checkExpiringProducts();
- sendEmailsExpiring(data);
+cron.schedule("0 0 * * */14", () => {
+ checkExpiringProducts();
 });
 const server = httpServer.listen(PORT, () => {
  console.log(`Server running on Port ${PORT}`);
