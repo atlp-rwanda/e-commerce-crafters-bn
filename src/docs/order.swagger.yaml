@@ -1,0 +1,42 @@
+paths:
+  /order/{orderId}/status:
+    put:
+      summary: This API is for seller to update the order status
+      description: This API is for seller to update the order status.
+      tags:
+        - order
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+          description: ID of the order to update
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Order status update payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [Pending, Shipped, Delivered, Cancelled]
+                  example: Delivered
+      responses:
+        "200":
+          description: Order status updated successfully
+        "404":
+          description: Order not found
+        "500":
+          description: Failed to update order status
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
