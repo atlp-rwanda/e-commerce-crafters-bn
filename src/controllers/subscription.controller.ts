@@ -31,7 +31,7 @@ export const saveSubscription = async (req: Request, res: Response) => {
 }
 
 export const deleteSubscription = async (req: Request, res: Response) => {
-  const email = req.body;
+    const { email } = req.body;
   try {
     await unsubscribe(email)
     res.status(200).json({ message: "Subcription deleted successfully" });
