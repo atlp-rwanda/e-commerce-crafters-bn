@@ -44,6 +44,7 @@ describe('createProduct', () => {
     saveProductStub.resolves(null);
 
     const res = await request(app).post('/create/product/123')
+      .set('Authorization', `Bearer test-token`) 
       .send({ name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
     expect(res.status).toBe(500);
@@ -55,6 +56,7 @@ describe('createProduct', () => {
     saveProductStub.resolves({ id: '1', name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
     const res = await request(app).post('/create/product/123')
+      .set('Authorization', `Bearer test-token`) 
       .send({ name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
     expect(res.status).toBe(201);
@@ -66,6 +68,7 @@ describe('createProduct', () => {
     checkVendorPermissionStub.rejects(new Error('Internal server error'));
 
     const res = await request(app).post('/create/product/123')
+      .set('Authorization', `Bearer test-token`) 
       .send({ name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
     expect(res.status).toBe(500);
@@ -96,6 +99,7 @@ describe('updateProduct', () => {
 
     const res = await request(app)
       .put('/updateProduct/123')
+      .set('Authorization', `Bearer test-token`) 
       .send({
         vendorId: 'vendor1',
         name: 'Updated Product',
@@ -115,6 +119,7 @@ describe('updateProduct', () => {
 
     const res = await request(app)
       .put('/updateProduct/123')
+      .set('Authorization', `Bearer test-token`) 
       .send({
         vendorId: 'vendor1',
         name: 'Updated Product',
@@ -134,6 +139,7 @@ describe('updateProduct', () => {
 
     const res = await request(app)
       .put('/updateProduct/123')
+      .set('Authorization', `Bearer test-token`) 
       .send({
         vendorId: 'vendor1',
         name: 'Updated Product',
