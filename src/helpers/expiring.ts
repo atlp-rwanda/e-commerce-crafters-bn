@@ -5,8 +5,7 @@ import { Op } from "sequelize";
 import nodemailer from "nodemailer";
 import models from "../database/models";
 import { Response } from "express";
-import cron from "node-cron"
-
+import cron from "node-cron";
 
 export const checkExpiringProducts = async () => {
   const productsData = await Product.findAll({
@@ -34,7 +33,6 @@ export const checkExpiringProducts = async () => {
     where: {
       vendorId: Object.keys(organizedProducts),
     },
-
   });
 
   const jsonVendors = vendorsData.map((vendor) => vendor.toJSON());
@@ -66,9 +64,6 @@ export const checkExpiringProducts = async () => {
   });
   return send;
 };
-
-
-
 
 const sendEmails = async (data) => {
   if (!data) return false;
@@ -188,41 +183,39 @@ const sendEmails = async (data) => {
   });
 };
 
+export const checkExpiredsProduct = async (req?: Request, res?: Response) => {
+  try {
+    const expiredProduct = await Product.findAll({
+      where: {
+        expiringDate: {
+          [Op.lt]: new Date(),
+        },
+        expired: false,
+      },
+      include: {
+        model: models.Vendor,
+        as: "Vendor",
+      },
+    });
+    console.log("Checking expired product is completed after 2 seconds!");
+    const updatePromise = expiredProduct.map(async (product) => {
+      const userId = product.Vendor.userId;
+      const userEmail = await User.findByPk(userId);
+      product.update({ expired: true, available: false }).then(async () => {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          secure: true,
+          auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASS,
+          },
+        });
 
-export const checkExpiredsProduct = async(req?:Request,res?:Response)=>{
-    try {
-        
-        const expiredProduct = await Product.findAll({
-            where:{
-                expiringDate:{
-                    [Op.lt]: new Date()
-                },
-                expired: false,
-            },  
-            include:{
-                model: models.Vendor,
-                as: "Vendor"
-            }
-        })
-        const updatePromise = expiredProduct.map(async(product)=>{
-            const userId = product.Vendor.userId
-            const userEmail =  await User.findByPk(userId)
-
-            product.update({expired: true,available: false}).then(async()=>{
-                const transporter = nodemailer.createTransport({
-                    service: "gmail",
-                    secure: true,
-                    auth: {
-                      user: process.env.EMAIL,
-                      pass: process.env.EMAIL_PASS,
-                    },
-                  });
-              
-                  let mailOptions = {
-                    from: process.env.EMAIL,
-                    to: userEmail?.email,
-                    subject: "expireProduct",
-                    html: `<!DOCTYPE html>
+        let mailOptions = {
+          from: process.env.EMAIL,
+          to: userEmail?.email,
+          subject: "expireProduct",
+          html: `<!DOCTYPE html>
                     <html lang="en">
                     <head>
                         <meta charset="UTF-8">
@@ -307,26 +300,20 @@ export const checkExpiredsProduct = async(req?:Request,res?:Response)=>{
                         </div>
                     </body>
                     </html>`,
-                  };
-                  await transporter.sendMail(mailOptions);
-                
-            })
-        })
+        };
+        await transporter.sendMail(mailOptions);
+      });
+    });
 
-        await Promise.all(updatePromise)
-        res?.status(200).json({message: "checking expiring product sucessfully"})
-
-        
-    } catch (error:any) {
-        return res?.status(500).json({error:error.message})
-        
-    }
-
-}
+    await Promise.all(updatePromise);
+    res?.status(200).json({ message: "checking expiring product sucessfully" });
+  } catch (error: any) {
+    return res?.status(500).json({ error: error.message });
+  }
+};
 export const UpdateExpiredProduct = async (productIds: string[] | []) => {};
 
 cron.schedule("0 0 * * */14", async () => {
   const data = await checkExpiringProducts();
   sendEmails(data);
 });
-

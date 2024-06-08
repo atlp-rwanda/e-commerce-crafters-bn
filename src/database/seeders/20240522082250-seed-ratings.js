@@ -20,6 +20,7 @@ module.exports = {
     const ratings = users.flatMap(user =>
       products.map(product => ({
         ratingId: uuidv4(),
+        name:"peter",
         ratingScore: 5,
         feedback: "good product",
         // @ts-ignore

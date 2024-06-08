@@ -1,11 +1,9 @@
-import express = require('express')
+import express = require("express");
 
-import swaggerJSDoc  from 'swagger-jsdoc'
-import  swaggerUi from "swagger-ui-express"
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
-
-const router = express.Router()
-
+const router = express.Router();
 
 const options = {
     definition: {
@@ -38,4 +36,4 @@ const options = {
 
 router.use("/", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-export default router
+export default router;

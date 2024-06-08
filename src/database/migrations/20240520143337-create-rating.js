@@ -9,6 +9,11 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: Sequelize.UUIDV4,
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+
       ratingScore: {
         type: Sequelize.INTEGER,
         allowNull: true
