@@ -90,7 +90,7 @@ paths:
                     type: string
                     example: internal server error
 
-  /selectreview/{vendorId}:
+  /select-review/{vendorId}:
     get:
       summary: Get all reviews for a vendor's products
       description: Get all reviews for a vendor's products
@@ -241,4 +241,59 @@ paths:
                   error:
                     type: string
                     example: internal server error
+  /select-feedback/{productId}:
+    get:
+      summary: Get feedback for a product
+      description: Retrieve all feedback for a specific product
+      tags:
+        - review
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of the product
+      responses:
+        200:
+          description: Successfully retrieved feedback
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ratings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        userId:
+                          type: string
+                          example: "user123"
+                        rating:
+                          type: integer
+                          example: 4
+                        feedback:
+                          type: string
+                          example: "Great product"
+        400:
+          description: No ratings found for the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: There is no Ratings in your products
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: internal server error                  
                   

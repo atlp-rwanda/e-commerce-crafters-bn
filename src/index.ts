@@ -68,13 +68,9 @@ app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
 
-cron.schedule("*/2 * * * * *", () => {
-  checkExpiredsProduct();
-});
 
 const server = httpServer.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);
-  checkExpiredsProduct();
 });
 
 export { app, ioServer, server };

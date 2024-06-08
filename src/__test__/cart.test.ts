@@ -72,7 +72,7 @@ describe('Cart Controller - getCart', () => {
 
     const response = await request(app).get(`/getcart/${userId}`);
 
-    console.log('getCart Response:', response.body);  // Log the response for debugging
+    console.log('getCart Response:', response.body);  
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('cartitem');

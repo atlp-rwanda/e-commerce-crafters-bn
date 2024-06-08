@@ -24,11 +24,6 @@ const options = {
           },
         },
       },
-      security: [
-        {
-          bearerAuth: [], 
-        },
-      ],
       servers: [
         {
           url: "http://localhost:5000",
