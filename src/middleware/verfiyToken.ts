@@ -28,4 +28,3 @@ export const VerifyAccessToken = (req: Request, res: Response, next: NextFunctio
         }
     });
 };
-

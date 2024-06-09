@@ -47,15 +47,39 @@ paths:
                   type: boolean
                 available:
                   type: string
+            example:
+              productId: '123'
+              vendorId: '256'
+              name: 'Sample product'
+              description: 'Sample product description'
+              image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXhCG6nff2emBYOKGHb6jU2zQ4C2m0LBg4Mj-eydwZyg&s'
+              discount: 10
+              price: 100
+              category: 'Electronics'
+              expiringDate: '2024-12-31T23:59:59Z'
+              expired: false
+              available: true
                 
               
       responses:
         "200":
           description: Product updated successfully
+          content:
+            application/json:
+              example:
+                message: 'Product updated successfully'
         "404":
           description: Product not found
+          content:
+            application/json:
+              example:
+                message: 'Product not found'
         "500":
           description: Internal server error
+          content:
+            application/json:
+              example:
+                message: 'Internal server error'
 
 
 
@@ -78,10 +102,22 @@ paths:
       responses:
         "200":
           description: Product deleted successfully
+          content:
+            application/json:
+              example:
+                message: 'Product deleted successfully'
         "404":
           description: Product not found
+          content:
+            application/json:
+              example:
+                message: 'Product not found'
         "500":
           description: Internal server error
+          content:
+            application/json:
+              example:
+                message: 'Internal server error'
 components:
   securitySchemes:
     BearerAuth:

@@ -1,5 +1,5 @@
 paths:
-  /order/{orderId}/order-status:
+  /order/{orderId}/status:
     put:
       summary: This API is for seller to update the order status
       description: This API is for seller to update the order status.

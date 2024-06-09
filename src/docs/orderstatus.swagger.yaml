@@ -17,10 +17,24 @@ paths:
       responses:
         "200":
           description: "Order"
+          content:
+            application/json:
+              example:
+                orderId: "12345"
+                status: "processing"
+                expectedDeliveryDate: "2024-12-31T23:59:59Z"
         "404":
           description: "Order not found"
+          content:
+            application/json:
+              example:
+                message: "Order not found"
         "500":
           description: "Internal server error"
+          content:
+            application/json:
+              example:
+                message: "Internal server error"
   
   
     put:
@@ -67,10 +81,22 @@ paths:
                     format: date-time
         "400":
           description: Invalid order status
+          content:
+            application/json:
+              example:
+                message: "Invalid order status"
         "404":
           description: Order not found
+          content:
+            application/json:
+              example:
+                message: "Order not found"
         "500":
           description: Internal server error
+          content:
+            application/json:
+              example:
+                message: "Internal server error"
       
 
 
