@@ -6,7 +6,7 @@ import CartItem from '../database/models/cartitem';
 import User from '../database/models/user';
 import Product from '../database/models/product';
 
-jest.setTimeout(50000);
+jest.setTimeout(500);
 
 afterAll(async () => {
   await new Promise(resolve => server.close(resolve));
