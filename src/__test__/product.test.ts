@@ -1,20 +1,20 @@
 import request from 'supertest';
 import sinon from 'sinon';
 import { productLifecycleEmitter } from '../helpers/events';
-import { NextFunction, Request, Response } from 'express';
 import { app, server } from '..';
 import Product from '../database/models/product';
+import  jwt  from 'jsonwebtoken';
+
+
+function generateToken() {
+  const payload = { userId: 'test-user' };
+  const secret = process.env.JWT_SECRET || 'crafters1234'; 
+  const options = { expiresIn: '1h' }; 
+
+  return jwt.sign(payload, secret, options);
+}
 
 jest.setTimeout(50000);
-
-jest.mock('../middleware/verfiyToken.ts', () => {
-  return {
-    VerifyAccessToken: (req: Request, res: Response, next: NextFunction) => {
-      (req as any).token = { userId: 'test-user' };
-      next();
-    }
-  };
-});
 
 beforeAll(() => {
 });
@@ -44,7 +44,11 @@ describe('createProduct', () => {
     checkVendorPermissionStub.resolves({ allowed: true });
     saveProductStub.resolves(null);
 
-    const res = await request(app).post('/create/product/123')
+    const token = generateToken();
+
+    const res = await request(app)
+      .post('/create/product/123')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
     expect(res.status).toBe(500);
@@ -55,7 +59,11 @@ describe('createProduct', () => {
     checkVendorPermissionStub.resolves({ allowed: true });
     saveProductStub.resolves({ id: '1', name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
-    const res = await request(app).post('/create/product/123')
+    const token = generateToken();
+
+    const res = await request(app)
+      .post('/create/product/123')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
     expect(res.status).toBe(201);
@@ -66,7 +74,11 @@ describe('createProduct', () => {
   it('should return 500 if there is an internal server error', async () => {
     checkVendorPermissionStub.rejects(new Error('Internal server error'));
 
-    const res = await request(app).post('/create/product/123')
+    const token = generateToken();
+
+    const res = await request(app)
+      .post('/create/product/123')
+      .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Product1', image: 'image.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' });
 
     expect(res.status).toBe(500);
@@ -95,8 +107,11 @@ describe('updateProduct', () => {
     checkVendorModifyPermissionStub.resolves({ allowed: true });
     productFindByPkStub.resolves(null);
 
+    const token = generateToken();
+
     const res = await request(app)
       .put('/updateProduct/123')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         vendorId: 'vendor1',
         name: 'Updated Product',
@@ -114,8 +129,11 @@ describe('updateProduct', () => {
   it('should return 403 if vendor does not have permission to modify the product', async () => {
     checkVendorModifyPermissionStub.resolves({ allowed: false, status: 403, message: 'Permission denied' });
 
+    const token = generateToken();
+
     const res = await request(app)
       .put('/updateProduct/123')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         vendorId: 'vendor1',
         name: 'Updated Product',
@@ -133,8 +151,11 @@ describe('updateProduct', () => {
   it('should return 500 if there is an internal server error', async () => {
     checkVendorModifyPermissionStub.rejects(new Error('Internal server error'));
 
+    const token = generateToken();
+
     const res = await request(app)
       .put('/updateProduct/123')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         vendorId: 'vendor1',
         name: 'Updated Product',
@@ -159,12 +180,15 @@ describe('updateProduct', () => {
       quantity: 20,
       category: 'Electronics'
     };
-  
+
     checkVendorModifyPermissionStub.resolves({ allowed: true });
     productFindByPkStub.resolves({ update: sinon.stub().resolves(updatedProduct) });
-  
+
+    const token = generateToken();
+
     const res = await request(app)
       .put('/updateProduct/123')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         vendorId: 'vendor1',
         name: 'Updated Product',
@@ -174,7 +198,7 @@ describe('updateProduct', () => {
         quantity: 20,
         category: 'Electronics'
       });
-  
+
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Product updated successfully');
   });
