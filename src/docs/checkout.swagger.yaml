@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: E-commerce Platform API
+  description: API documentation for the E-commerce platform.
+  version: 1.0.0
+paths:
+  /checkout:
+    post:
+      summary: Create a new order
+      description: This API is for creating a new order.
+      tags:
+        - order
+      requestBody:
+        description: Order creation payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: 12345
+                deliveryAddress:
+                  type: string
+                  example: Kigali, Rwanda
+                paymentMethod:
+                  type: string
+                  example: Credit Card
+              required:
+                - userId
+                - deliveryAddress
+                - paymentMethod
+      responses:
+        "201":
+          description: Order placed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Order placed successfully
+                  order:
+                    type: object
+                    properties:
+                      orderId:
+                        type: string
+                        example: 67890
+                      deliveryAddress:
+                        type: string
+                        example: Kigali, Rwanda
+                      userId:
+                        type: string
+                        example: 12345
+                      paymentMethod:
+                        type: string
+                        example: Credit Card
+                      status:
+                        type: string
+                        example: pending
+                      products:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            productId:
+                              type: string
+                              example: 98765
+                            quantity:
+                              type: integer
+                              example: 2
+                            price:
+                              type: number
+                              format: float
+                              example: 19.99
+                      totalAmount:
+                        type: number
+                        format: float
+                        example: 39.98
+        "400":
+          description: Bad request - missing fields or empty cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: All fields are required
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cart not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An unexpected error occurred
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+        deliveryAddress:
+          type: string
+        userId:
+          type: string
+        paymentMethod:
+          type: string
+        status:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: integer
+              price:
+                type: number
+                format: float
+        totalAmount:
+          type: number
+          format: float

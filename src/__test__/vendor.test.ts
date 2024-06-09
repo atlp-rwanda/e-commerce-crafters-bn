@@ -1,0 +1,84 @@
+import request from 'supertest';
+import sinon from 'sinon';
+import { app, server } from '../index';
+import Vendor from '../database/models/vendor';
+import User from '../database/models/user';
+
+beforeAll(() => {
+});
+
+afterAll(async () => {
+  await new Promise(resolve => server.close(resolve));
+});
+describe('registerVendor', () => {
+    let createStub: sinon.SinonStub;
+    let findOneStub: sinon.SinonStub;
+  
+    beforeAll(() => {
+      createStub = sinon.stub(Vendor, 'create');
+      findOneStub = sinon.stub(User, 'findOne');
+    });
+  
+    afterAll((done) => {
+      createStub.restore();
+      findOneStub.restore();
+      if (server.listening) {
+        server.close(done);
+      } else {
+        done();
+      }
+    });
+  
+    it('should return 400 if userId, storeName, address, TIN, bankAccount, and paymentDetails are not provided', async () => {
+      const res = await request(app)
+        .post('/requestVendor')
+        .send({ userIds: "user123", storeNames: "storeName", address: "address", TINs: 784378, bankAccounts: 853509345, paymentDetail: "momo pay" });
+      expect(res.status).toBe(400);
+      expect(res.body.message).toBe('Please fill all fields');
+    });
+  
+    it('should return 200 and vendor saved successfully', async () => {
+      const newVendor = {
+        userId: "5d7f1cce-8dc4-4e9c-b426-11fbda9f4129",
+        storeName: "storeName",
+        address: "address",
+        TIN: 784378,
+        bankAccount: 853509345,
+        paymentDetails: "momo pay"
+      };
+
+      findOneStub.resolves({ id: '5d7f1cce-8dc4-4e9c-b426-11fbda9f4129' });
+      createStub.resolves(newVendor);
+      
+      const res = await request(app)
+        .post('/requestVendor')
+        .send({ userId: "5d7f1cce-8dc4-4e9c-b426-11fbda9f4129", storeName: "storeName", address: "address", TIN: 784378, bankAccount: 853509345, paymentDetails: "momo pay" });
+  
+      expect(res.status).toBe(200);
+      expect(res.body.message).toBe('Vendor requested successfully');
+      expect(res.body.vendor).toEqual(newVendor);
+    });
+  
+    it('should return 500 if there is an internal server error', async () => {
+      findOneStub.resolves({ id: '5d7f1cce-8dc4-4e9c-b426-11fbda9f4129' });
+      createStub.rejects(new Error('Internal server error'));
+  
+      const res = await request(app)
+        .post('/requestVendor')
+        .send({ userId: "5d7f1cce-8dc4-4e9c-b426-11fbda9f4129", storeName: "storeName", address: "address", TIN: 784378, bankAccount: 853509345, paymentDetails: "momo pay" });
+  
+      expect(res.status).toBe(500);
+      expect(res.body.message).toBe('Internal server error');
+    });
+
+    it('should return 404 if user is not found', async () => {
+      findOneStub.resolves(null);
+  
+      const res = await request(app)
+        .post('/requestVendor')
+        .send({ userId: "nonexistentUser", storeName: "storeName", address: "address", TIN: 784378, bankAccount: 853509345, paymentDetails: "momo pay" });
+  
+      expect(res.status).toBe(404);
+      expect(res.body.message).toBe('User not found');
+    });
+  });
