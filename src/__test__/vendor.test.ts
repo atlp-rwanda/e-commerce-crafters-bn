@@ -9,7 +9,7 @@ afterAll(async () => {
   await new Promise(resolve => server.close(resolve));
 });
 
-describe('Vendor Tests - PATCH /updateVendor/', () => {
+describe('PATCH /updateVendor/', () => {
   let findOneVendorStub: sinon.SinonStub;
   let updateVendorStub: sinon.SinonStub;
 

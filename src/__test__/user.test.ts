@@ -10,7 +10,7 @@ afterAll(async () => {
   await new Promise(resolve => server.close(resolve));
 });
 
-describe('User Tests - PATCH /updateuser/', () => {
+describe('PATCH /updateuser/', () => {
   let findOneUserStub: sinon.SinonStub;
   let updateUserStub: sinon.SinonStub;
 
@@ -63,7 +63,7 @@ describe('User Tests - PATCH /updateuser/', () => {
  
 });
 
-describe('User Tests - PATCH /updatepassword/', () => {
+describe('PATCH /updatepassword/', () => {
   let findOneUserStub: sinon.SinonStub;
   let updateUserStub: sinon.SinonStub;
   let comparePasswordStub: sinon.SinonStub;

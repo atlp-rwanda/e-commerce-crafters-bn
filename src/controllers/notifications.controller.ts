@@ -1,40 +1,38 @@
 import { Request, Response } from 'express';
 import Notification from '../database/models/notification';
 
-export const getNotifications = async (req: Request, res: Response): Promise<void> => {
+export const getNotifications = async (req: Request, res: Response) => {
   try {
-    const { vendorId } = req.params;
+    const vendorId = req.params.vendorId;
     const notifications = await Notification.findAll({ where: { vendorId } });
-      if (notifications.length === 0) {
-      res.status(404).json({
-        message: 'No notifications that were found',
-      });
-      return;
+
+    if (notifications.length === 0) {
+      return res.status(404).json({ message: 'No notifications that were found' });
     }
-    res.status(200).json({ notifications: notifications });
+
+    res.status(200).json({ notifications });
   } catch (error) {
     console.error(`Error occurred: ${error}`);
-    res.status(500).json({ error: "Failed to retrieve notifications" });
+    res.status(500).json({ error: 'Failed to retrieve notifications' });
   }
 };
 
-export const markNotificationAsRead = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  const { isRead } = req.body;
+export const markNotificationAsRead = async (req: Request, res: Response) => {
   try {
-    const notification = await Notification.findByPk(id);
+    const notificationId = req.params.id;
+    const notification = await Notification.findByPk(notificationId);
+
     if (!notification) {
-      res.status(401).json({
-        errorMessage: 'No notification found',
-      });
-      return;
+      return res.status(401).json({ errorMessage: 'No notification found' });
     }
-    notification.isRead = isRead;
+
+    notification.isRead = true;
     await notification.save();
+
     res.status(200).json({ message: 'Notification marked as read successfully' });
   } catch (error) {
-     console.error(`Error occurred: ${error}`);
-    res.status(500).json({ error: "Failed to retrieve notifications" });
+    console.error(`Error occurred: ${error}`);
+    res.status(500).json({ error: 'Failed to retrieve notifications' });
   }
 };
 
