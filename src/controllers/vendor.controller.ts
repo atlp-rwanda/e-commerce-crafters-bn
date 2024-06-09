@@ -22,10 +22,15 @@ export const deletingVendor = async (req: Request, res: Response) => {
     await deleteVendorById(vendorId);
     res.status(200).json({ message: "Vendor deleted successful" });
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
-    console.log(error.message)
+    if (error.message === "Vendor not found") {  
+      res.status(404).json({ error: "Vendor not found" });
+    } else {
+      console.log("The error is: " + error.message);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 };
+
 
 
 export const editVendor = async (req: Request, res: Response) => {
