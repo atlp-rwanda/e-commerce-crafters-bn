@@ -1,0 +1,97 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+  description: API documentation for product management
+
+paths:
+
+  /readAllProducts:
+    get:
+      summary: Get all products
+      description: Retrieves a list of all products
+      tags:
+        - Product
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          description: No products found
+        '500':
+          description: Internal server error
+
+  /readProduct/{id}:
+    get:
+      summary: Get product by ID
+      description: Retrieves details about a single product
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the product
+      responses:
+        '200':
+          description: Details about the product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+        '500':
+          description: Internal server error
+
+  /products/search:
+    get:
+      summary: Search products
+      description: Searches for products based on specified criteria
+      tags:
+        - Product
+      parameters:
+        - in: query
+          name: name
+          description: Name of the product to search for
+          schema:
+            type: string
+        - in: query
+          name: category
+          description: Category of the product to search for
+          schema:
+            type: string
+        - in: query
+          name: page
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: limit
+          description: Maximum number of products per page
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: A list of products matching the search criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          description: No products found
+        '500':
+          description: Internal server error
+
+  
