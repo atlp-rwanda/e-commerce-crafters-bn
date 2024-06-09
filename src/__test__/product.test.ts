@@ -7,7 +7,7 @@ import Product from '../database/models/product';
 
 jest.setTimeout(50000);
 
-jest.mock('../middleware/verfiyToken', () => {
+jest.mock('../middleware/verfiyToken.ts', () => {
   return {
     VerifyAccessToken: (req: Request, res: Response, next: NextFunction) => {
       (req as any).token = { userId: 'test-user' };
