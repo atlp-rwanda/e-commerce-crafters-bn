@@ -25,7 +25,6 @@ import googleAuthRoute from "./routes/googleAuth.route";
 import cartroute from "./routes/cart.route";
 import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
-
 import wishlistroute from "./routes/wishlist.route";
 import {
  checkExpiredProducts,
@@ -33,8 +32,6 @@ import {
 } from "./helpers/expiring";
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
-
-
 
 
 const app = express();
