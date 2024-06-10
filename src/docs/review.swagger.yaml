@@ -1,0 +1,299 @@
+paths:
+  /addreview/{userId}:
+    post:
+      summary: Add a review for product buyer bought successfully
+      description: Add a review for product buyer bought successfully
+      tags:
+        - review
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                  example: "12345"
+                  description: ID of the product
+                rating:
+                  type: integer
+                  example: 4
+                  description: Rating of the product
+                feedback:
+                  type: string
+                  example: "Great product!"
+                  description: Feedback about the product
+      responses:
+        200:
+          description: Review created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Review created successfully
+                  review:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        example: "user123"
+                      productId:
+                        type: string
+                        example: "product123"
+                      rating:
+                        type: integer
+                        example: 4
+                      feedback:
+                        type: string
+                        example: "Great product"
+        400:
+          description: User has not bought this product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User has not bought this product
+        402:
+          description: Rating is between 0 and 5
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Rating is between 0 and 5
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: internal server error
+
+  /select-review/{vendorId}:
+    get:
+      summary: Get all reviews for a vendor's products
+      description: Get all reviews for a vendor's products
+      tags:
+        - review
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: vendorId
+          required: true
+          schema:
+            type: string
+          description: ID of the vendor
+      responses:
+        200:
+          description: Successfully retrieved reviews
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  review:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        userId:
+                          type: string
+                          example: "user123"
+                        productId:
+                          type: string
+                          example: "product123"
+                        rating:
+                          type: integer
+                          example: 4
+                        feedback:
+                          type: string
+                          example: "Great product"
+        400:
+          description: No reviews found for the vendor's products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: There is no review for your products
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: internal server error
+  /addfeedback/{productId}:
+    post:
+      summary: Add feedback for a product
+      description: Add feedback for a product
+      tags:
+        - review
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of the product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                  description: Name of the person giving feedback
+                ratingScore:
+                  type: integer
+                  example: 4
+                  description: Rating score for the product
+                feedback:
+                  type: string
+                  example: "Great product"
+                  description: Feedback about the product
+      responses:
+        201:
+          description: Feedback created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Feedback created
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "feedback123"
+                      name:
+                        type: string
+                        example: "John Doe"
+                      ratingScore:
+                        type: integer
+                        example: 4
+                      feedback:
+                        type: string
+                        example: "Great product"
+                      productId:
+                        type: string
+                        example: "product123"
+        400:
+          description: Error in saving data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error in saving data
+        402:
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You must add your name or enter rating between 0 and 5"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: internal server error
+  /select-feedback/{productId}:
+    get:
+      summary: Get feedback for a product
+      description: Retrieve all feedback for a specific product
+      tags:
+        - review
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of the product
+      responses:
+        200:
+          description: Successfully retrieved feedback
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ratings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        userId:
+                          type: string
+                          example: "user123"
+                        rating:
+                          type: integer
+                          example: 4
+                        feedback:
+                          type: string
+                          example: "Great product"
+        400:
+          description: No ratings found for the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: There is no Ratings in your products
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: internal server error                  
+                  

@@ -4,7 +4,7 @@ import Order from "../database/models/order";
 
 const allowedStatuses = ["Pending", "Shipped", "Delivered", "Cancelled"];
 
-export const updateOrderStatus = async (req: Request, res: Response) => {
+export const modifyOrderStatus = async (req: Request, res: Response) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;
@@ -37,6 +37,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+<<<<<<< ft-update-order
 
 
 
@@ -79,3 +80,5 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 //     res.status(500).json({ error: error.message });
 //   }
 // };
+=======
+>>>>>>> friday-demo-31-05

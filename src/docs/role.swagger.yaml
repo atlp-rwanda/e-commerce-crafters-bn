@@ -1,0 +1,31 @@
+/approve-vendor/{userId}:
+  put:
+    summary: Approve a vendor request
+    parameters:
+      - in: path
+        name: userId
+        schema:
+          type: string
+        required: true
+        description: The ID of the user to approve
+    responses:
+      200:
+        description: Vendor Request Approved
+      404:
+        description: Vendor Request Not Found
+
+/reject-vendor/{userId}:
+  put:
+    summary: Reject a vendor request
+    parameters:
+      - in: path
+        name: userId
+        schema:
+          type: string
+        required: true
+        description: The ID of the user to reject
+    responses:
+      200:
+        description: Vendor Request Rejected
+      404:
+        description: Vendor Request Not Found

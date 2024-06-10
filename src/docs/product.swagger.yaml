@@ -1,0 +1,103 @@
+paths:
+  /create/product/{vendorId}:
+    post:
+      summary: Create product by vendor
+      description: Vendor can create product
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: vendorId
+          required: true
+          schema:
+            type: string
+          description: ID of the vendor in order to create product
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: air force 1 shoes
+                image:
+                  type: string
+                  example: http://indopic.com/public/airforce.png
+                description:
+                  type: string
+                  example: amazing shoes
+                price:
+                  type: integer
+                  example: 20000
+                quantity:
+                  type: integer
+                  example: 12
+                category:
+                  type: string
+                  example: shoes
+                expiringDate:
+                  type: string
+                  example: 08/10/2025
+      responses:
+        201:
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product created"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 1wsssd625283ad
+                      name:
+                        type: string
+                        example: air force 1 shoes
+                      image:
+                        type: string
+                        example: http://indopic.com/public/airforce.png
+                      description:
+                        type: string
+                        example: amazing shoes
+                      price:
+                        type: integer
+                        example: 20000
+                      quantity:
+                        type: integer
+                        example: 12
+                      category:
+                        type: string
+                        example: shoes
+                      expiringDate:
+                        type: string
+                        example: 08/10/2025
+        422:
+          description: Fail to save data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to save data
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: internal server error
+        

@@ -13,7 +13,8 @@ jobs:
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
-      MODE: ${{ secrets.HOST_MODE }}
+      HOST_MODE: remote
+      NODE_ENV: test
 
     steps:
     - uses: actions/checkout@v4
@@ -35,6 +36,7 @@ jobs:
         echo "DATABASE_TEST_URL=$DATABASE_TEST_URL"
         echo "GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL"
         echo "GOOGLE_CALLBACK_ID=$GOOGLE_CLIENT_ID"
+        echo "NODE_ENV=$NODE_ENV"
         
 
     - name: Run tests

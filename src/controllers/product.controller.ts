@@ -43,6 +43,7 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const readProduct = async (req: Request, res: Response) => {
   try {
+
     const productId = req.params.id;
     const product = await Product.findByPk(productId);
     if (!product) {
