@@ -66,7 +66,7 @@ export const getCart = async (req: Request, res: Response) => {
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
-    const cartitem = await CartItem.findAll({where:{cartId:cart.cartId}})
+    const cartitem = await CartItem.findAll({ where: { cartId: cart.cartId } });
 
     return res.status(200).json({ cartitem });
   } catch (error: any) {
