@@ -22,7 +22,7 @@ import orderRoute from "../routes/order.route";
 import wishlistroute from "../routes/wishlist.route";
 import subscriptionRoute from "../routes/subscription.route";
 import notificationRoute from "../routes/notifications.route";
-import { checkExpiredsProduct } from "./expiring";
+import { checkExpiredProduct } from "./expiring";
 
 dotenv.config();
 
