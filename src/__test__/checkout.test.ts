@@ -43,6 +43,8 @@ describe('createOrder', () => {
 
     await createOrder(req as Request, res as Response);
 
+    console.log('res.status calls:', (res.status as jest.Mock).mock.calls);
+    console.log('res.json calls:', (res.json as jest.Mock).mock.calls);
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({ message: 'Cart not found' });
