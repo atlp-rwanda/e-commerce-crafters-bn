@@ -64,6 +64,24 @@ export const selectReview = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
+export const selectFeedback = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    const ratings = await Rating.findAll({
+      where:{
+        productId
+      }
+    });
+    if (!ratings || ratings.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "There in no Ratings in your products" });
+    }
+    return res.status(200).json({ ratings: ratings });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 export const addFeedback = async (req:Request,res:Response)=>{
   try {
