@@ -1,7 +1,8 @@
 import express from 'express'
 import { createOrder } from '../controllers/checkout.controller'
-const router = express.Router()
 import { VerifyAccessToken } from '../middleware/verfiyToken'
+
+const router = express.Router()
 
 router.post('/checkout', VerifyAccessToken, createOrder)
 
