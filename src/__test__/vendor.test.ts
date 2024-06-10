@@ -1,9 +1,18 @@
-<<<<<<< ft-update-order
 
 import { Request, Response } from "express";
 import { deletingVendor } from "../controllers/vendor.controller";
 import { deleteVendorById } from "../services/vendorServices";
 import Vendor from "../database/models/vendor";
+import request from 'supertest';
+import sinon from 'sinon';
+import { app, server } from '../index';
+import User from '../database/models/user';
+
+jest.setTimeout(50000);
+
+afterAll(async () => {
+  await new Promise(resolve => server.close(resolve));
+});
 
 jest.mock("../services/vendorServices");
 jest.mock("../database/models/vendor");
@@ -64,18 +73,7 @@ describe("Vendor Deletion", () => {
     expect(status).toHaveBeenCalledWith(404);
     expect(json).toHaveBeenCalledWith({ error: "Vendor not found" });
 
-=======
-import request from 'supertest';
-import sinon from 'sinon';
-import { app, server } from '../index';
-import Vendor from '../database/models/vendor';
-import User from '../database/models/user';
 
-jest.setTimeout(50000);
-
-afterAll(async () => {
-  await new Promise(resolve => server.close(resolve));
-});
 describe('registerVendor', () => {
     let createStub: sinon.SinonStub;
     let findOneStub: sinon.SinonStub;
@@ -196,6 +194,5 @@ describe('PATCH /updateVendor/', () => {
 
     expect(response.status).toBe(500);
     expect(response.body).toHaveProperty('message', 'Internal server error');
->>>>>>> friday-demo-31-05
   });
 });
