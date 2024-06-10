@@ -1,7 +1,7 @@
 import Vendor from "../database/models/vendor";
 
 export const saveVendor = async (data: any) => {
-  const { userId, storeName, address, TIN, bankAccount, paymentDetails } = data
+  const { userId, storeName, address, TIN, bankAccount, paymentDetails } = data;
 
   const insertVendor = await Vendor.create({
     userId: userId,
@@ -9,18 +9,16 @@ export const saveVendor = async (data: any) => {
     address: address,
     TIN: TIN,
     bankAccount: bankAccount,
-    paymentDetails
-  })
+    paymentDetails,
+  });
 
-    return insertVendor;
-  }
-
-
+  return insertVendor;
+};
 
 export const deleteVendorById = async (vendorId: any) => {
   const vendor = await Vendor.findByPk(vendorId);
   if (!vendor) {
-    throw new Error("vendor not found");
+    throw new Error("Vendor not found");
   }
   await vendor.destroy();
 };
@@ -30,6 +28,6 @@ export const updateVendor = async (vendor: any) => {
     await vendor.save();
     return vendor;
   } catch (error) {
-    throw new Error('Error updating vendor');
+    throw new Error("Error updating vendor");
   }
-}
+};
