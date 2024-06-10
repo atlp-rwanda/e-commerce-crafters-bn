@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import Product from '../database/models/product';
-import { sendEmailNotification, sendInAppNotification } from './notifications';
+import { sendInAppNotification } from './notifications';
 
 class ProductLifecycleEmitter extends EventEmitter {}
 export const productLifecycleEmitter = new ProductLifecycleEmitter();

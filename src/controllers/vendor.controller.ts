@@ -43,9 +43,9 @@ export const deletingVendor = async (req: Request, res: Response) => {
 export const editVendor = async (req: Request, res: Response) => {
   const updates = req.body;
   const vendorId = req.params.id;
-
+  
   try {
-    const vendor: any = await Vendor.findOne({ where: { vendorId: vendorId } });
+    const vendor = await Vendor.findOne({ where: { vendorId } });
     if (!vendor) {
       return res.status(404).json({ message: 'Vendor not found' });
     }
@@ -54,10 +54,10 @@ export const editVendor = async (req: Request, res: Response) => {
       vendor[key] = updates[key];
     });
 
-    const updatedVendor = await updateVendor(vendor);
+    const updatedVendor = await vendor.save();
 
-    res.status(200).json({ message: 'Vendor update success', user: updatedVendor });
+    res.status(200).json({ message: 'Vendor update success', vendor: updatedVendor });
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: 'Internal server error' });
   }
 };

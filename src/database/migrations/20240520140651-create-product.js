@@ -15,7 +15,7 @@ module.exports = {
           model: 'Vendors',
           key: 'vendorId'
         },
-        onDelete:"CASCADE"
+        onDelete: "CASCADE"
       },
       name: {
         type: Sequelize.STRING,
@@ -54,7 +54,9 @@ module.exports = {
       expiringDate: {
         allowNull: true,
         type: Sequelize.DATE
-      }
+      },
+      expired: { allowNull: false, type: Sequelize.BOOLEAN, defaultValue: false },
+      available: { allowNull: false, type: Sequelize.BOOLEAN, defaultValue: true },
     });
   },
   async down(queryInterface, Sequelize) {
