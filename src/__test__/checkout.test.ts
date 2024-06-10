@@ -39,8 +39,12 @@ describe('createOrder', () => {
   });
 
   it('should return 404 if cart is not found', async () => {
+    console.log('Test: should return 404 if cart is not found');
     mocked(Cart.findOne).mockResolvedValueOnce(null);
+
     await createOrder(req as Request, res as Response);
+
+
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({ message: 'Cart not found' });
   });
