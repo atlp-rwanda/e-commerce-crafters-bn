@@ -14,6 +14,5 @@ describe("Welcome endpoint",()=>{
         const response = await request(app).get('/');
         expect(response.status).toBe(200);
         expect(response.text).toContain("<h1 style='text-align:center;font-family: sans-serif'>Welcome to our backend as code crafters team </h1>");
-     
-    });
+    });
 })
