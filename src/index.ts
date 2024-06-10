@@ -72,15 +72,18 @@ app.use("/", cartroute);
 app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 
-const server = httpServer.listen(PORT, () => {
-  console.log(`Server running on Port ${PORT}`);
-});
 
 cron.schedule("0 0 * * *", () => {
   checkExpiredProducts();
 });
 cron.schedule("0 0 * * */14", () => {
   checkExpiringProducts();
+});
+
+const server = httpServer.listen(PORT, () => {
+ console.log(`Server running on Port ${PORT}`);
+  checkExpiringProducts();
+  checkExpiredProducts();
 });
 
 export { app, server, ioServer };
