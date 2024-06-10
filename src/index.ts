@@ -30,10 +30,9 @@ import {
   checkExpiredProducts,
   checkExpiringProducts,
 } from "./helpers/expiring";
-
 import subscriptionRoute from "./routes/subscription.route";
-
 import notificationRoute from "./routes/notifications.route";
+
 const app = express();
 const httpServer = http.createServer(app);
 const ioServer = new SocketIOServer(httpServer);
@@ -73,6 +72,7 @@ app.use("/", cartroute);
 app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 
+
 cron.schedule("0 0 * * *", () => {
   checkExpiredProducts();
 });
@@ -81,7 +81,7 @@ cron.schedule("0 0 * * */14", () => {
 });
 
 const server = httpServer.listen(PORT, () => {
-  console.log(`Server running on Port ${PORT}`);
+ console.log(`Server running on Port ${PORT}`);
   checkExpiringProducts();
   checkExpiredProducts();
 });

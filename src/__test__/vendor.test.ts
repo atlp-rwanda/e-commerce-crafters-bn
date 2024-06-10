@@ -1,14 +1,78 @@
+
+import { Request, Response } from "express";
+import { deletingVendor } from "../controllers/vendor.controller";
+import { deleteVendorById } from "../services/vendorServices";
+import Vendor from "../database/models/vendor";
 import request from 'supertest';
 import sinon from 'sinon';
 import { app, server } from '../index';
-import Vendor from '../database/models/vendor';
 import User from '../database/models/user';
+import { error } from "console";
+
+
 
 jest.setTimeout(50000);
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve));
+  await new Promise((resolve) => server.close(resolve));
 });
+
+describe("Vendor Deletion", () => {
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+  let json: sinon.SinonSpy;
+  let status: sinon.SinonStub;
+  let findByPkStub: sinon.SinonStub;
+
+  beforeEach(() => {
+    req = { params: { id: "1" } };
+    json = sinon.spy();
+    status = sinon.stub().returns({ json });
+    res = { status } as unknown as Response;
+
+    findByPkStub = sinon.stub(Vendor, "findByPk");
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it("should return status 200 and success message if vendor is deleted", async () => {
+    const destroyStub = sinon.stub().resolves(true);
+    findByPkStub.resolves({
+      destroy: destroyStub,
+    } as any);
+
+    await deletingVendor(req as Request, res as Response);
+
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledOnce(destroyStub);
+    sinon.assert.calledWith(status, 200);
+    sinon.assert.calledWith(json, { message: "Vendor deleted successful" });
+  });
+
+  it("should return status 500 and error message if an exception occurs", async () => {
+    findByPkStub.rejects(new Error("Internal server error"));
+
+    await deletingVendor(req as Request, res as Response);
+
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledWith(status, 500);
+    sinon.assert.calledWith(json, { error: "Internal server error" });
+  });
+
+  it("should return status 404 and error message if vendor is not found", async () => {
+    findByPkStub.resolves(null);
+
+    await deletingVendor(req as Request, res as Response);
+
+    sinon.assert.calledOnce(findByPkStub);
+  
+    sinon.assert.calledWith(json, { error: "Vendor not found" });
+  });
+});
+
+
 describe('registerVendor', () => {
     let createStub: sinon.SinonStub;
     let findOneStub: sinon.SinonStub;
