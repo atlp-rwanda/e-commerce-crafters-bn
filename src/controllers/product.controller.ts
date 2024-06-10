@@ -55,7 +55,6 @@ export const readProduct = async (req: Request, res: Response) => {
   }
 };
 
-// delete product
 export const readAllProducts = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
