@@ -2,7 +2,7 @@
 
 import { Request, Response } from "express";
 import Order from "../database/models/order";
-import { updateOrderStatus } from "../controllers/orderController";
+import { ModifyOrderStatus } from "../controllers/orderController";
 
 jest.mock("../database/models/order");
 
@@ -16,7 +16,7 @@ const mockFindByPk = Order.findByPk as jest.MockedFunction<
   typeof Order.findByPk
 >;
 
-describe("updateOrderStatus", () => {
+describe("ModifyOrderStatus", () => {
   let req: Partial<CustomRequest>;
   let res: Partial<Response>;
   let json: jest.Mock;
@@ -49,7 +49,7 @@ describe("updateOrderStatus", () => {
   it("should return status 400 for invalid order status", async () => {
     req.body.status = "InvalidStatus";
 
-    await updateOrderStatus(req as Request, res as Response);
+    await ModifyOrderStatus(req as Request, res as Response);
 
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ error: "Invalid order status" });
@@ -58,7 +58,7 @@ describe("updateOrderStatus", () => {
   it("should return status 404 if order is not found", async () => {
     mockFindByPk.mockResolvedValue(null);
 
-    await updateOrderStatus(req as Request, res as Response);
+    await ModifyOrderStatus(req as Request, res as Response);
 
     expect(status).toHaveBeenCalledWith(404);
     expect(json).toHaveBeenCalledWith({ error: "Order not found" });
@@ -67,7 +67,7 @@ describe("updateOrderStatus", () => {
   it("should return status 403 if user is not the owner of the order", async () => {
     mockFindByPk.mockResolvedValue({ userId: "2", save: jest.fn() } as any);
 
-    await updateOrderStatus(req as Request, res as Response);
+    await ModifyOrderStatus(req as Request, res as Response);
 
     expect(status).toHaveBeenCalledWith(403);
     expect(json).toHaveBeenCalledWith({
@@ -83,7 +83,7 @@ describe("updateOrderStatus", () => {
       save,
     } as any);
 
-    await updateOrderStatus(req as Request, res as Response);
+    await ModifyOrderStatus(req as Request, res as Response);
 
     expect(status).toHaveBeenCalledWith(200);
     expect(json).toHaveBeenCalledWith({
@@ -98,7 +98,7 @@ describe("updateOrderStatus", () => {
       throw new Error("Internal server error");
     });
 
-    await updateOrderStatus(req as Request, res as Response);
+    await ModifyOrderStatus(req as Request, res as Response);
 
     expect(status).toHaveBeenCalledWith(500);
     expect(json).toHaveBeenCalledWith({ error: "Internal server error" });
