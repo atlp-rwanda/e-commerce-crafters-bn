@@ -1,4 +1,3 @@
-
 openapi: "3.0.0"
 info:
   title: "ATLP Project API"
@@ -100,12 +99,10 @@ paths:
                     type: "string"
                     example: "Internal server error"
 
-                    
- 
   /getcart/{userId}:
     get:
       summary: Get all items in a user's cart
-      tags: 
+      tags:
         - Cart
       produces:
         - application/json
@@ -127,7 +124,7 @@ paths:
   /clearcart/{userId}:
     delete:
       summary: Remove all items of a specific user from cart
-      tags: 
+      tags:
         - Cart
       parameters:
         - name: userId
@@ -147,7 +144,7 @@ paths:
   /cart/{userId}/product/{productId}:
     delete:
       summary: Remove item from cart
-      tags: 
+      tags:
         - Cart
       parameters:
         - name: userId
@@ -296,3 +293,94 @@ paths:
                   message:
                     type: "string"
                     example: "Error resetting password"
+/updatecart:
+  post:
+    summary: Update cart items
+    tags:
+      - Cart
+    requestBody:
+      description: Cart updates
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              updates:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    cartId:
+                      type: string
+                      example: 456
+                    productId:
+                      type: string
+                      example: 123
+                    quantity:
+                      type: integer
+                      example: 2
+                    price:
+                      type: number
+                      example: 100
+    responses:
+      "200":
+        description: Cart items updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Cart items updated successfully!
+                cartItems:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      cartId:
+                        type: string
+                        example: 456
+                      productId:
+                        type: string
+                        example: 123
+                      quantity:
+                        type: integer
+                        example: 2
+                      price:
+                        type: number
+                        example: 100
+                total:
+                  type: number
+                  example: 200
+      "400":
+        description: Invalid quantity or exceeds available quantity
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Only 5 Test Product available In store
+      "404":
+        description: Product or cart item not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Product 123 Not Found
+      "500":
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Internal server error
