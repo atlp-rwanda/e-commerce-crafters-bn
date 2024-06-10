@@ -8,7 +8,6 @@ import { verify } from 'crypto';
 const route = express.Router();
 
 route.get("/", Welcome);
-
 route.post("/register", register);
 route.post("/login",twoFAController, login);
 route.patch("/updateuser/:id", VerifyAccessToken, editUser)
