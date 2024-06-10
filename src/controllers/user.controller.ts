@@ -82,7 +82,11 @@ export const register = async (req: Request, res: Response) => {
     return res.status(409).json({ Message: "Email already exists" });
   }
   try {
-    const senddata = await saveUser(req.body);
+    const hashedPwd = bcrypt.hashSync(password, 10)
+    const insertUser = await User.create({
+      name: name,
+      email: email,
+      password: hashedPwd})
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -185,11 +189,11 @@ export const register = async (req: Request, res: Response) => {
     await transporter.sendMail(mailOptions);
     res.status(201).json({
       message: "User created",
-      user: senddata,
+      user: insertUser,
       email: "Email sent to your email address",
     });
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
