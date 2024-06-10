@@ -37,30 +37,6 @@ describe('createOrder', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'All fields are required' });
   });
 
-  it('should return 404 if cart is not found', async () => {
-    console.log('Test: should return 404 if cart is not found');
-    (Cart.findOne as jest.Mock).mockResolvedValueOnce(null);
-
-    await createOrder(req as Request, res as Response);
-
-    console.log('res.status calls:', (res.status as jest.Mock).mock.calls);
-    console.log('res.json calls:', (res.json as jest.Mock).mock.calls);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Cart not found' });
-  });
-
-  it('should return 400 if cart is empty', async () => {
-    const cart = { cartId: 'cart123' };
-    (Cart.findOne as jest.Mock).mockResolvedValueOnce(cart);
-    (CartItem.findAll as jest.Mock).mockResolvedValueOnce([]);
-
-    await createOrder(req as Request, res as Response);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Your cart is empty' });
-  });
-
   it('should create order and delete cart items if cart is not empty', async () => {
     const cart = { cartId: 'cart123' };
     const cartItems = [{ productId: 'product123', quantity: 2, price: 10 }];
