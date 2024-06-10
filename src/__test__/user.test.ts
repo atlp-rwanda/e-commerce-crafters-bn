@@ -13,66 +13,61 @@ import * as passwordUtils from '../services/userService';
 jest.setTimeout(50000);
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve));
+  await new Promise((resolve) => server.close(resolve));
 });
-
-jest.mock("../services/userService");
-jest.mock("../database/models/user");
-
-
-const mockDeleteUserById = deleteUserById as jest.MockedFunction<
-  typeof deleteUserById
->;
-const mockFindByPk = User.findByPk as jest.MockedFunction<typeof User.findByPk>;
 
 describe("deleteUser", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let json: jest.Mock;
-  let status: jest.Mock;
+  let json: sinon.SinonSpy;
+  let status: sinon.SinonStub;
+  let findByPkStub: sinon.SinonStub;
 
   beforeEach(() => {
     req = { params: { id: "1" } };
-    json = jest.fn();
-    status = jest.fn().mockReturnValue({ json });
+    json = sinon.spy();
+    status = sinon.stub().returns({ json });
     res = { status } as unknown as Response;
+
+    findByPkStub = sinon.stub(User, "findByPk");
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    sinon.restore();
   });
 
-  it("should delete  user and return a success message", async () => {
-    mockFindByPk.mockResolvedValue({
-      destroy: jest.fn().mockResolvedValueOnce(true),
+  it("should delete user and return a success message", async () => {
+    const destroyStub = sinon.stub().resolves(true);
+    findByPkStub.resolves({
+      destroy: destroyStub,
     } as any);
 
     await deleteUser(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(200);
-    expect(json).toHaveBeenCalledWith({ message: "User deleted successful" });
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledOnce(destroyStub);
+    sinon.assert.calledWith(status, 200);
+    sinon.assert.calledWith(json, { message: "User deleted successful" });
   });
 
   it("should return status 500 error if an exception occurs", async () => {
-    mockDeleteUserById.mockRejectedValueOnce(
-      new Error("Internal server error")
-    );
+    findByPkStub.rejects(new Error("Internal server error"));
 
     await deleteUser(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(500);
-    expect(json).toHaveBeenCalledWith({ error: "Internal server error" });
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledWith(status, 500);
+    sinon.assert.calledWith(json, { error: "Internal server error" });
   });
 
-  it("should return  status 404  if user is not found", async () => {
-    mockDeleteUserById.mockImplementationOnce(() => {
-      throw new Error("user not found");
-    });
+  it("should return status 404 if user is not found", async () => {
+    findByPkStub.resolves(null);
 
     await deleteUser(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(404);
-    expect(json).toHaveBeenCalledWith({ error: "User not found" });
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledWith(status, 404);
+    sinon.assert.calledWith(json, { error: "User not found" });
   });
 });
 

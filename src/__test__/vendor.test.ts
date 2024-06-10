@@ -7,73 +7,71 @@ import request from 'supertest';
 import sinon from 'sinon';
 import { app, server } from '../index';
 import User from '../database/models/user';
+import { error } from "console";
+
+
 
 jest.setTimeout(50000);
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve));
+  await new Promise((resolve) => server.close(resolve));
 });
-
-jest.mock("../services/vendorServices");
-jest.mock("../database/models/vendor");
-
-const mockDeleteVendorById = deleteVendorById as jest.MockedFunction<
-  typeof deleteVendorById
->;
-const mockFindByPk = Vendor.findByPk as jest.MockedFunction<
-  typeof Vendor.findByPk
->;
 
 describe("Vendor Deletion", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
-  let json: jest.Mock;
-  let status: jest.Mock;
+  let json: sinon.SinonSpy;
+  let status: sinon.SinonStub;
+  let findByPkStub: sinon.SinonStub;
 
   beforeEach(() => {
     req = { params: { id: "1" } };
-    json = jest.fn();
-    status = jest.fn().mockReturnValue({ json });
+    json = sinon.spy();
+    status = sinon.stub().returns({ json });
     res = { status } as unknown as Response;
+
+    findByPkStub = sinon.stub(Vendor, "findByPk");
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    sinon.restore();
   });
 
   it("should return status 200 and success message if vendor is deleted", async () => {
-    mockFindByPk.mockResolvedValue({
-      destroy: jest.fn().mockResolvedValueOnce(true),
+    const destroyStub = sinon.stub().resolves(true);
+    findByPkStub.resolves({
+      destroy: destroyStub,
     } as any);
 
     await deletingVendor(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(200);
-    expect(json).toHaveBeenCalledWith({ message: "Vendor deleted successful" });
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledOnce(destroyStub);
+    sinon.assert.calledWith(status, 200);
+    sinon.assert.calledWith(json, { message: "Vendor deleted successful" });
   });
 
   it("should return status 500 and error message if an exception occurs", async () => {
-    mockDeleteVendorById.mockRejectedValueOnce(
-      new Error("Internal server error")
-    );
+    findByPkStub.rejects(new Error("Internal server error"));
 
     await deletingVendor(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(500);
-    expect(json).toHaveBeenCalledWith({ error: "Internal server error" });
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledWith(status, 500);
+    sinon.assert.calledWith(json, { error: "Internal server error" });
   });
 
   it("should return status 404 and error message if vendor is not found", async () => {
-    mockDeleteVendorById.mockImplementationOnce(() => {
-      throw new Error("Vendor not found");
-    });
+    findByPkStub.resolves(null);
 
     await deletingVendor(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(404);
-    expect(json).toHaveBeenCalledWith({ error: "Vendor not found" });
+    sinon.assert.calledOnce(findByPkStub);
+  
+    sinon.assert.calledWith(json, { error: "Vendor not found" });
   });
-    });
+});
+
 
 describe('registerVendor', () => {
     let createStub: sinon.SinonStub;

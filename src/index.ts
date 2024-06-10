@@ -28,14 +28,11 @@ import orderRoute from "./routes/order.route";
 
 import wishlistroute from "./routes/wishlist.route";
 import {
- checkExpiredProducts,
- checkExpiringProducts,
+  checkExpiredProducts,
+  checkExpiringProducts,
 } from "./helpers/expiring";
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
-
-
-
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -45,14 +42,12 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-
   session({
     secret: "crafters1234",
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
   })
-
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -79,14 +74,14 @@ app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 
 const server = httpServer.listen(PORT, () => {
- console.log(`Server running on Port ${PORT}`);
+  console.log(`Server running on Port ${PORT}`);
 });
 
 cron.schedule("0 0 * * *", () => {
- checkExpiredProducts();
+  checkExpiredProducts();
 });
 cron.schedule("0 0 * * */14", () => {
- checkExpiringProducts();
+  checkExpiringProducts();
 });
 
 export { app, server, ioServer };

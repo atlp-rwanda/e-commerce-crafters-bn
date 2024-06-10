@@ -3,8 +3,7 @@
 import { Request, Response } from "express";
 import Order from "../database/models/order";
 import { modifyOrderStatus } from "../controllers/orderController";
-
-jest.mock("../database/models/order");
+import sinon from "sinon";
 
 interface CustomRequest extends Request {
   token: {
@@ -12,16 +11,13 @@ interface CustomRequest extends Request {
   };
 }
 
-const mockFindByPk = Order.findByPk as jest.MockedFunction<
-  typeof Order.findByPk
->;
-
 describe("modifyOrderStatus", () => {
   let req: Partial<CustomRequest>;
   let res: Partial<Response>;
-  let json: jest.Mock;
-  let status: jest.Mock;
-  let consoleErrorMock: jest.SpyInstance;
+  let json: sinon.SinonSpy;
+  let status: sinon.SinonStub;
+  let findByPkStub: sinon.SinonStub;
+  let consoleErrorMock: sinon.SinonStub;
 
   beforeEach(() => {
     req = {
@@ -29,20 +25,17 @@ describe("modifyOrderStatus", () => {
       body: { status: "Shipped" },
       token: { userId: "1" },
     };
-    json = jest.fn();
-    status = jest.fn().mockReturnValue({ json });
+    json = sinon.spy();
+    status = sinon.stub().returns({ json });
     res = { status } as unknown as Response;
 
-    consoleErrorMock = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+    findByPkStub = sinon.stub(Order, "findByPk");
+
+    consoleErrorMock = sinon.stub(console, "error").callsFake(() => {});
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
-
-
-    consoleErrorMock.mockRestore();
+    sinon.restore();
   });
 
   it("should return status 400 for invalid order status", async () => {
@@ -50,33 +43,33 @@ describe("modifyOrderStatus", () => {
 
     await modifyOrderStatus(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(400);
-    expect(json).toHaveBeenCalledWith({ error: "Invalid order status" });
+    sinon.assert.calledWith(status, 400);
+    sinon.assert.calledWith(json, { error: "Invalid order status" });
   });
 
   it("should return status 404 if order is not found", async () => {
-    mockFindByPk.mockResolvedValue(null);
+    findByPkStub.resolves(null);
 
     await modifyOrderStatus(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(404);
-    expect(json).toHaveBeenCalledWith({ error: "Order not found" });
+    sinon.assert.calledWith(status, 404);
+    sinon.assert.calledWith(json, { error: "Order not found" });
   });
 
   it("should return status 403 if user is not the owner of the order", async () => {
-    mockFindByPk.mockResolvedValue({ userId: "2", save: jest.fn() } as any);
+    findByPkStub.resolves({ userId: "2", save: sinon.stub() } as any);
 
     await modifyOrderStatus(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(403);
-    expect(json).toHaveBeenCalledWith({
+    sinon.assert.calledWith(status, 403);
+    sinon.assert.calledWith(json, {
       error: "Only the vendor can update the order status",
     });
   });
 
   it("should return status 200 and update the order status", async () => {
-    const save = jest.fn();
-    mockFindByPk.mockResolvedValue({
+    const save = sinon.stub();
+    findByPkStub.resolves({
       userId: "1",
       status: "Pending",
       save,
@@ -84,22 +77,20 @@ describe("modifyOrderStatus", () => {
 
     await modifyOrderStatus(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(200);
-    expect(json).toHaveBeenCalledWith({
+    sinon.assert.calledWith(status, 200);
+    sinon.assert.calledWith(json, {
       message: "Order has been shipped",
       order: { userId: "1", status: "Shipped", save },
     });
-    expect(save).toHaveBeenCalled();
+    sinon.assert.calledOnce(save);
   });
 
   it("should return status 500 if an internal server error occurs", async () => {
-    mockFindByPk.mockImplementation(() => {
-      throw new Error("Internal server error");
-    });
+    findByPkStub.throws(new Error("Internal server error"));
 
     await modifyOrderStatus(req as Request, res as Response);
 
-    expect(status).toHaveBeenCalledWith(500);
-    expect(json).toHaveBeenCalledWith({ error: "Internal server error" });
+    sinon.assert.calledWith(status, 500);
+    sinon.assert.calledWith(json, { error: "Internal server error" });
   });
 });
