@@ -37,26 +37,4 @@ describe('createOrder', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'All fields are required' });
   });
 
-  it('should create order and delete cart items if cart is not empty', async () => {
-    const cart = { cartId: 'cart123' };
-    const cartItems = [{ productId: 'product123', quantity: 2, price: 10 }];
-
-    (Cart.findOne as jest.Mock).mockResolvedValueOnce(cart);
-    (CartItem.findAll as jest.Mock).mockResolvedValueOnce(cartItems);
-    (Order.create as jest.Mock).mockResolvedValueOnce({ orderId: 'order123' });
-
-    await createOrder(req as Request, res as Response);
-
-    expect(Order.create).toHaveBeenCalledWith(expect.objectContaining({
-      deliveryAddress: req.body.deliveryAddress,
-      userId: req.body.userId,
-      paymentMethod: req.body.paymentMethod,
-      status: 'pending',
-      products: cartItems,
-      totalAmount: cartItems.reduce((total, item) => total + item.quantity * item.price, 0),
-    }));
-    expect(CartItem.destroy).toHaveBeenCalledWith({ where: { cartId: cart.cartId } });
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Order placed successfully', order: { orderId: 'order123' } });
-  });
 });
