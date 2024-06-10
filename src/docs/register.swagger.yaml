@@ -1,0 +1,101 @@
+openapi: 3.0.0
+info:
+  title: E-commerce Platform API
+  description: API documentation for the E-commerce platform.
+  version: 1.0.0
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      description: This API is for registering a new user.
+      tags:
+        - user
+      requestBody:
+        description: User registration payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: shafi
+                email:
+                  type: string
+                  example: shafi@example.com
+                password:
+                  type: string
+                  example: strongpassword123
+              required:
+                - name
+                - email
+                - password
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User created
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 12345
+                      name:
+                        type: string
+                        example: Shafi
+                      email:
+                        type: string
+                        example: Shafi@example.com
+                  email:
+                    type: string
+                    example: Email sent to your email address
+        "400":
+          description: Bad request - missing fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Please fill all fields
+        "409":
+          description: Conflict - email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email already exists
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An unexpected error occurred
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
