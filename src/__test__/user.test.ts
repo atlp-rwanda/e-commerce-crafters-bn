@@ -1,31 +1,24 @@
-<<<<<<< ft-update-order
-// import request from "supertest";
-// import { app, server } from "..";
-
-// describe("Welcome endpoint", () => {
-//   beforeAll((done) => {
-//     done();
-//   });
-
-//   afterAll((done) => {
-//     server.close(done);
-//   });
-//   it("should return welcome message and status 200 ", async () => {
-//     const response = await request(app).get("/");
-//     expect(response.status).toBe(200);
-//     expect(response.text).toContain(
-//       "<h1 style='text-align:center;font-family: sans-serif'>Welcome to our backend as code crafters team </h1>"
-//     );
-//   });
-// });
-
 import { Request, Response } from "express";
 import { deleteUser } from "../controllers/user.controller";
 import { deleteUserById } from "../services/userService";
 import User from "../database/models/user";
+import request from 'supertest';
+import sinon from 'sinon';
+import { app, server } from '../index';
+import nodemailer from 'nodemailer';
+import Vendor from '../database/models/vendor';
+import * as passwordUtils from '../services/userService';
+
+
+jest.setTimeout(50000);
+
+afterAll(async () => {
+  await new Promise(resolve => server.close(resolve));
+});
 
 jest.mock("../services/userService");
 jest.mock("../database/models/user");
+
 
 const mockDeleteUserById = deleteUserById as jest.MockedFunction<
   typeof deleteUserById
@@ -82,20 +75,9 @@ describe("deleteUser", () => {
     expect(json).toHaveBeenCalledWith({ error: "User not found" });
   });
 });
-=======
-import request from 'supertest';
-import sinon from 'sinon';
-import { app, server } from '../index';
-import User from '../database/models/user';
-import nodemailer from 'nodemailer';
-import Vendor from '../database/models/vendor';
-import * as passwordUtils from '../services/userService';
 
-jest.setTimeout(50000);
 
-afterAll(async () => {
-  await new Promise(resolve => server.close(resolve));
-});
+
 describe('register', () => {
   let createStub: sinon.SinonStub;
   let findOneStub: sinon.SinonStub;
@@ -313,4 +295,4 @@ describe("Welcome endpoint",()=>{
         expect(response.text).toContain("<h1 style='text-align:center;font-family: sans-serif'>Welcome to our backend as code crafters team </h1>");
     });
 })
->>>>>>> friday-demo-31-05
+
