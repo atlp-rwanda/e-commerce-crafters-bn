@@ -26,7 +26,10 @@ import cartroute from "./routes/cart.route";
 import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
 import wishlistroute from "./routes/wishlist.route";
-import { checkExpiredProducts } from "./helpers/expiring";
+import {
+  checkExpiredProducts,
+  checkExpiringProducts,
+} from "./helpers/expiring";
 
 import subscriptionRoute from "./routes/subscription.route";
 
@@ -71,14 +74,14 @@ app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 
 cron.schedule("0 0 * * *", () => {
- checkExpiredProducts();
+  checkExpiredProducts();
 });
 cron.schedule("0 0 * * */14", () => {
- checkExpiringProducts();
+  checkExpiringProducts();
 });
 
 const server = httpServer.listen(PORT, () => {
- console.log(`Server running on Port ${PORT}`);
+  console.log(`Server running on Port ${PORT}`);
   checkExpiringProducts();
   checkExpiredProducts();
 });
