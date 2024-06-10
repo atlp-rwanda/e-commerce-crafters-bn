@@ -4,27 +4,11 @@ import sinon from "sinon";
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import { app, server } from "..";
+import * as googleAuthService from "../services/googleAuth.service";
 
 beforeAll(() => {
   server;
 });
-
-// describe("Welcome endpoint", () => {
-//   beforeAll((done) => {
-//     done();
-//   });
-
-//   afterAll((done) => {
-//     server.close(done);
-//   });
-//   it("should return welcome message and status 200 ", async () => {
-//     const response = await request(app).get("/");
-//     expect(response.status).toBe(200);
-//     expect(response.text).toContain(
-//       "<h1 style='text-align:center;font-family: sans-serif'>Welcome to our backend as code crafters team </h1>"
-//     );
-//   });
-// });
 
 describe("Google Authentication Routes", () => {
   it("should return status 302 of redirection", async () => {
@@ -44,9 +28,7 @@ describe("Google Authentication Routes", () => {
   });
 });
 
-import * as googleAuthService from "../services/googleAuth.service";
-
-let findUserByEmailStub;
+let findUserByEmailStub: any;
 
 beforeEach(() => {
   findUserByEmailStub = sinon.stub(googleAuthService, "findUserByEmail");
@@ -104,8 +86,7 @@ describe("Handle Google callback", () => {
   let res: response;
 
   afterEach(() => {
-    jest.restoreAllMocks();
-    sinon.restore(); 
+    sinon.restore();
   });
 
   beforeAll(async () => {

@@ -28,7 +28,6 @@ import orderRoute from "./routes/order.route";
 import wishlistroute from "./routes/wishlist.route";
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
-import { checkExpiredsProduct } from "./helpers/expiring";
 
 
 const app = express();
@@ -72,12 +71,8 @@ app.use("/", cartroute);
 app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 
-cron.schedule("0 0 * * * *", () => {
-  checkExpiredsProduct();
-});
 const server = httpServer.listen(PORT, () => {
   console.log(`Server running on Port ${PORT}`);
-  checkExpiredsProduct();
 });
 
 export { app, server, ioServer };
