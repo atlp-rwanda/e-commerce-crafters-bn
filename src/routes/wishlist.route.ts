@@ -4,6 +4,6 @@ import { VerifyAccessToken } from "../middleware/verfiyToken";
 
 const router = Router();
 
-router.post("/toWishlist", VerifyAccessToken, addToWishlist)
+router.post("/toWishlist", VerifyAccessToken, addToWishlist);
 
 export default router
