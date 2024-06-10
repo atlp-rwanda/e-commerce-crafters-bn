@@ -17,6 +17,7 @@
   "dependencies": {
     "@types/helmet": "^4.0.0",
     "@types/sequelize": "^4.28.20",
+    "@types/sinon": "^17.0.3",
     "@types/supertest": "^6.0.2",
     "base32.js": "^0.1.0",
     "bcrypt": "^5.1.1",

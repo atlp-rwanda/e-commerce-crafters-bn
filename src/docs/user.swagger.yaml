@@ -1,8 +1,190 @@
-/:
-  get:
-    summary: welcome endpoint
-    responses:
-      200:
-        description: server running
-      500:
-        description: sorry
+paths:
+  /updateuser/{id}:
+    patch:
+      summary: Updates a user
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the user to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                  description: New name for the user
+                email:
+                  type: string
+                  format: email
+                  example: "john@email.com"
+                  description: New email for the user
+                profile:
+                  type: string
+                  example: "profile"
+                  description: New profile for the user
+      responses:
+        200:
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User update success
+                  user:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        example: "142b7ffd-efff-497a-8ac0-12fff26c38b6"
+                      name:
+                        type: string
+                        example: "John Doe"
+                      email:
+                        type: string
+                        example: "john@email.com"
+                      profile:
+                        type: string
+                        example: "profile"
+        400:
+          description: Bad request, missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not updated, missing or invalid parameters
+        403:
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email already exists
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  
+  
+  /updatepassword/{id}:
+    patch:
+      summary: Updates user password
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the user whose password needs to be updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: Existing password
+                  example: "currentPassword123"
+                newPassword:
+                  type: string
+                  description: New password
+                  example: "newPassword456"
+                confirmPassword:
+                  type: string
+                  description: Confirm the new password
+                  example: "newPassword456"
+      responses:
+        200:
+          description: User password updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password updated successfully"
+                  user:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        example: "142b7ffd-efff-497a-8ac0-12fff26c38b6"
+                      name:
+                        type: string
+                        example: "John Doe"
+                      email:
+                        type: string
+                        example: "john.doe@example.com"
+                      profile:
+                        type: string
+                        example: "profileImageUrl"
+        400:
+          description: Bad request, missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Please fill all fields"
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User not found"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal server error"
