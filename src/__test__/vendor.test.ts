@@ -72,7 +72,8 @@ describe("Vendor Deletion", () => {
 
     expect(status).toHaveBeenCalledWith(404);
     expect(json).toHaveBeenCalledWith({ error: "Vendor not found" });
-  })
+  });
+    });
 
 describe('registerVendor', () => {
     let createStub: sinon.SinonStub;
