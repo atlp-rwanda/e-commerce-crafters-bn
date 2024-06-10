@@ -8,7 +8,7 @@ interface ExtendedSession extends Session {
   password?: string;
   twoFactorCode?: string | null;
   twoFactorExpiry?: Date | null;
-  twoFAError?: string;
+  twoFAError?: string | null;
 }
 
 export const twoFAController = async (
@@ -43,19 +43,22 @@ export const verifyCode = async (
   const sessionCode = extendedSession.twoFactorCode;
   const sessionExpiry = extendedSession.twoFactorExpiry;
 
+  extendedSession.twoFAError = null;
+
   if (sessionCode && sessionExpiry) {
     const sessionExpiryDate = new Date(sessionExpiry);
+    const result = verify2FACode(code, sessionCode, sessionExpiryDate.getTime());
 
-    if (verify2FACode(code, sessionCode, sessionExpiryDate.getTime())) {
+    if (result === true) {
       extendedSession.twoFactorCode = null;
       extendedSession.twoFactorExpiry = null;
     } else {
-      extendedSession.twoFAError = "Invalid or expired 2FA code.";
+      extendedSession.twoFAError = result;
     }
   } else {
     extendedSession.twoFAError = "2FA code or expiring time is missing.";
   }
-
+  
   try {
     await new Promise((resolve, reject) => {
       req.session.save((err) => {
