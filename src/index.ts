@@ -34,7 +34,7 @@ import {
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
 
-import { checkExpiredsProduct } from "./helpers/expiring";
+import { checkExpiredProducts } from "./helpers/expiring";
 
 
 const app = express();
