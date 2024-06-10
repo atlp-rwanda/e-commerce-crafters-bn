@@ -1,6 +1,5 @@
 import { createOrder } from '../controllers/checkout.controller';
 import { Request, Response } from 'express';
-import { mocked } from 'jest-mock';
 import Order from '../database/models/order';
 import Cart from '../database/models/cart';
 import CartItem from '../database/models/cartitem';
@@ -40,7 +39,7 @@ describe('createOrder', () => {
 
   it('should return 404 if cart is not found', async () => {
     console.log('Test: should return 404 if cart is not found');
-    mocked(Cart.findOne).mockResolvedValueOnce(null);
+    (Cart.findOne as jest.Mock).mockResolvedValueOnce(null);
 
     await createOrder(req as Request, res as Response);
 
@@ -50,9 +49,9 @@ describe('createOrder', () => {
   });
 
   it('should return 400 if cart is empty', async () => {
-    const cart: any = { cartId: 'cart123' };
-    mocked(Cart.findOne).mockResolvedValueOnce(cart);
-    mocked(CartItem.findAll).mockResolvedValueOnce([]);
+    const cart = { cartId: 'cart123' };
+    (Cart.findOne as jest.Mock).mockResolvedValueOnce(cart);
+    (CartItem.findAll as jest.Mock).mockResolvedValueOnce([]);
 
     await createOrder(req as Request, res as Response);
 
@@ -61,12 +60,12 @@ describe('createOrder', () => {
   });
 
   it('should create order and delete cart items if cart is not empty', async () => {
-    const cart: any = { cartId: 'cart123' };
-    const cartItems: any = [{ productId: 'product123', quantity: 2, price: 10 }];
+    const cart = { cartId: 'cart123' };
+    const cartItems = [{ productId: 'product123', quantity: 2, price: 10 }];
 
-    mocked(Cart.findOne).mockResolvedValueOnce(cart);
-    mocked(CartItem.findAll).mockResolvedValueOnce(cartItems);
-    mocked(Order.create).mockResolvedValueOnce({ orderId: 'order123' });
+    (Cart.findOne as jest.Mock).mockResolvedValueOnce(cart);
+    (CartItem.findAll as jest.Mock).mockResolvedValueOnce(cartItems);
+    (Order.create as jest.Mock).mockResolvedValueOnce({ orderId: 'order123' });
 
     await createOrder(req as Request, res as Response);
 
