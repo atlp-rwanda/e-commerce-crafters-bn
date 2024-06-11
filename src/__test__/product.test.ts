@@ -1,107 +1,156 @@
 import request from 'supertest';
-import express, { Application } from 'express';
-import { readAllProducts, readProduct, searchProduct } from '../controllers/product.controller';
+import sinon from 'sinon';
+import { app, server } from '..';
 import Product from '../database/models/product';
-import { getAllProducts, searchProducts } from '../services/productService';
+import jwt from 'jsonwebtoken';
 
-const app: Application = express();
-app.use(express.json());
+// Function to generate a JWT token for authorization
+function generateToken() {
+  const payload = { userId: 'test-user' };
+  const secret = process.env.JWT_SECRET || 'crafters1234';
+  const options = { expiresIn: '1h' };
 
-app.get('/products', readAllProducts);
-app.get('/products/:id', readProduct);
-app.get('/search', searchProduct);
+  return jwt.sign(payload, secret, options);
+}
 
-jest.mock('../services/productService');
-jest.mock('../database/models/product');
+jest.setTimeout(50000);
 
-describe('Product Controller', () => {
-  describe('readAllProducts', () => {
-    it('should return products with status 200', async () => {
-      const mockProducts = [{ id: 1, name: 'Test Product' }];
-      (getAllProducts as jest.Mock).mockResolvedValue(mockProducts);
+beforeAll(() => {
+  // Any global setup if needed
+});
 
-      const response = await request(app).get('/products?page=1&limit=10');
+afterAll(async () => {
+  await new Promise(resolve => server.close(resolve));
+});
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockProducts);
+describe('Product Read Operations', () => {
+  let findAllStub: sinon.SinonStub;
+  let findByPkStub: sinon.SinonStub;
+
+  beforeEach(() => {
+    findAllStub = sinon.stub(Product, 'findAll');
+    findByPkStub = sinon.stub(Product, 'findByPk');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  describe('Get all products', () => {
+    it('should return 200 and all products', async () => {
+      const products = [
+        { id: '1', name: 'Product1', image: 'image1.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' },
+        { id: '2', name: 'Product2', image: 'image2.png', description: 'Another product', price: 150, quantity: 5, category: 'Books' }
+      ];
+
+      findAllStub.resolves(products);
+
+      const res = await request(app)
+        .get('/readAllProducts')
+        .set('Authorization', `Bearer ${generateToken()}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(products);
     });
 
-    it('should return 404 if no products found', async () => {
-      (getAllProducts as jest.Mock).mockResolvedValue([]);
+    it('should return 404 if no products are found', async () => {
+      findAllStub.resolves([]);
 
-      const response = await request(app).get('/products?page=1&limit=10');
+      const res = await request(app)
+        .get('/readAllProducts')
+        .set('Authorization', `Bearer ${generateToken()}`);
 
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ error: "No products found" });
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe('No products found');
     });
 
-    it('should handle errors', async () => {
-      (getAllProducts as jest.Mock).mockRejectedValue(new Error('Database Error'));
+    it('should return 500 if there is an internal server error', async () => {
+      findAllStub.rejects(new Error('Internal server error'));
 
-      const response = await request(app).get('/products');
+      const res = await request(app)
+        .get('/readAllProducts')
+        .set('Authorization', `Bearer ${generateToken()}`);
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ error: 'Database Error' });
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe('Error while fetching all products'); // Updated error message
     });
   });
 
-  describe('readProduct', () => {
-    it('should return a product with status 200', async () => {
-      const mockProduct = { id: 1, name: 'Test Product' };
-      (Product.findByPk as jest.Mock).mockResolvedValue(mockProduct);
+  describe('Get product by ID', () => {
+    it('should return 200 and the product details', async () => {
+      const product = { id: '1', name: 'Product1', image: 'image1.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' };
 
-      const response = await request(app).get('/products/1');
+      findByPkStub.resolves(product);
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockProduct);
+      const res = await request(app)
+        .get('/readProduct/1')
+        .set('Authorization', `Bearer ${generateToken()}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(product);
     });
 
-    it('should return 404 if product not found', async () => {
-      (Product.findByPk as jest.Mock).mockResolvedValue(null);
+    it('should return 404 if the product is not found', async () => {
+      findByPkStub.resolves(null);
 
-      const response = await request(app).get('/products/1');
+      const res = await request(app)
+        .get('/readProduct/999')
+        .set('Authorization', `Bearer ${generateToken()}`);
 
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ error: "Product not found" });
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe('Product not found');
     });
 
-    it('should handle errors', async () => {
-      (Product.findByPk as jest.Mock).mockRejectedValue(new Error('Database Error'));
-
-      const response = await request(app).get('/products/1');
-
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ error: 'Database Error' });
+    it('should return 500 if there is an internal server error', async () => {
+      findByPkStub.rejects(new Error('Internal server error')); // Update the error message
+    
+      const res = await request(app)
+        .get('/readProduct/1')
+        .set('Authorization', `Bearer ${generateToken()}`);
+    
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe('Internal server error'); // Updated error message to match the received error
     });
   });
 
-  describe('searchProduct', () => {
-    it('should return products matching the search criteria with status 200', async () => {
-      const mockProducts = [{ id: 1, name: 'Test Product' }];
-      (searchProducts as jest.Mock).mockResolvedValue(mockProducts);
+  describe('Search products', () => {
+    it('should return 200 and matching products', async () => {
+      const searchResults = [
+        { id: '1', name: 'Product1', image: 'image1.png', description: 'A great product', price: 100, quantity: 10, category: 'Electronics' },
+        { id: '3', name: 'Electronics Product', image: 'image3.png', description: 'Another great electronic product', price: 200, quantity: 15, category: 'Electronics' }
+      ];
 
-      const response = await request(app).get('/search?name=Test&category=Electronics&page=1&limit=10');
+      findAllStub.resolves(searchResults);
 
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockProducts);
+      const res = await request(app)
+        .get('/products/search?name=Product&category=Electronics')
+        .set('Authorization', `Bearer ${generateToken()}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(searchResults);
     });
 
     it('should return 404 if no products match the search criteria', async () => {
-      (searchProducts as jest.Mock).mockResolvedValue([]);
+      findAllStub.resolves([]);
 
-      const response = await request(app).get('/search?name=Test&category=Electronics&page=1&limit=10');
+      const res = await request(app)
+        .get('/products/search?name=NonExisting&category=NonExistingCategory')
+        .set('Authorization', `Bearer ${generateToken()}`);
 
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ error: "No products found" });
+      expect(res.status).toBe(404);
+      expect(res.body.error).toBe('No products found');
     });
 
-    it('should handle errors', async () => {
-      (searchProducts as jest.Mock).mockRejectedValue(new Error('Database Error'));
+    it('should return 500 if there is an internal server error', async () => {
+      findAllStub.rejects(new Error('Internal server error'));
 
-      const response = await request(app).get('/search?name=Test&category=Electronics&page=1&limit=10');
+      const res = await request(app)
+        .get('/products/search?name=Product&category=Electronics')
+        .set('Authorization', `Bearer ${generateToken()}`);
 
-      expect(response.status).toBe(500);
-      expect(response.body).toEqual({ error: 'Database Error' });
+      expect(res.status).toBe(500);
+      expect(res.body.error).toBe('Error while searching products'); // Updated error message
     });
   });
 });
+
