@@ -20,7 +20,7 @@ paths:
   /api/carts/add:
     post:
       tags:
-        - "carts"
+        - Cart
       summary: "Add a new item to cart"
       description: "Add a new item to the cart"
       security:
@@ -169,7 +169,7 @@ paths:
   /api/users/request-reset-password:
     post:
       tags:
-        - "users"
+        - User
       summary: "Request password reset"
       description: "Request a password reset for the user's account"
       requestBody:
@@ -227,7 +227,7 @@ paths:
   /api/users/reset-password/{token}:
     patch:
       tags:
-        - "users"
+        - User
       summary: "Reset password"
       description: "Reset the user's password using the provided token"
       parameters:

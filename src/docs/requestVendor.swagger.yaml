@@ -9,7 +9,7 @@ paths:
       summary: Request to be a vendor
       description: This API is for requesting to be a vendor.
       tags:
-        - vendor
+        - Vendor
       requestBody:
         description: Vendor registration payload
         required: true
