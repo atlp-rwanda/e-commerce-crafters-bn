@@ -1,16 +1,78 @@
+import { Request, Response } from "express";
+import { deleteUser } from "../controllers/user.controller";
+import { deleteUserById } from "../services/userService";
+import User from "../database/models/user";
 import request from 'supertest';
 import sinon from 'sinon';
 import { app, server } from '../index';
-import User from '../database/models/user';
 import nodemailer from 'nodemailer';
 import Vendor from '../database/models/vendor';
 import * as passwordUtils from '../services/userService';
 
+
 jest.setTimeout(50000);
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve));
+  await new Promise((resolve) => server.close(resolve));
 });
+
+describe("deleteUser", () => {
+  let req: Partial<Request>;
+  let res: Partial<Response>;
+  let json: sinon.SinonSpy;
+  let status: sinon.SinonStub;
+  let findByPkStub: sinon.SinonStub;
+
+  beforeEach(() => {
+    req = { params: { id: "1" } };
+    json = sinon.spy();
+    status = sinon.stub().returns({ json });
+    res = { status } as unknown as Response;
+
+    findByPkStub = sinon.stub(User, "findByPk");
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it("should delete user and return a success message", async () => {
+    const destroyStub = sinon.stub().resolves(true);
+    findByPkStub.resolves({
+      destroy: destroyStub,
+    } as any);
+
+    await deleteUser(req as Request, res as Response);
+
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledOnce(destroyStub);
+    sinon.assert.calledWith(status, 200);
+    sinon.assert.calledWith(json, { message: "User deleted successful" });
+  });
+
+  it("should return status 500 error if an exception occurs", async () => {
+    findByPkStub.rejects(new Error("Internal server error"));
+
+    await deleteUser(req as Request, res as Response);
+
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledWith(status, 500);
+    sinon.assert.calledWith(json, { error: "Internal server error" });
+  });
+
+  it("should return status 404 if user is not found", async () => {
+    findByPkStub.resolves(null);
+
+    await deleteUser(req as Request, res as Response);
+
+    sinon.assert.calledOnce(findByPkStub);
+    sinon.assert.calledWith(status, 404);
+    sinon.assert.calledWith(json, { error: "User not found" });
+  });
+});
+
+
+
 describe('register', () => {
   let createStub: sinon.SinonStub;
   let findOneStub: sinon.SinonStub;
@@ -228,3 +290,4 @@ describe("Welcome endpoint",()=>{
         expect(response.text).toContain("<h1 style='text-align:center;font-family: sans-serif'>Welcome to our backend as code crafters team </h1>");
     });
 })
+

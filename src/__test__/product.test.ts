@@ -203,3 +203,80 @@ describe('updateProduct', () => {
     expect(res.body.message).toBe('Product updated successfully');
   });
 });
+describe('deleteProduct', () => {
+  let checkVendorModifyPermissionStub: sinon.SinonStub;
+  let findByPkStub: sinon.SinonStub;
+  let destroyStub: sinon.SinonStub;
+  let productLifecycleEmitterStub: sinon.SinonStub;
+
+  beforeEach(() => {
+    checkVendorModifyPermissionStub = sinon.stub(require('../services/PermisionService'), 'checkVendorModifyPermission');
+    findByPkStub = sinon.stub(Product, 'findByPk');
+    destroyStub = sinon.stub(Product.prototype, 'destroy');
+    productLifecycleEmitterStub = sinon.stub(productLifecycleEmitter, 'emit');
+  });
+
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it('should return 404 if product not found', async () => {
+    checkVendorModifyPermissionStub.resolves({ allowed: true });
+    findByPkStub.resolves(null);
+    
+    const token = generateToken();
+    const res = await request(app)
+      .delete('/deleteProduct/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ vendorId: '123' });
+
+    expect(res.status).toBe(404);
+    expect(res.body.error).toBe('Product not found');
+  });
+
+  it('should return 403 if permission denied', async () => {
+    checkVendorModifyPermissionStub.resolves({ allowed: false, status: 403, message: 'You are not allowed to perform this action' });
+    findByPkStub.resolves({});
+    
+    const token = generateToken();
+
+    const res = await request(app)
+      .delete('/deleteProduct/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ vendorId: '123' });
+
+    expect(res.status).toBe(403);
+    expect(res.body.message).toBe('You are not allowed to perform this action');
+  });
+
+  it('should delete product and return 200 if successful', async () => {
+    checkVendorModifyPermissionStub.resolves({ allowed: true });
+    const product = { destroy: destroyStub };
+    findByPkStub.resolves(product);
+    
+    destroyStub.resolves();
+
+    const token = generateToken();
+
+    const res = await request(app)
+      .delete('/deleteProduct/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ vendorId: '123' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.message).toBe('Product deleted successfully');
+  });
+
+  it('should return 500 if there is an internal server error', async () => {
+    checkVendorModifyPermissionStub.rejects(new Error('Internal server error'));
+
+    const token = generateToken();
+    const res = await request(app)
+      .delete('/deleteProduct/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ vendorId: '123' });
+
+    expect(res.status).toBe(500);
+    expect(res.body.error).toBe('Internal server error');
+  });
+});

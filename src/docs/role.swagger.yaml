@@ -1,5 +1,7 @@
 /approve-vendor/{userId}:
   put:
+    tags:
+      - Vendor
     summary: Approve a vendor request
     parameters:
       - in: path
@@ -16,6 +18,8 @@
 
 /reject-vendor/{userId}:
   put:
+    tags:
+      - Vendor
     summary: Reject a vendor request
     parameters:
       - in: path
