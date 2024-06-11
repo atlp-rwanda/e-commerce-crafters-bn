@@ -7,7 +7,7 @@
     "dev": "nodemon src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc -p .",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "test:product": "jest src/__test__/product.test.ts",
     "migrate": "sequelize-cli db:migrate",
     "seed": "sequelize-cli db:seed:all"

@@ -14,6 +14,18 @@ app.get('/search', searchProduct);
 jest.mock('../services/productService');
 jest.mock('../database/models/product');
 
+let server;
+
+beforeAll(() => {
+  server = app.listen(5000);
+});
+
+afterAll(async () => {
+  await new Promise(resolve => {
+    server.close(resolve);
+  });
+});
+
 describe('Product Controller', () => {
   describe('readAllProducts', () => {
     it('should return products with status 200', async () => {
