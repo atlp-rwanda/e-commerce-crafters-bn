@@ -1,14 +1,16 @@
 import request from 'supertest';
 import {app,server} from '..'
 
+beforeAll(() => {
+
+});
+
+afterAll(async () => {
+  await new Promise(resolve => server.close(resolve));
+});
+
 describe("Welcome endpoint",()=>{
-    beforeAll((done) => {
-        done();
-      });
-    
-      afterAll((done) => {
-        server.close(done);
-      });
+
     it('should return welcome message and status 200 ', async()=>{
         const response = await request(app).get('/');
         expect(response.status).toBe(200);
