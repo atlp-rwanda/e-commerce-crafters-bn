@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: E-commerce Platform API
+  description: API documentation for the E-commerce platform.
+  version: 1.0.0
+paths:
+  /requestVendor:
+    post:
+      summary: Request to be a vendor
+      description: This API is for requesting to be a vendor.
+      tags:
+        - Vendor
+      requestBody:
+        description: Vendor registration payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: 12345
+                storeName:
+                  type: string
+                  example: Shafi's Store
+                address:
+                  type: string
+                  example: 123 Main Street, Springfield, IL
+                TIN:
+                  type: string
+                  example: 987654321
+                bankAccount:
+                  type: string
+                  example: 1234567890
+                paymentDetails:
+                  type: string
+                  example: Stripe
+              required:
+                - userId
+                - storeName
+                - address
+                - TIN
+                - bankAccount
+                - paymentDetails
+      responses:
+        "200":
+          description: Vendor requested successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Vendor requested successfully
+                  vendor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 67890
+                      userId:
+                        type: string
+                        example: 12345
+                      storeName:
+                        type: string
+                        example: Shafi's Store
+                      address:
+                        type: string
+                        example: 123 Main Street, Springfield, IL
+                      TIN:
+                        type: string
+                        example: 987654321
+                      bankAccount:
+                        type: string
+                        example: 1234567890
+                      paymentDetails:
+                        type: string
+                        example: Stripe
+        "400":
+          description: Bad request - missing fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Please fill all fields
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An unexpected error occurred
+
+components:
+  schemas:
+    Vendor:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        storeName:
+          type: string
+        address:
+          type: string
+        TIN:
+          type: string
+        bankAccount:
+          type: string
+        paymentDetails:
+          type: string

@@ -1,0 +1,120 @@
+paths:
+  /notifications/{vendorId}:
+    get:
+      summary: Get Notifications
+      tags:
+        - Notification
+      description: Retrieve all notifications for a specific vendor
+      parameters:
+        - in: path
+          name: vendorId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the vendor to retrieve notifications for
+      responses:
+        200:
+          description: Notifications retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notifications:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        vendorId:
+                          type: string
+                          format: uuid
+                        message:
+                          type: string
+                        isRead:
+                          type: boolean
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+        404:
+          description: No notifications found for the vendor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No notifications that were found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Failed to retrieve notifications
+
+  /readnotifications/{id}:
+    patch:
+      summary: Mark Notification As Read
+      tags:
+        - Notification
+      description: Mark a specific notification as read
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the notification to be marked as read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isRead:
+                  type: boolean
+                  description: Whether the notification is read
+      responses:
+        200:
+          description: Notification marked as read successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Notification marked as read successfully
+        401:
+          description: No notification found with the specified ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorMessage:
+                    type: string
+                    example: No notification found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Failed to retrieve notifications

@@ -16,7 +16,7 @@ export const enable2FA = async (req: Request, res: Response) => {
     const statusMessage = user.isTwoFactorEnabled
       ? "2FA enabled."
       : "2FA disabled.";
-    res.status(200).json({ message: statusMessage });
+    return res.status(200).json({ message: statusMessage });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

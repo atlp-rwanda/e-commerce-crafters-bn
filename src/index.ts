@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
 import cors from "cors";
+import cron from "node-cron";
 import "./config/passport";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
@@ -71,8 +72,18 @@ app.use("/", cartroute);
 app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 
+
+cron.schedule("0 0 * * *", () => {
+  checkExpiredProducts();
+});
+cron.schedule("0 0 * * */14", () => {
+  checkExpiringProducts();
+});
+
 const server = httpServer.listen(PORT, () => {
  console.log(`Server running on Port ${PORT}`);
+  checkExpiringProducts();
+  checkExpiredProducts();
 });
 
 export { app, server, ioServer };
