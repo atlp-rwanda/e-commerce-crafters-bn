@@ -1,4 +1,5 @@
 import Product from "../database/models/product"
+import { Op } from 'sequelize';
 
 export const saveProduct = async (data:any)=>{
     const response = await Product.create(data)
@@ -30,14 +31,17 @@ export const getProductById = async (productId: string) => {
 
 export const searchProducts = async (criteria: any, page: number, limit: number) => {
     try {
-        const offset = (page - 1) * limit;
-        const products = await Product.findAll({
-            where: criteria,
-            offset,
-            limit
-        });
-        return products;
+      const offset = (page - 1) * limit;
+  
+      const products = await Product.findAll({
+        where: criteria,
+        offset,
+        limit
+      });
+  
+      return products;
     } catch (error) {
-        throw new Error('Error while searching products');
+      throw new Error('Error while searching products');
     }
-};
+  };
+  
