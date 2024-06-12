@@ -1,91 +1,46 @@
 import Product from "../database/models/product";
-import Vendor from "../database/models/vendor";
 import User from "../database/models/user";
 import { Op } from "sequelize";
 import nodemailer from "nodemailer";
 import models from "../database/models";
 import { Response } from "express";
-import cron from "node-cron";
-
-export const checkExpiringProducts = async () => {
-  const productsData = await Product.findAll({
-    where: {
-      expiringDate: {
-        [Op.between]: [
-          new Date(),
-          new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(),
-        ],
+export const checkExpiringProducts = async (req?: Request, res?: Response) => {
+  try {
+    const expiringProducts = await Product.findAll({
+      where: {
+        expiringDate: {
+          [Op.between]: [
+            new Date(),
+            new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).getTime(),
+          ],
+        },
       },
-    },
-  });
-  const jsonProducts = productsData.map((product) => product.toJSON());
-  if (jsonProducts.length === 0) return false;
-  const organizedProducts = jsonProducts.reduce((acc, product) => {
-    const { vendorId } = product;
-    if (!acc[vendorId]) {
-      acc[vendorId] = [];
-    }
-    acc[vendorId].push(product.name);
-    return acc;
-  }, {});
-
-  const vendorsData = await Vendor.findAll({
-    where: {
-      vendorId: Object.keys(organizedProducts),
-    },
-  });
-
-  const jsonVendors = vendorsData.map((vendor) => vendor.toJSON());
-  const organizedVendors = jsonVendors.reduce((acc, vendor) => {
-    const { userId, vendorId } = vendor;
-    if (!acc[userId]) {
-      acc[userId] = vendorId;
-    }
-    acc[userId] = vendorId;
-    return acc;
-  }, {});
-
-  const usersData = await User.findAll({
-    where: {
-      userId: Object.keys(organizedVendors),
-    },
-  });
-
-  let send = {};
-  const jsonUsers = usersData.map((user) => user.toJSON());
-  jsonUsers.forEach((user) => {
-    const { email } = user;
-    const userIds = Object.keys(organizedVendors);
-    userIds.forEach((id) => {
-      if (id === user.userId) {
-        send[email] = organizedProducts[organizedVendors[id]];
-      }
+      include: {
+        model: models.Vendor,
+        as: "Vendor",
+      },
     });
-  });
-  return send;
-};
+    console.log(expiringProducts);
+    if (expiringProducts.length === 0) {
+      return res?.status(204).json({ message: "No Expiring Products" });
+    }
 
-const sendEmails = async (data) => {
-  if (!data) return false;
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure: true,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-  const emails = Object.keys(data);
-  emails.map(async (email, i, arr) => {
-    const productsList = data[email].reduce((acc, curr) => {
-      acc += `<li>${curr}</li>`;
-      return acc;
-    }, "");
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Reminder: Expiring Product in Store Inventory⚠️⚠️",
-      html: `<!DOCTYPE html>
+    const sendEmails = expiringProducts.map(async (product) => {
+      const userId = product.Vendor.userId;
+      const userEmail = await User.findByPk(userId);
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        secure: true,
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+      let mailOptions = {
+        from: process.env.EMAIL,
+        to: userEmail?.email,
+        subject: "Reminder: Expiring Product in Store Inventory⚠️⚠️",
+        html: `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -157,8 +112,7 @@ const sendEmails = async (data) => {
                 <h2>Greetings,</h2>
                 <p>I hope this email finds you well. I wanted to bring to your attention the upcoming expiration dates of some of the products in your store inventory. As you know, maintaining the freshness and quality of products is crucial for customer satisfaction and business success.</p>
                 <p>Upon reviewing our records, it appears that the following items in your inventory are nearing their expiration dates:</p>
-               <ul>${productsList}
-               </ul>
+               <ul>${product.name}</ul>
                 <p>It's essential to take proactive measures to manage these expiring products effectively. Here are a few suggestions:</p>
                 <p>Consider offering special promotions or discounts to encourage customers to purchase these items before they expire. This can help minimize losses and increase sales.</p>
                 <a href="www.gurisha.com" class="button"><span>Add Discount</span></a>
@@ -171,19 +125,16 @@ const sendEmails = async (data) => {
         </div>
     </body>
     </html>`,
-    };
-
-    try {
+      };
       await transporter.sendMail(mailOptions);
-      arr[i] = "sent";
-    } catch (error) {
-      console.log(error);
-    }
-    return arr;
-  });
+    });
+    await Promise.all(sendEmails);
+    res?.status(200).json({ message: "Check Expiring Product Successfully" });
+  } catch (error: any) {
+    return res?.status(500).json({ error: error.message });
+  }
 };
-
-export const checkExpiredsProduct = async (req?: Request, res?: Response) => {
+export const checkExpiredProducts = async (req?: Request, res?: Response) => {
   try {
     const expiredProduct = await Product.findAll({
       where: {
@@ -197,7 +148,11 @@ export const checkExpiredsProduct = async (req?: Request, res?: Response) => {
         as: "Vendor",
       },
     });
-    console.log("Checking expired product is completed after 2 seconds!");
+    if (expiredProduct.length === 0) {
+      return res?.status(204).json({
+        message: "No Expired Products To Update",
+      });
+    }
     const updatePromise = expiredProduct.map(async (product) => {
       const userId = product.Vendor.userId;
       const userEmail = await User.findByPk(userId);
@@ -210,7 +165,6 @@ export const checkExpiredsProduct = async (req?: Request, res?: Response) => {
             pass: process.env.EMAIL_PASS,
           },
         });
-
         let mailOptions = {
           from: process.env.EMAIL,
           to: userEmail?.email,
@@ -281,7 +235,7 @@ export const checkExpiredsProduct = async (req?: Request, res?: Response) => {
                     <body>
                         <div class="container">
                             <div class="header">
-                                <h1>⚠️Expiring Products⚠️</h1>
+                                <h1>⚠️Expired Products⚠️</h1>
                             </div>
                             <div class="content">
                             <h2>Greetings,</h2>
@@ -304,16 +258,13 @@ export const checkExpiredsProduct = async (req?: Request, res?: Response) => {
         await transporter.sendMail(mailOptions);
       });
     });
-
     await Promise.all(updatePromise);
-    res?.status(200).json({ message: "checking expiring product sucessfully" });
+    res
+      ?.status(200)
+      .json({ message: "Check Expired Product Successfully And Sent Emails" });
   } catch (error: any) {
+    console.log(error.message);
+
     return res?.status(500).json({ error: error.message });
   }
 };
-export const UpdateExpiredProduct = async (productIds: string[] | []) => {};
-
-cron.schedule("0 0 * * */14", async () => {
-  const data = await checkExpiringProducts();
-  sendEmails(data);
-});
