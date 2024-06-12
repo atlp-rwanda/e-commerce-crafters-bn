@@ -1,340 +1,338 @@
 components:
-  schemas:
-    user:
-      type: object
-      properties:
-        name:
-          type: string
-          example: "Mark Zuck"
-        email:
-          type: string
-          format: email
-          example: nimuhnorbert@gmail.com  
-        password:
-          type: string
-          example: "$m3llyc@t"
-      required:
-        - name
-        - email
-        - password 
-    userCode:
-      type: object
-      properties:
-        code:
-          type: string
-          example: "123456"
-      required:
-        - code
-  securitySchemes:
-    BearerAuth:            
-      type: http
-      scheme: bearer
-      bearerFormat: JWT    
+ schemas:
+  user:
+   type: object
+   properties:
+    name:
+     type: string
+     example: "Mark Zuck"
+    email:
+     type: string
+     format: email
+     example: nimuhnorbert@gmail.com
+    password:
+     type: string
+     example: "$m3llyc@t"
+   required:
+    - name
+    - email
+    - password
+  userCode:
+   type: object
+   properties:
+    code:
+     type: string
+     example: "123456"
+   required:
+    - code
+ securitySchemes:
+  BearerAuth:
+   type: http
+   scheme: bearer
+   bearerFormat: JWT
 
 /:
-  get:
-    summary: welcome endpoint
-    responses:
-      200:
-        description: server running
-      500:
-        description: sorry       
+ get:
+  summary: welcome endpoint
+  responses:
+   200:
+    description: server running
+   500:
+    description: sorry
 
 /login:
-  post:
-    tags:
-      - User
-    summary: logging in a user
-    description: authenticating user to our app
-    operationId: log-In
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/user'     
-    responses:
-      200:
-        description: success login
-      500:
-        description: An error occurred
-
+ post:
+  tags:
+   - User
+  summary: logging in a user
+  description: authenticating user to our app
+  operationId: log-In
+  requestBody:
+   content:
+    application/json:
+     schema:
+      $ref: "#/components/schemas/user"
+  responses:
+   200:
+    description: success login
+   500:
+    description: An error occurred
 
 /enable-2fa:
-  post:
-    tags:
-      - User
-    summary: enabling 2fa
-    description: enabling 2fa for your account
-    operationId: enable-2fa
-    security:
-      - BearerAuth: []
-    responses:
-      200:
-        description: success
-      401:
-        description: Unauthorized
-      500:
-        description: An error occurred
+ post:
+  tags:
+   - User
+  summary: enabling 2fa
+  description: enabling 2fa for your account
+  operationId: enable-2fa
+  security:
+   - BearerAuth: []
+  responses:
+   200:
+    description: success
+   401:
+    description: Unauthorized
+   500:
+    description: An error occurred
 
 /verify-code:
-  post:
-    tags:
-      - User
-    summary: verifying code
-    description: getting your code verified and proceed to login
-    operationId: verify-code
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/userCode'
-      required: true      
-    responses:
-      200:
-        description: success
-      500:
-        description: An error occurred
+ post:
+  tags:
+   - User
+  summary: verifying code
+  description: getting your code verified and proceed to login
+  operationId: verify-code
+  requestBody:
+   content:
+    application/json:
+     schema:
+      $ref: "#/components/schemas/userCode"
+   required: true
+  responses:
+   200:
+    description: success
+   500:
+    description: An error occurred
 
 /auth/google:
-  get:
-    tags:
-      - User
-    summary: Sign-In with google
-    description: Redirects the user to Google for authentication. After successful authentication, Google will redirect the user back to our application with an authorization code.
-    responses:
-      302:
-        description: Redirect to Google's OAuth
-      500:
-        description: An error occurred
+ get:
+  tags:
+   - User
+  summary: Sign-In with google
+  description: Redirects the user to Google for authentication. After successful authentication, Google will redirect the user back to our application with an authorization code.
+  responses:
+   302:
+    description: Redirect to Google's OAuth
+   500:
+    description: An error occurred
 
 /auth/google/callback:
-  get:
-    tags:
-      - User
-    summary: Google Sign-In Callback
-    description: This is The endpoint that Google redirects the user back to after successful authentication.
-    responses:
-      200:
-        description: success
-      400:
-        description: Invalid or expired authorization code
-      500:
-        description: An error occurred
+ get:
+  tags:
+   - User
+  summary: Google Sign-In Callback
+  description: This is The endpoint that Google redirects the user back to after successful authentication.
+  responses:
+   200:
+    description: success
+   400:
+    description: Invalid or expired authorization code
+   500:
+    description: An error occurred
 paths:
-  /updateuser/{id}:
-    patch:
-      summary: Updates a user
-      tags:
-        - User
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
+ /updateuser/{id}:
+  patch:
+   summary: Updates a user
+   tags:
+    - User
+   parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+       type: string
+       format: uuid
+      description: ID of the user to be updated
+   requestBody:
+    required: true
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        name:
+         type: string
+         example: "John Doe"
+         description: New name for the user
+        email:
+         type: string
+         format: email
+         example: "john@email.com"
+         description: New email for the user
+        profile:
+         type: string
+         example: "profile"
+         description: New profile for the user
+   responses:
+    200:
+     description: User updated successfully
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         message:
+          type: string
+          example: User update success
+         user:
+          type: object
+          properties:
+           userId:
             type: string
-            format: uuid
-          description: ID of the user to be updated
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: "John Doe"
-                  description: New name for the user
-                email:
-                  type: string
-                  format: email
-                  example: "john@email.com"
-                  description: New email for the user
-                profile:
-                  type: string
-                  example: "profile"
-                  description: New profile for the user
-      responses:
-        200:
-          description: User updated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User update success
-                  user:
-                    type: object
-                    properties:
-                      userId:
-                        type: string
-                        example: "142b7ffd-efff-497a-8ac0-12fff26c38b6"
-                      name:
-                        type: string
-                        example: "John Doe"
-                      email:
-                        type: string
-                        example: "john@email.com"
-                      profile:
-                        type: string
-                        example: "profile"
-        400:
-          description: Bad request, missing or invalid parameters
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User not updated, missing or invalid parameters
-        403:
-          description: Email already exists
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Email already exists
-        404:
-          description: User not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: User not found
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
+            example: "142b7ffd-efff-497a-8ac0-12fff26c38b6"
+           name:
+            type: string
+            example: "John Doe"
+           email:
+            type: string
+            example: "john@email.com"
+           profile:
+            type: string
+            example: "profile"
+    400:
+     description: Bad request, missing or invalid parameters
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         message:
+          type: string
+          example: User not updated, missing or invalid parameters
+    403:
+     description: Email already exists
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         message:
+          type: string
+          example: Email already exists
+    404:
+     description: User not found
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         message:
+          type: string
+          example: User not found
+    500:
+     description: Internal server error
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         error:
+          type: string
+          example: Internal server error
 
-  /updatepassword/{id}:
-    patch:
-      summary: Updates user password
-      tags:
-        - User
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
+ /updatepassword/{id}:
+  patch:
+   summary: Updates user password
+   tags:
+    - User
+   parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+       type: string
+       format: uuid
+      description: ID of the user whose password needs to be updated
+   requestBody:
+    required: true
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        password:
+         type: string
+         description: Existing password
+         example: "currentPassword123"
+        newPassword:
+         type: string
+         description: New password
+         example: "newPassword456"
+        confirmPassword:
+         type: string
+         description: Confirm the new password
+         example: "newPassword456"
+   responses:
+    200:
+     description: User password updated successfully
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         message:
+          type: string
+          example: "Password updated successfully"
+         user:
+          type: object
+          properties:
+           userId:
             type: string
-            format: uuid
-          description: ID of the user whose password needs to be updated
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                password:
-                  type: string
-                  description: Existing password
-                  example: "currentPassword123"
-                newPassword:
-                  type: string
-                  description: New password
-                  example: "newPassword456"
-                confirmPassword:
-                  type: string
-                  description: Confirm the new password
-                  example: "newPassword456"
-      responses:
-        200:
-          description: User password updated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Password updated successfully"
-                  user:
-                    type: object
-                    properties:
-                      userId:
-                        type: string
-                        example: "142b7ffd-efff-497a-8ac0-12fff26c38b6"
-                      name:
-                        type: string
-                        example: "John Doe"
-                      email:
-                        type: string
-                        example: "john.doe@example.com"
-                      profile:
-                        type: string
-                        example: "profileImageUrl"
-        400:
-          description: Bad request, missing or invalid parameters
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Please fill all fields"
-        404:
-          description: User not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "User not found"
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Internal server error"
+            example: "142b7ffd-efff-497a-8ac0-12fff26c38b6"
+           name:
+            type: string
+            example: "John Doe"
+           email:
+            type: string
+            example: "john.doe@example.com"
+           profile:
+            type: string
+            example: "profileImageUrl"
+    400:
+     description: Bad request, missing or invalid parameters
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         message:
+          type: string
+          example: "Please fill all fields"
+    404:
+     description: User not found
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         message:
+          type: string
+          example: "User not found"
+    500:
+     description: Internal server error
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         error:
+          type: string
+          example: "Internal server error"
 
 /deleteuser/{userId}/:
-  delete:
-    summary: This API is for deleting  user
-    description: This API is for deleting user
-    tags:
-      - user
-    parameters:
-      - in: path
-        name: userId
-        required: true
-        schema:
-          type: string
-        description: ID of the user to be deleted
-    security:
-      - BearerAuth: []
-    responses:
-      "200":
-        description: User deleted successfully
-      "404":
-        description: User not found
-      "500":
-        description: Internal error server
-components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+ delete:
+  summary: This API is for deleting  user
+  description: This API is for deleting user
+  tags:
+   - User
+  parameters:
+   - in: path
+     name: userId
+     required: true
+     schema:
+      type: string
+     description: ID of the user to be deleted
+  security:
+   - BearerAuth: []
+  responses:
+   "200":
+    description: User deleted successfully
+   "404":
+    description: User not found
+   "500":
+    description: Internal error server
+ securitySchemes:
+  BearerAuth:
+   type: http
+   scheme: bearer
+   bearerFormat: JWT
