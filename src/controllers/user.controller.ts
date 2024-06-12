@@ -31,7 +31,7 @@ export const Welcome = async (req: Request, res: Response) => {
 
 
 interface ExtendedRequest extends ExpressRequest {
-  session: Session & Partial<SessionData> & { twoFAError?: string, email?: string, password?: string };
+  session: Session & Partial<SessionData> & { twoFAError?: string, email?: string | null, password?: string| null };
 }
 
 export const login = async (req: ExtendedRequest, res: Response) => {
@@ -60,6 +60,10 @@ export const login = async (req: ExtendedRequest, res: Response) => {
   
       const token = await generateToken(existUser);
       res.cookie("token", token, { httpOnly: true });
+
+      req.session.email = null;
+      req.session.password = null;
+      
       return res.status(200).json({
         message: "Login successful",
         token,
