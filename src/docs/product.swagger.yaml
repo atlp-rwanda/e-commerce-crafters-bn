@@ -226,6 +226,234 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT        paths:
+  /create/product/{vendorId}:
+    post:
+      summary: Create product by vendor
+      description: Vendor can create product
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: vendorId
+          required: true
+          schema:
+            type: string
+          description: ID of the vendor in order to create product
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: air force 1 shoes
+                image:
+                  type: string
+                  example: http://indopic.com/public/airforce.png
+                description:
+                  type: string
+                  example: amazing shoes
+                price:
+                  type: integer
+                  example: 20000
+                quantity:
+                  type: integer
+                  example: 12
+                category:
+                  type: string
+                  example: shoes
+                expiringDate:
+                  type: string
+                  example: 08/10/2025
+      responses:
+        201:
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product created"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 1wsssd625283ad
+                      name:
+                        type: string
+                        example: air force 1 shoes
+                      image:
+                        type: string
+                        example: http://indopic.com/public/airforce.png
+                      description:
+                        type: string
+                        example: amazing shoes
+                      price:
+                        type: integer
+                        example: 20000
+                      quantity:
+                        type: integer
+                        example: 12
+                      category:
+                        type: string
+                        example: shoes
+                      expiringDate:
+                        type: string
+                        example: 08/10/2025
+        422:
+          description: Fail to save data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Failed to save data
+        500:
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: internal server error
+
+
+  /product/updateProduct/{productId}:
+    put:
+      summary: This API is for updating a product
+      description: This API is for a vendor to update product details
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: productId 
+          required: true
+          schema:
+            type: string
+          description: ID of the product to update
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Product update payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                vendorId:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                discount:
+                  type: integer
+                price:
+                  type: integer
+                quantity:
+                  type: integer
+                category:
+                  type: string
+                expiringDate:
+                  type: string
+                  format: date-time
+                expired:
+                  type: boolean
+                available:
+                  type: string
+            example:
+              productId: '123'
+              vendorId: '256'
+              name: 'Sample product'
+              description: 'Sample product description'
+              image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXhCG6nff2emBYOKGHb6jU2zQ4C2m0LBg4Mj-eydwZyg&s'
+              discount: 10
+              price: 100
+              category: 'Electronics'
+              expiringDate: '2024-12-31T23:59:59Z'
+              expired: false
+              available: true
+                
+              
+      responses:
+        "200":
+          description: Product updated successfully
+          content:
+            application/json:
+              example:
+                message: 'Product updated successfully'
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              example:
+                message: 'Product not found'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                message: 'Internal server error'
+
+
+
+
+  /product/deleteProduct/{productId}:
+    delete:
+      summary: delete a product
+      description: This API allows a vendor to delete a product
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of product to delete
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Product deleted successfully
+          content:
+            application/json:
+              example:
+                message: 'Product deleted successfully'
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              example:
+                message: 'Product not found'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                message: 'Internal server error'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
       bearerFormat: JWT        openapi: 3.0.0
 info:
   title: Product API
