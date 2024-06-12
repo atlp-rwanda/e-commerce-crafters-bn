@@ -7,7 +7,6 @@
     "dev": "nodemon src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc -p .",
-    "test": "jest",
     "migrate": "sequelize-cli db:migrate",
     "seed": "sequelize-cli db:seed:all"
   },
