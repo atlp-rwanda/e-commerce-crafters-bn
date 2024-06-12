@@ -98,8 +98,7 @@ paths:
                   error:
                     type: string
                     example: Internal server error
-  
-  
+
   /updatepassword/{id}:
     patch:
       summary: Updates user password
@@ -188,3 +187,32 @@ paths:
                   error:
                     type: string
                     example: "Internal server error"
+
+/deleteuser/{userId}/:
+  delete:
+    summary: This API is for deleting  user
+    description: This API is for deleting user
+    tags:
+      - user
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+        description: ID of the user to be deleted
+    security:
+      - BearerAuth: []
+    responses:
+      "200":
+        description: User deleted successfully
+      "404":
+        description: User not found
+      "500":
+        description: Internal error server
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
