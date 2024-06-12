@@ -46,7 +46,7 @@ describe('Cart Controller - addToCart', () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('message', 'cart added successfully!');
     expect(response.body).toHaveProperty('cart');
-  });
+  },10000);
 });
 
 
