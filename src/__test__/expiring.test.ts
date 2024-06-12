@@ -39,7 +39,7 @@ describe("Check Expired Products", () => {
   const statusCode = res.statusCode;
   const data = res._getJSONData();
   if (statusCode === 204) {
-   expect(data).toEqual({ message: "No Expired Products to Update" });
+   expect(data).toEqual({ message: "No Expired Products To Update" });
   }
  }, 10000);
  test("Should return Check Expired Product Successfully", async () => {
@@ -63,4 +63,3 @@ describe("Check Expired Products", () => {
   }
  }, 10000);
 });
-
