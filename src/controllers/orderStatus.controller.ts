@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Order from "../database/models/order";
 import { ioServer } from "..";
+import pusher from "../pusher";
 
 export const getOrderStatus = async(req: Request, res: Response) => {
     try{
@@ -53,7 +54,11 @@ export const updateOrderStatus = async(req: Request, res: Response) => {
         const formattedDate = order.expectedDeliveryDate ? order.expectedDeliveryDate.toLocaleDateString() : null;
 
         
-
+        pusher.trigger('e-commerce-crafters', 'orderStatusUpdated', {
+            orderId,
+            status: order.status,
+            expectedDeliveryDate: formattedDate
+          });
         ioServer.emit('orderStatusUpdated', { orderId, status: order.status, expectedDeliveryDate: formattedDate})
         res.status(200).json({orderId, status: order.status, expectedDeliveryDate: formattedDate});
     } catch(err: any){
