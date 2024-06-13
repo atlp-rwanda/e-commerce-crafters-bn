@@ -1,386 +1,386 @@
 openapi: "3.0.0"
 info:
-  title: "ATLP Project API"
-  version: "1.0.0"
-  description: "APIs for adding items to cart and resetting password"
+ title: "ATLP Project API"
+ version: "1.0.0"
+ description: "APIs for adding items to cart and resetting password"
 servers:
-  - url: "https://e-commerce-crafters-bn.com"
-    description: "Production server"
-  - url: "http://localhost:5000"
-    description: "Development server"
+ - url: "https://e-commerce-crafters-bn.com"
+   description: "Production server"
+ - url: "http://localhost:5000"
+   description: "Development server"
 components:
-  securitySchemes:
-    token:
-      type: "apiKey"
-      name: "Authorization"
-      in: "header"
-      scheme: "bearer"
-      bearerFormat: "JWT"
+ securitySchemes:
+  token:
+   type: "apiKey"
+   name: "Authorization"
+   in: "header"
+   scheme: "bearer"
+   bearerFormat: "JWT"
 paths:
-  /api/carts/add:
-    post:
-      tags:
-        - "carts"
-      summary: "Add a new item to cart"
-      description: "Add a new item to the cart"
-      security:
-        - token: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                userId:
-                  type: "string"
-                  example: "268dd4a0-9e23-441f-b7ba-890cce959387"
-                productId:
-                  type: "string"
-                  example: "8bb67532-7d91-4e17-8f1c-a91e5178792e"
-                quantity:
-                  type: "integer"
-                  example: 3
-                price:
-                  type: "number"
-                  example: 45
-              required:
-                - userId
-                - productId
-                - quantity
-                - price
-      responses:
-        "200":
-          description: "Item added to cart successfully"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "success"
-                  data:
-                    type: "object"
-                    properties:
-                      productId:
-                        type: "string"
-                        example: "8bb67532-7d91-4e17-8f1c-a91e5178792e"
-                      quantity:
-                        type: "integer"
-                        example: 3
-                      price:
-                        type: "number"
-                        example: 45
-        "400":
-          description: "Invalid request body"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "Error"
-                  message:
-                    type: "string"
-                    example: "Invalid request body"
-        "500":
-          description: "Internal server error"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "Error"
-                  message:
-                    type: "string"
-                    example: "Internal server error"
-
-  /getcart/{userId}:
-    get:
-      summary: Get all items in a user's cart
-      tags:
-        - Cart
-      produces:
-        - application/json
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-          format: uuid
-          description: ID of the user
-      responses:
-        200:
-          description: Successful retrieval of cart items
-        404:
-          description: Cart not found
-        500:
-          description: Internal Server Error
-
-  /clearcart/{userId}:
-    delete:
-      summary: Remove all items of a specific user from cart
-      tags:
-        - Cart
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-          format: uuid
-          description: ID of the user
-      responses:
-        200:
-          description: Cart cleared successfully
-        404:
-          description: Cart not found
-        500:
-          description: Internal Server Error
-
-  /cart/{userId}/product/{productId}:
-    delete:
-      summary: Remove item from cart
-      tags:
-        - Cart
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-          format: uuid
-          description: ID of the user
-        - name: productId
-          in: path
-          required: true
-          type: string
-          format: uuid
-          description: ID of the product
-      responses:
-        200:
-          description: Product removed from cart successfully
-        404:
-          description: Product not found in cart
-        500:
-          description: Internal Server Error
-  /api/users/request-reset-password:
-    post:
-      tags:
-        - "users"
-      summary: "Request password reset"
-      description: "Request a password reset for the user's account"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                email:
-                  type: "string"
-                  example: "admin@gmail.com"
-              required:
-                - email
-      responses:
-        "200":
-          description: "Password reset email sent successfully"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "success"
-                  message:
-                    type: "string"
-                    example: "Password reset email sent"
-        "404":
-          description: "User not found"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "Error"
-                  message:
-                    type: "string"
-                    example: "User not found"
-        "500":
-          description: "Internal server error"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "Error"
-                  message:
-                    type: "string"
-                    example: "Error requesting password reset"
-  /api/users/reset-password/{token}:
-    patch:
-      tags:
-        - "users"
-      summary: "Reset password"
-      description: "Reset the user's password using the provided token"
-      parameters:
-        - name: "token"
-          in: "path"
-          description: "Token for password reset"
-          required: true
-          schema:
-            type: "string"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: "object"
-              properties:
-                password:
-                  type: "string"
-                  example: "newpassword123"
-                confirmPassword:
-                  type: "string"
-                  example: "newpassword123"
-              required:
-                - password
-                - confirmPassword
-      responses:
-        "200":
-          description: "Password reset successfully"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "success"
-                  message:
-                    type: "string"
-                    example: "Password has been reset"
-        "400":
-          description: "Invalid or expired token"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "Error"
-                  message:
-                    type: "string"
-                    example: "Password reset token is invalid or has expired"
-        "500":
-          description: "Internal server error"
-          content:
-            application/json:
-              schema:
-                type: "object"
-                properties:
-                  status:
-                    type: "string"
-                    example: "Error"
-                  message:
-                    type: "string"
-                    example: "Error resetting password"
-/updatecart:
+ /carts/addcart:
   post:
-    summary: Update cart items
-    tags:
-      - Cart
-    requestBody:
-      description: Cart updates
+   tags:
+    - Cart
+   summary: "Add a new item to cart"
+   description: "Add a new item to the cart"
+   security:
+    - token: []
+   requestBody:
+    required: true
+    content:
+     application/json:
+      schema:
+       type: "object"
+       properties:
+        userId:
+         type: "string"
+         example: "268dd4a0-9e23-441f-b7ba-890cce959387"
+        productId:
+         type: "string"
+         example: "8bb67532-7d91-4e17-8f1c-a91e5178792e"
+        quantity:
+         type: "integer"
+         example: 3
+        price:
+         type: "number"
+         example: 45
+       required:
+        - userId
+        - productId
+        - quantity
+        - price
+   responses:
+    "200":
+     description: "Item added to cart successfully"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "success"
+         data:
+          type: "object"
+          properties:
+           productId:
+            type: "string"
+            example: "8bb67532-7d91-4e17-8f1c-a91e5178792e"
+           quantity:
+            type: "integer"
+            example: 3
+           price:
+            type: "number"
+            example: 45
+    "400":
+     description: "Invalid request body"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "Error"
+         message:
+          type: "string"
+          example: "Invalid request body"
+    "500":
+     description: "Internal server error"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "Error"
+         message:
+          type: "string"
+          example: "Internal server error"
+
+ /getcart/{userId}:
+  get:
+   summary: Get all items in a user's cart
+   tags:
+    - Cart
+   produces:
+    - application/json
+   parameters:
+    - name: userId
+      in: path
       required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              updates:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    cartId:
-                      type: string
-                      example: 456
-                    productId:
-                      type: string
-                      example: 123
-                    quantity:
-                      type: integer
-                      example: 2
-                    price:
-                      type: number
-                      example: 100
-    responses:
-      "200":
-        description: Cart items updated successfully
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Cart items updated successfully!
-                cartItems:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      cartId:
-                        type: string
-                        example: 456
-                      productId:
-                        type: string
-                        example: 123
-                      quantity:
-                        type: integer
-                        example: 2
-                      price:
-                        type: number
-                        example: 100
-                total:
-                  type: number
-                  example: 200
-      "400":
-        description: Invalid quantity or exceeds available quantity
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Only 5 Test Product available In store
-      "404":
-        description: Product or cart item not found
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Product 123 Not Found
-      "500":
-        description: Internal server error
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Internal server error
+      type: string
+      format: uuid
+      description: ID of the user
+   responses:
+    200:
+     description: Successful retrieval of cart items
+    404:
+     description: Cart not found
+    500:
+     description: Internal Server Error
+
+ /clearcart/{userId}:
+  delete:
+   summary: Remove all items of a specific user from cart
+   tags:
+    - Cart
+   parameters:
+    - name: userId
+      in: path
+      required: true
+      type: string
+      format: uuid
+      description: ID of the user
+   responses:
+    200:
+     description: Cart cleared successfully
+    404:
+     description: Cart not found
+    500:
+     description: Internal Server Error
+
+ /cart/{userId}/product/{productId}:
+  delete:
+   summary: Remove item from cart
+   tags:
+    - Cart
+   parameters:
+    - name: userId
+      in: path
+      required: true
+      type: string
+      format: uuid
+      description: ID of the user
+    - name: productId
+      in: path
+      required: true
+      type: string
+      format: uuid
+      description: ID of the product
+   responses:
+    200:
+     description: Product removed from cart successfully
+    404:
+     description: Product not found in cart
+    500:
+     description: Internal Server Error
+ /request-reset-password:
+  post:
+   tags:
+    - User
+   summary: "Request password reset"
+   description: "Request a password reset for the user's account"
+   requestBody:
+    required: true
+    content:
+     application/json:
+      schema:
+       type: "object"
+       properties:
+        email:
+         type: "string"
+         example: "admin@gmail.com"
+       required:
+        - email
+   responses:
+    "200":
+     description: "Password reset email sent successfully"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "success"
+         message:
+          type: "string"
+          example: "Password reset email sent"
+    "404":
+     description: "User not found"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "Error"
+         message:
+          type: "string"
+          example: "User not found"
+    "500":
+     description: "Internal server error"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "Error"
+         message:
+          type: "string"
+          example: "Error requesting password reset"
+ /reset-password/{token}:
+  post:
+   tags:
+    - User
+   summary: "Reset password"
+   description: "Reset the user's password using the provided token"
+   parameters:
+    - name: "token"
+      in: "path"
+      description: "Token for password reset"
+      required: true
+      schema:
+       type: "string"
+   requestBody:
+    required: true
+    content:
+     application/json:
+      schema:
+       type: "object"
+       properties:
+        password:
+         type: "string"
+         example: "newpassword123"
+        confirmPassword:
+         type: "string"
+         example: "newpassword123"
+       required:
+        - password
+        - confirmPassword
+   responses:
+    "200":
+     description: "Password reset successfully"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "success"
+         message:
+          type: "string"
+          example: "Password has been reset"
+    "400":
+     description: "Invalid or expired token"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "Error"
+         message:
+          type: "string"
+          example: "Password reset token is invalid or has expired"
+    "500":
+     description: "Internal server error"
+     content:
+      application/json:
+       schema:
+        type: "object"
+        properties:
+         status:
+          type: "string"
+          example: "Error"
+         message:
+          type: "string"
+          example: "Error resetting password"
+/updatecart:
+ post:
+  summary: Update cart items
+  tags:
+   - Cart
+  requestBody:
+   description: Cart updates
+   required: true
+   content:
+    application/json:
+     schema:
+      type: object
+      properties:
+       updates:
+        type: array
+        items:
+         type: object
+         properties:
+          cartId:
+           type: string
+           example: 456
+          productId:
+           type: string
+           example: 123
+          quantity:
+           type: integer
+           example: 2
+          price:
+           type: number
+           example: 100
+  responses:
+   "200":
+    description: Cart items updated successfully
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        message:
+         type: string
+         example: Cart items updated successfully!
+        cartItems:
+         type: array
+         items:
+          type: object
+          properties:
+           cartId:
+            type: string
+            example: 456
+           productId:
+            type: string
+            example: 123
+           quantity:
+            type: integer
+            example: 2
+           price:
+            type: number
+            example: 100
+        total:
+         type: number
+         example: 200
+   "400":
+    description: Invalid quantity or exceeds available quantity
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        message:
+         type: string
+         example: Only 5 Test Product available In store
+   "404":
+    description: Product or cart item not found
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        message:
+         type: string
+         example: Product 123 Not Found
+   "500":
+    description: Internal server error
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        message:
+         type: string
+         example: Internal server error

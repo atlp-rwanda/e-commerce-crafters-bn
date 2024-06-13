@@ -9,7 +9,7 @@ paths:
       summary: Create a new order
       description: This API is for creating a new order.
       tags:
-        - order
+        - Order
       requestBody:
         description: Order creation payload
         required: true

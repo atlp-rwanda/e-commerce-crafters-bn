@@ -9,7 +9,7 @@ paths:
       summary: Register a new user
       description: This API is for registering a new user.
       tags:
-        - user
+        - User
       requestBody:
         description: User registration payload
         required: true

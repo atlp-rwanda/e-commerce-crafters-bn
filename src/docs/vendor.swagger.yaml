@@ -106,7 +106,7 @@ paths:
       summary: This API is for deleting  vendor
       description: This API is for deleting vendor
       tags:
-        - vendor
+        - Vendor
       parameters:
         - in: path
           name: vendorId
