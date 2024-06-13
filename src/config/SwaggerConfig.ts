@@ -24,7 +24,7 @@ const options = {
   },
   servers: [
    {
-    url: "https://e-commerce-crafters-bn.onrender.com/",
+    url: "https://e-commerce-crafters-bn.onrender.com",
    },
   ],
  },
