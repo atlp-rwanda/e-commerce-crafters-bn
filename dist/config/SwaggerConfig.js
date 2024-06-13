@@ -18,7 +18,7 @@ const options = {
         components: {
             securitySchemes: {
                 bearerAuth: {
-                    type: "http",
+                    type: "https",
                     scheme: "bearer",
                     bearerFormat: "JWT",
                 },
@@ -26,7 +26,7 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:5000",
+                url: "https://e-commerce-crafters-bn.onrender.com",
             },
         ],
     },
