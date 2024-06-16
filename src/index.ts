@@ -54,7 +54,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
-app.use(express.json());
+app.use((req, res, next) => {
+    if (req.originalUrl === '/webhook') {
+      next();
+    } else {
+      express.json()(req, res, next);
+    }
+  });
 
 app.use("/", userRoute);
 app.use("/", authRoute);
