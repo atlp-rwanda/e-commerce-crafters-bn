@@ -10,7 +10,7 @@ class Product extends Model {
  public description!: string;
  public image!: string;
  public discount!: number;
- public price!: string;
+ public price!: number;
  public quantity!: number;
  public category!: string;
  public expiringDate?: Date;
