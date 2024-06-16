@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { saveProduct, searchProducts, getAllProducts } from "../services/productService";
+import { saveProduct, searchProducts, getAllProducts, getProductById } from "../services/productService";
 import Product from "../database/models/product";
 import { checkVendorModifyPermission, checkVendorPermission } from "../services/PermisionService";
 import { PRODUCT_ADDED, PRODUCT_REMOVED, PRODUCT_UPDATED, productLifecycleEmitter } from "../helpers/events";

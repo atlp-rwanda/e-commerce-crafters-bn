@@ -10,7 +10,8 @@ import http from "http";
 import { Server as SocketIOServer } from "socket.io";
 
 dotenv.config();
-const PORT = process.env.PORT;
+//const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 import userRoute from "./routes/user.route";
 import vendorRoute from "./routes/vendor.route";
