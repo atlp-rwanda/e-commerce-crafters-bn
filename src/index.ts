@@ -10,7 +10,8 @@ import http from "http";
 import { Server as SocketIOServer } from "socket.io";
 
 dotenv.config();
-const PORT = process.env.PORT;
+//const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 import userRoute from "./routes/user.route";
 import vendorRoute from "./routes/vendor.route";
@@ -26,6 +27,7 @@ import cartroute from "./routes/cart.route";
 import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
 import wishlistroute from "./routes/wishlist.route";
+import statistics from "./routes/statistics.route";
 import {
  checkExpiredProducts,
  checkExpiringProducts,
@@ -77,6 +79,8 @@ app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
+app.use("/", statistics);
+
 
 cron.schedule("0 0 * * *", () => {
  checkExpiredProducts();
@@ -89,6 +93,7 @@ const server = httpServer.listen(PORT, () => {
  console.log(`Server running on Port ${PORT}`);
  checkExpiringProducts();
  checkExpiredProducts();
+
 });
 
 export { app, server, ioServer };
