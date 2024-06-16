@@ -4,7 +4,7 @@ paths:
       summary: This API is for seller to update the order status
       description: This API is for seller to update the order status.
       tags:
-        - Order
+        - order
       parameters:
         - in: path
           name: orderId

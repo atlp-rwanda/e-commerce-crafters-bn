@@ -20,10 +20,10 @@ export const handleGoogleCallback = (
       return res.redirect("/auth/google");
     }
 
-    if (info && info.isNewUser) {
+    if (info.isNewUser) {
       return res
         .status(200)
-        .json({ message: "Successfully signed up." });
+        .json({ error: false, message: "Successfully signed up." });
     } else {
       const token = await generateToken(user);
       // console.log(token);
@@ -37,7 +37,7 @@ export const handleGoogleCallback = (
         });
       return res
         .status(200)
-        .json({ message: "Successfully logged in." });
+        .json({ error: false, message: "Successfully logged in." });
     }
   })(req, res, next);
 };
