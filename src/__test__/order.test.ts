@@ -1,96 +1,114 @@
-
-
 import { Request, Response } from "express";
 import Order from "../database/models/order";
+import { findVendorByUserId } from "../services/orderStatus";
+import Product from "../database/models/product";
 import { modifyOrderStatus } from "../controllers/orderController";
-import sinon from "sinon";
 
-interface CustomRequest extends Request {
-  token: {
-    userId: string;
-  };
-}
+jest.mock("../services/orderStatus");
+jest.mock("../database/models/order");
+jest.mock("../database/models/product");
 
 describe("modifyOrderStatus", () => {
-  let req: Partial<CustomRequest>;
+  let req: Partial<Request> & { token: { id: string } };
   let res: Partial<Response>;
-  let json: sinon.SinonSpy;
-  let status: sinon.SinonStub;
-  let findByPkStub: sinon.SinonStub;
-  let consoleErrorMock: sinon.SinonStub;
+  let jsonSpy: jest.SpyInstance;
+  let statusSpy: jest.SpyInstance;
 
   beforeEach(() => {
     req = {
       params: { orderId: "1" },
       body: { status: "Shipped" },
-      token: { userId: "1" },
+      token: { id: "user1" },
     };
-    json = sinon.spy();
-    status = sinon.stub().returns({ json });
-    res = { status } as unknown as Response;
 
-    findByPkStub = sinon.stub(Order, "findByPk");
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
 
-    consoleErrorMock = sinon.stub(console, "error").callsFake(() => {});
+    jsonSpy = jest.spyOn(res, "json");
+    statusSpy = jest.spyOn(res, "status");
   });
 
   afterEach(() => {
-    sinon.restore();
+    jest.clearAllMocks();
   });
 
-  it("should return status 400 for invalid order status", async () => {
+  it("should return 404 if no vendor is found", async () => {
+    (findVendorByUserId as jest.Mock).mockResolvedValue(null);
+
+    await modifyOrderStatus(req as Request, res as Response);
+
+    expect(statusSpy).toHaveBeenCalledWith(404);
+    expect(jsonSpy).toHaveBeenCalledWith({ message: "No vendor found" });
+  });
+
+  it("should return 400 if invalid status is provided", async () => {
     req.body.status = "InvalidStatus";
-
-    await modifyOrderStatus(req as Request, res as Response);
-
-    sinon.assert.calledWith(status, 400);
-    sinon.assert.calledWith(json, { error: "Invalid order status" });
-  });
-
-  it("should return status 404 if order is not found", async () => {
-    findByPkStub.resolves(null);
-
-    await modifyOrderStatus(req as Request, res as Response);
-
-    sinon.assert.calledWith(status, 404);
-    sinon.assert.calledWith(json, { error: "Order not found" });
-  });
-
-  it("should return status 403 if user is not the owner of the order", async () => {
-    findByPkStub.resolves({ userId: "2", save: sinon.stub() } as any);
-
-    await modifyOrderStatus(req as Request, res as Response);
-
-    sinon.assert.calledWith(status, 403);
-    sinon.assert.calledWith(json, {
-      error: "Only the vendor can update the order status",
+    (findVendorByUserId as jest.Mock).mockResolvedValue({
+      vendorId: "vendor1",
     });
+
+    await modifyOrderStatus(req as Request, res as Response);
+
+    expect(statusSpy).toHaveBeenCalledWith(400);
+    expect(jsonSpy).toHaveBeenCalledWith({ error: "Invalid order status" });
+  });
+
+  it("should return 404 if order is not found", async () => {
+    (findVendorByUserId as jest.Mock).mockResolvedValue({
+      vendorId: "vendor1",
+    });
+    (Order.findByPk as jest.Mock).mockResolvedValue(null);
+
+    await modifyOrderStatus(req as Request, res as Response);
+
+    expect(statusSpy).toHaveBeenCalledWith(404);
+    expect(jsonSpy).toHaveBeenCalledWith({ error: "Order not found" });
   });
 
   it("should return status 200 and update the order status", async () => {
-    const save = sinon.stub();
-    findByPkStub.resolves({
-      userId: "1",
+    const mockOrder = {
+      orderId: "1",
       status: "Pending",
-      save,
-    } as any);
+      products: [{ productId: "product1", status: "Pending" }],
+    };
+
+    const mockVendor = { vendorId: "vendor1" };
+
+    (findVendorByUserId as jest.Mock).mockResolvedValue(mockVendor);
+    (Order.findByPk as jest.Mock).mockResolvedValue(mockOrder);
+    (Product.findOne as jest.Mock).mockResolvedValue(true);
+    (Order.update as jest.Mock).mockResolvedValue([1]);
 
     await modifyOrderStatus(req as Request, res as Response);
 
-    sinon.assert.calledWith(status, 200);
-    sinon.assert.calledWith(json, {
-      message: "Order has been shipped",
-      order: { userId: "1", status: "Shipped", save },
+    expect(Order.update).toHaveBeenCalledWith(
+      { products: mockOrder.products },
+      { where: { orderId: mockOrder.orderId } }
+    );
+
+    expect(Order.update).toHaveBeenCalledWith(
+      { status: "Pending" },
+      { where: { orderId: mockOrder.orderId } }
+    );
+
+    expect(statusSpy).toHaveBeenCalledWith(200);
+    expect(jsonSpy).toHaveBeenCalledWith({
+      message: `Order has been shipped`,
+      order: mockOrder,
     });
-    sinon.assert.calledOnce(save);
   });
 
   it("should return status 500 if an internal server error occurs", async () => {
-    findByPkStub.throws(new Error("Internal server error"));
+    const errorMessage = "Database error";
+    (findVendorByUserId as jest.Mock).mockRejectedValue(
+      new Error(errorMessage)
+    );
 
     await modifyOrderStatus(req as Request, res as Response);
 
-    sinon.assert.calledWith(status, 500);
-    sinon.assert.calledWith(json, { error: "Internal server error" });
+    expect(statusSpy).toHaveBeenCalledWith(500);
+    expect(jsonSpy).toHaveBeenCalledWith({ error: errorMessage });
   });
 });

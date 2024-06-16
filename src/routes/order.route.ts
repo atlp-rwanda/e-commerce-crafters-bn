@@ -8,6 +8,6 @@ const router = express.Router();
 router.put("/order/:orderId/order-status", VerifyAccessToken, updateOrderStatus);
 
 router.get('/order/:orderId/status',VerifyAccessToken, getOrderStatus);
-router.put('/order/:orderId/status',VerifyAccessToken, verifyAdmin, updateOrderStatus);
+router.put('/order/:orderId/status',VerifyAccessToken, modifyOrderStatus);
 
 export default router;

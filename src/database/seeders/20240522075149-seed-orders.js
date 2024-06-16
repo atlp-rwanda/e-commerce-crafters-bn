@@ -28,12 +28,12 @@ module.exports = {
         userId: user.userId,
         paymentMethod: 'Bank Transfer',
         status: 'pending',
-        products: JSON.stringify({
+        products: JSON.stringify([{
           // @ts-ignore
           productId: product.productId,
           // @ts-ignore
           productName: product.name
-        }),
+        }]),
         createdAt: new Date(),
         updatedAt: new Date()
       })))
