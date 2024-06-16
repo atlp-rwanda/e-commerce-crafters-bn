@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -17,34 +17,36 @@ module.exports = {
       LIMIT 3;
     `);
 
-    const orders = users.flatMap(user =>
-      products.map(product => ({
+    const orders = users.flatMap((user) =>
+      products.map((product) => ({
         orderId: uuidv4(),
         deliveryAddress: JSON.stringify({
-          street: 'KG 111 ST',
-          city: 'Kigali'
+          street: "KG 111 ST",
+          city: "Kigali",
         }),
         // @ts-ignore
         userId: user.userId,
-        paymentMethod: 'Bank Transfer',
-        status: 'pending',
-        products: JSON.stringify([{
-          // @ts-ignore
-          productId: product.productId,
-          // @ts-ignore
-          productName: product.name,
-          quantity: 3
-        }]),
+        paymentMethod: "Bank Transfer",
+        status: "pending",
+        products: JSON.stringify([
+          {
+            // @ts-ignore
+            productId: product.productId,
+            // @ts-ignore
+            productName: product.name,
+            quantity: 3,
+          },
+        ]),
         createdAt: new Date(),
-        updatedAt: new Date()
-      })))
+        updatedAt: new Date(),
+      }))
+    );
 
-    await queryInterface.bulkInsert('Orders', orders, {});
-
+    await queryInterface.bulkInsert("Orders", orders, {});
   },
 
   async down(queryInterface, Sequelize) {
     // @ts-ignore
-    await queryInterface.bulkDelete('Orders', null, {})
-  }
+    await queryInterface.bulkDelete("Orders", null, {});
+  },
 };
