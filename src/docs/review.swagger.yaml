@@ -4,7 +4,7 @@ paths:
       summary: Add a review for product buyer bought successfully
       description: Add a review for product buyer bought successfully
       tags:
-        - Review
+        - review
       security:
         - bearerAuth: []
       parameters:
@@ -95,7 +95,7 @@ paths:
       summary: Get all reviews for a vendor's products
       description: Get all reviews for a vendor's products
       tags:
-        - Review
+        - review
       security:
         - bearerAuth: []
       parameters:
@@ -155,7 +155,7 @@ paths:
       summary: Add feedback for a product
       description: Add feedback for a product
       tags:
-        - Review
+        - review
       parameters:
         - in: path
           name: productId
@@ -246,7 +246,7 @@ paths:
       summary: Get feedback for a product
       description: Retrieve all feedback for a specific product
       tags:
-        - Review
+        - review
       parameters:
         - in: path
           name: productId

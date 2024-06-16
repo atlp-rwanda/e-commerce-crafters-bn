@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { getNotifications, markNotificationAsRead } from "../controllers/notifications.controller";
-import { VerifyAccessToken } from "../middleware/verfiyToken";
 
 const router = Router();
 
-router.get('/notifications/:vendorId', VerifyAccessToken, getNotifications);
-router.patch('/readnotifications/:id', VerifyAccessToken, markNotificationAsRead);
+router.get('/notifications/:vendorId', getNotifications);
+router.patch('/readnotifications/:id', markNotificationAsRead);
 
 export default router;
