@@ -24,8 +24,7 @@ export const createOrder = async (req: Request, res: Response) => {
         const orderItems = cartItems.map(item => ({
             productId: item.productId,
             quantity: item.quantity,
-            price: item.price,
-            status:"pending"
+            price: item.price
         }));
 
         const totalAmount = orderItems.reduce((total, item) => total + (item.price * item.quantity), 0);
