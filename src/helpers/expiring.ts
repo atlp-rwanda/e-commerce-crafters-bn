@@ -20,7 +20,6 @@ export const checkExpiringProducts = async (req?: Request, res?: Response) => {
     as: "Vendor",
    },
   });
-  console.log(expiringProducts);
   if (expiringProducts.length === 0) {
    return res?.status(204).json({ message: "No Expiring Products" });
   }
