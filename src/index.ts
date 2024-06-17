@@ -37,6 +37,14 @@ const app = express();
 const httpServer = http.createServer(app);
 const ioServer = new SocketIOServer(httpServer);
 
+ioServer.on('connection', (socket) => {
+    console.log('New client connected');
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    })
+})
+
 app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
