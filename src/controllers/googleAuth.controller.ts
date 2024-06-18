@@ -35,9 +35,7 @@ export const handleGoogleCallback = (
           sameSite: "lax",
           secure: true,
         });
-      return res
-        .status(200)
-        .json({ message: "Successfully logged in." });
+        return res.redirect('http://localhost:3000/auth/signup');
     }
   })(req, res, next);
 };

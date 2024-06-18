@@ -13,10 +13,11 @@ class User extends Model {
   public cartId?: string;
   public role!: string;
   public profile?: string;
-  public isVerified?: boolean;
+  public isVerfied!: boolean;
   public resetPasswordToken?: string | null;
   public resetPasswordExpires?: Date | null;
   public isTwoFactorEnabled?: boolean;
+  public emailVerificationToken?: string | null
 
   static associate(models: any) {
     User.hasMany(models.Review, {
@@ -46,6 +47,8 @@ class User extends Model {
         resetPasswordToken: { type: DataTypes.STRING, allowNull: true },
         resetPasswordExpires: { type: DataTypes.DATE, allowNull: true },
         isTwoFactorEnabled: { type: DataTypes.BOOLEAN, defaultValue: false },
+        isVerfied: { type: DataTypes.BOOLEAN, defaultValue: false },
+        emailVerificationToken: { type: DataTypes.TEXT },
       },
       {
         sequelize: connectSequelize,
