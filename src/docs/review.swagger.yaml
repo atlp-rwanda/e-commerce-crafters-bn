@@ -295,5 +295,53 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: internal server error                  
+                    example: internal server error
+  paths:
+  /delete-review/{id}:
+    delete:
+      summary: Delete a review
+      description: Delete a review by its ID
+      tags:
+        - Review
+      security:
+        - bearerAuth: []  
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the review to be deleted
+      responses:
+        200:
+          description: Review deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Review Deleted Successfully
+        404:
+          description: No review found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No review Found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error
+                  
                   
