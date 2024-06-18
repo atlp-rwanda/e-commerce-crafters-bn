@@ -7,6 +7,7 @@ import {
  login,
  register,
  updatePassword,
+ verifyEmail,
 } from "../controllers/user.controller";
 import { VerifyAccessToken } from "../middleware/verfiyToken";
 
@@ -23,6 +24,7 @@ route.patch("/updatepassword/:id", VerifyAccessToken, updatePassword)
 route.delete("/deleteuser/:id", VerifyAccessToken, deleteUser);
 route.post("/addreview/:id", VerifyAccessToken, addReview);
 route.post("/addfeedback/:id", addFeedback);
+route.get("/verfiy-email", verifyEmail);
 
 
 

@@ -110,3 +110,22 @@ export const addFeedback = async (req:Request,res:Response)=>{
     
   }
 }
+
+export const deleteReview = async(req:Request,res:Response)=>{
+  try {
+    const  reviewId  = req.params.id
+    const review = await Review.findByPk(reviewId)
+    if(!review){
+      res.status(404).json({message: "No review Found"})
+      return
+    }
+    await review.destroy()
+    res.status(200).json({message: "Review Deleted Successfully"})
+    
+  } catch (error: any) {
+    res.status(500).json({message: error.message})
+    
+  }
+
+
+}
