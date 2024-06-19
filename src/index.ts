@@ -10,8 +10,7 @@ import http from "http";
 import { Server as SocketIOServer } from "socket.io";
 
 dotenv.config();
-//const PORT = process.env.PORT;
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 import userRoute from "./routes/user.route";
 import vendorRoute from "./routes/vendor.route";
@@ -26,11 +25,11 @@ import googleAuthRoute from "./routes/googleAuth.route";
 import cartroute from "./routes/cart.route";
 import TwoFaRoute from "./routes/2fa.route";
 import orderRoute from "./routes/order.route";
+
 import wishlistroute from "./routes/wishlist.route";
-import statistics from "./routes/statistics.route";
 import {
- checkExpiredProducts,
- checkExpiringProducts,
+  checkExpiredProducts,
+  checkExpiringProducts,
 } from "./helpers/expiring";
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
@@ -51,24 +50,18 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
- session({
-  secret: "crafters1234",
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false },
- })
+  session({
+    secret: "crafters1234",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
-app.use((req, res, next) => {
-    if (req.originalUrl === '/webhook') {
-      next();
-    } else {
-      express.json()(req, res, next);
-    }
-  });
+app.use(express.json());
 
 app.use("/", userRoute);
 app.use("/", authRoute);
@@ -87,21 +80,16 @@ app.use("/admin", adminRoute);
 app.use("/", cartroute);
 app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
-app.use("/", statistics);
-
-
-cron.schedule("0 0 * * *", () => {
- checkExpiredProducts();
-});
-cron.schedule("0 0 1 * *", () => {
- checkExpiringProducts();
-});
 
 const server = httpServer.listen(PORT, () => {
- console.log(`Server running on Port ${PORT}`);
- checkExpiringProducts();
- checkExpiredProducts();
+  console.log(`Server running on Port ${PORT}`);
+});
 
+cron.schedule("0 0 * * *", () => {
+  checkExpiredProducts();
+});
+cron.schedule("0 0 * * */14", () => {
+  checkExpiringProducts();
 });
 
 export { app, server, ioServer };

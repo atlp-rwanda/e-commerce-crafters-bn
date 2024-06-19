@@ -29,12 +29,16 @@ export const Welcome = async (req: Request, res: Response) => {
 };
 
 interface ExtendedRequest extends ExpressRequest {
+<<<<<<< HEAD
   session: Session &
     Partial<SessionData> & {
       twoFAError?: string;
       email?: string | null;
       password?: string | null;
     };
+=======
+  session: Session & Partial<SessionData> & { twoFAError?: string, email?: string, password?: string };
+>>>>>>> develop
 }
 
 export const login = async (req: ExtendedRequest, res: Response) => {
@@ -62,10 +66,13 @@ export const login = async (req: ExtendedRequest, res: Response) => {
 
       const token = await generateToken(existUser);
       res.cookie("token", token, { httpOnly: true });
+<<<<<<< HEAD
 
       req.session.email = null;
       req.session.password = null;
 
+=======
+>>>>>>> develop
       return res.status(200).json({
         message: "Login successful",
         token,

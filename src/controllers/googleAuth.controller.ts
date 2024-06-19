@@ -20,6 +20,7 @@ export const handleGoogleCallback = (
       return res.redirect("/auth/google");
     }
 
+<<<<<<< HEAD
     const token = await generateToken(user);
     const userData = {
       id: user.userId,
@@ -36,6 +37,26 @@ export const handleGoogleCallback = (
       return res.redirect(redirectUrl.toString());
     } else {
       return res.redirect(redirectUrl.toString());
+=======
+    if (info.isNewUser) {
+      return res
+        .status(200)
+        .json({ error: false, message: "Successfully signed up." });
+    } else {
+      const token = await generateToken(user);
+      // console.log(token);
+      res
+        .header("Authorization", `Bearer ${token}`)
+        .cookie("Authorization", token, {
+          httpOnly: true,
+          maxAge: 60 * 60 * 1000,
+          sameSite: "lax",
+          secure: true,
+        });
+      return res
+        .status(200)
+        .json({ error: false, message: "Successfully logged in." });
+>>>>>>> develop
     }
   })(req, res, next);
 };
