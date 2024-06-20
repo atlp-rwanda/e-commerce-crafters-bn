@@ -74,10 +74,8 @@ export const verify2FACode = (
   sessionCode: string,
   sessionExpiry: number
 ) => {
-  if (code !== sessionCode) {
-    return 'Invalid code.';
-  } else if (Date.now() >= sessionExpiry) {
-    return 'The code has expired.';
+  if (code === sessionCode && Date.now() < sessionExpiry) {
+    return true;
   }
-  return true;
+  return false;
 };
