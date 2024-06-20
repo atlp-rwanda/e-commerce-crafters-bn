@@ -40,6 +40,7 @@ export const verifyCode = async (
 ) => {
   const extendedSession = req.session as ExtendedSession;
   const { code } = req.body;
+
   const sessionCode = extendedSession.twoFactorCode;
   const sessionExpiry = extendedSession.twoFactorExpiry;
 

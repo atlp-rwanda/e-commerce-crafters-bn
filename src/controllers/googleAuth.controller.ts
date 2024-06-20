@@ -21,16 +21,10 @@ export const handleGoogleCallback = (
     }
 
     const token = await generateToken(user);
-    const userData = {
-      id: user.userId,
-      email: user.email,
-      name: user.name,
-      profile: user.profile
-    };
 
     const redirectUrl = new URL(`${process.env.GOOGLE_AUTH_REDIRECT_URL}`);
     redirectUrl.searchParams.append('token', token);
-    redirectUrl.searchParams.append('user', JSON.stringify(userData));
+    redirectUrl.searchParams.append('user', JSON.stringify(user));
 
     if (info && info.isNewUser) {
       return res.redirect(redirectUrl.toString());
