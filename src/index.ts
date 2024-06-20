@@ -53,17 +53,14 @@ app.use(cors({
 ));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret:"crafters1234",
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: process.env.NODE_ENV === 'test',
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'test' ? 'none' : 'lax',
-  },
-}))
-
+app.use(
+  session({
+    secret: "crafters1234",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
