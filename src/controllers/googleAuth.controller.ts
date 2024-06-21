@@ -20,24 +20,16 @@ export const handleGoogleCallback = (
       return res.redirect("/auth/google");
     }
 
-    if (info.isNewUser) {
-      return res
-        .status(200)
-        .json({ error: false, message: "Successfully signed up." });
+    const token = await generateToken(user);
+
+    const redirectUrl = new URL(`${process.env.GOOGLE_AUTH_REDIRECT_URL}`);
+    redirectUrl.searchParams.append('token', token);
+    redirectUrl.searchParams.append('user', JSON.stringify(user));
+
+    if (info && info.isNewUser) {
+      return res.redirect(redirectUrl.toString());
     } else {
-      const token = await generateToken(user);
-      // console.log(token);
-      res
-        .header("Authorization", `Bearer ${token}`)
-        .cookie("Authorization", token, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 1000,
-          sameSite: "lax",
-          secure: true,
-        });
-      return res
-        .status(200)
-        .json({ error: false, message: "Successfully logged in." });
+      return res.redirect(redirectUrl.toString());
     }
   })(req, res, next);
 };

@@ -34,9 +34,34 @@ paths:
         "500":
           description: Failed to update order status
 
+
+    get:
+      summary: get order status
+      description: This API is for the buyer to get order status.
+      tags:
+        - Order
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+          description: ID of the order to get status for
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Order status updated successfully
+        "404":
+          description: Order not found
+        "500":
+          description: Failed to update order status
+
+
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+

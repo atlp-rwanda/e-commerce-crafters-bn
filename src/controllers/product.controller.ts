@@ -3,6 +3,9 @@ import { saveProduct, searchProducts, getAllProducts } from "../services/product
 import Product from "../database/models/product";
 import { checkVendorModifyPermission, checkVendorPermission } from "../services/PermisionService";
 import { PRODUCT_ADDED, PRODUCT_REMOVED, PRODUCT_UPDATED, productLifecycleEmitter } from "../helpers/events";
+import { Op } from 'sequelize';
+import { ParsedQs } from 'qs'; 
+import Vendor from "../database/models/vendor";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
@@ -43,9 +46,9 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const readProduct = async (req: Request, res: Response) => {
   try {
-
     const productId = req.params.id;
-    const product = await Product.findByPk(productId);
+    const product = await Product.findByPk(productId,{include:{
+      model: Vendor,as: "Vendor"}});
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
