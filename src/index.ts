@@ -29,8 +29,8 @@ import orderRoute from "./routes/order.route";
 import wishlistroute from "./routes/wishlist.route";
 import statistics from "./routes/statistics.route";
 import {
- checkExpiredProducts,
- checkExpiringProducts,
+  checkExpiredProducts,
+  checkExpiringProducts,
 } from "./helpers/expiring";
 import subscriptionRoute from "./routes/subscription.route";
 import notificationRoute from "./routes/notifications.route";
@@ -43,24 +43,24 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
- session({
-  secret: "crafters1234",
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false },
- })
+  session({
+    secret: "crafters1234",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
 app.use((req, res, next) => {
-    if (req.originalUrl === '/webhook') {
-      next();
-    } else {
-      express.json()(req, res, next);
-    }
-  });
+  if (req.originalUrl === "/webhook") {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
 app.use("/", userRoute);
 app.use("/", authRoute);
@@ -81,19 +81,17 @@ app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 app.use("/", statistics);
 
-
 cron.schedule("0 0 * * *", () => {
- checkExpiredProducts();
+  checkExpiredProducts();
 });
 cron.schedule("0 0 1 * *", () => {
- checkExpiringProducts();
+  checkExpiringProducts();
 });
 
 const server = httpServer.listen(PORT, () => {
- console.log(`Server running on Port ${PORT}`);
- checkExpiringProducts();
- checkExpiredProducts();
-
+  console.log(`Server running on Port ${PORT}`);
+  checkExpiringProducts();
+  checkExpiredProducts();
 });
 
 export { app, server, ioServer };
