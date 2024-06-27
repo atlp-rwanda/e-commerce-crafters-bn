@@ -1,14 +1,12 @@
-
 import { Request, Response } from "express";
 import Order from "../database/models/order";
 import { findVendorByUserId } from "../services/orderStatus";
-import Product from "../database/models/product";
 
-const allowedStatuses = ["Pending", "Shipped", "Delivered", "Cancelled"];
+const allowedStatuses = ["pending", "shipped", "delivered", "cancelled"];
 
 export const modifyOrderStatus = async (req: Request, res: Response) => {
   try {
-    const { orderId } = req.params;
+    const { orderId, productId } = req.params;
     const { status } = req.body;
     const userId = (req as any).token.id;
 
@@ -28,42 +26,45 @@ export const modifyOrderStatus = async (req: Request, res: Response) => {
     }
 
     let isOrderDelivered = true;
-    const updateProductStatusPromises = order.products.map(
-      async (item: any) => {
-        const productId = item.productId;
-        const isVendorProduct = await Product.findOne({
-          where: { productId, vendorId: vendor.vendorId },
-        });
-        if (isVendorProduct) {
-          item.status = status;
-        }
-        if (item.status !== "Delivered") {
-          isOrderDelivered = false;
-        }
+    const updatedProducts = order.products.map((item: any) => {
+      if (item.productId === productId) {
+        item.status = status;
       }
+
+      if (item.status !== "delivered") {
+        isOrderDelivered = false;
+      }
+      return item;
+    });
+
+    order.products = updatedProducts;
+
+    order.status = isOrderDelivered ? "delivered" : "pending";
+
+    await Order.update(
+      { products: updatedProducts, status: order.status },
+      { where: { orderId: orderId } }
     );
 
-    await Promise.all(updateProductStatusPromises);
-    await Order.update({ products: order.products }, { where: { orderId } });
-
-    let newOrderStatus = order.status;
-    if (isOrderDelivered) {
-      newOrderStatus = "Delivered";
-    } else {
-      newOrderStatus = "Pending";
-    }
-
-    await Order.update({ status: newOrderStatus }, { where: { orderId } });
+    const updatedOrder = await Order.findByPk(orderId);
 
     return res.status(200).json({
-      message: `Order has been ${status.toLowerCase()}`,
-      order,
+      message: `Product status has been updated to ${status.toLowerCase()}`,
+      order: updatedOrder,
     });
   } catch (error: any) {
-    console.error(`Failed to update order status: ${error}`);
+    console.error(`Failed to update product status: ${error}`);
     res.status(500).json({ error: error.message });
   }
 };
 
+export const getAllOrder = async (req: Request, res: Response) => {
+  try {
+    const response = await Order.findAll();
 
-
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal error server" });
+  }
+};

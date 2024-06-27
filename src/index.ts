@@ -65,7 +65,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
-app.use(express.json());
+app.use((req, res, next) => {
+  if (req.originalUrl === "/webhook") {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
 app.use("/", userRoute);
 app.use("/", authRoute);
@@ -85,15 +91,17 @@ app.use("/", cartroute);
 app.use("/", wishlistroute);
 app.use("/", TwoFaRoute);
 
-const server = httpServer.listen(PORT, () => {
-  console.log(`Server running on Port ${PORT}`);
-});
-
 cron.schedule("0 0 * * *", () => {
   checkExpiredProducts();
 });
-cron.schedule("0 0 * * */14", () => {
+cron.schedule("0 0 1 * *", () => {
   checkExpiringProducts();
+});
+
+const server = httpServer.listen(PORT, () => {
+  console.log(`Server running on Port ${PORT}`);
+  checkExpiringProducts();
+  checkExpiredProducts();
 });
 
 export { app, server, ioServer };
