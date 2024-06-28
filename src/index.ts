@@ -39,7 +39,11 @@ const app = express();
 const httpServer = http.createServer(app);
 const ioServer = new SocketIOServer(httpServer);
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:8080',
+  credentials: true,
+}
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
