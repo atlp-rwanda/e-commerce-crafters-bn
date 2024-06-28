@@ -10,15 +10,15 @@ const router = express.Router();
 
 router.put(
   "/order/:orderId/order-status",
-  VerifyAccessToken,
+  
   updateOrderStatus
 );
 
-router.get("/order/:orderId/status", VerifyAccessToken, getOrderStatus);
+router.get("/order/:orderId/status", getOrderStatus);
 
 router.put(
   "/order/:orderId/product/:productId/status",
-  VerifyAccessToken,
+ 
   modifyOrderStatus
 );
 
