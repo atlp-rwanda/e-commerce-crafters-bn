@@ -38,19 +38,11 @@ const app = express();
 const httpServer = http.createServer(app);
 const ioServer = new SocketIOServer(httpServer);
 
-ioServer.on('connection', (socket) => {
-    console.log('New client connected');
-
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
-    })
-})
-
-app.use(cors({
-  origin: process.env.CORS_ORIGIN_URL, 
-  credentials: true 
+const corsOptions = {
+  origin: 'http://localhost:8080',
+  credentials: true,
 }
-));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(

@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllOrder, modifyOrderStatus } from "../controllers/orderController";
+import { getAllOrder, modifyOrderStatus, getOrder } from "../controllers/orderController";
 import { VerifyAccessToken } from "../middleware/verfiyToken";
 import {
   getOrderStatus,
@@ -23,5 +23,6 @@ router.put(
 );
 
 router.get("/order/getAllOrder", getAllOrder);
+router.get("/order/getOrder/:orderId", getOrder);
 
 export default router;
