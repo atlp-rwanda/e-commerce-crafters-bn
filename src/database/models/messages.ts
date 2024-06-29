@@ -23,7 +23,7 @@ class Message extends Model {
       {
         sequelize: connectSequelize,
         modelName: "Message",
-        tableName: "Ratings",
+        tableName: "Messages",
         timestamps: true,
       }
     );
