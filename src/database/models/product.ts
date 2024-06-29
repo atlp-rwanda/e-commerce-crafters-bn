@@ -30,6 +30,10 @@ class Product extends Model {
   Product.hasMany(models.Review, {
    foreignKey: "productId",
   });
+  Product.hasMany(models.CartItem,{
+    foreignKey: "productId",
+    as: "CartItem"
+  });
  }
  static initModel(sequelize: Sequelize) {
   Product.init(
