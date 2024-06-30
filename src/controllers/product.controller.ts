@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { saveProduct, searchProducts, getAllProducts } from "../services/productService";
 import Product from "../database/models/product";
+import CartItem from "../database/models/cartitem";
 import { checkVendorModifyPermission, checkVendorPermission } from "../services/PermisionService";
 import { PRODUCT_ADDED, PRODUCT_REMOVED, PRODUCT_UPDATED, productLifecycleEmitter } from "../helpers/events";
 import { Op } from 'sequelize';
@@ -182,3 +183,25 @@ export const viewProducts = async (req: Request, res: Response) => {
   }
 };
 
+//get popular products
+
+export const getPopularProduct = async (req: Request, res: Response) => {
+  try {
+    const products = await Product.findAll({ include: { model: CartItem, as: "CartItem" } });
+    if(!products){
+      res.status(404).json({ message: "No products found" });
+    }
+    for( let i = 0 ; i<= products.length ; i++){
+       for(let b= i+1; b<=products.length;b++){
+        if(products[i]?.CartItem?.length < products[b]?.CartItem?.length){
+          let temp = products[i];
+          products[i] = products[b];
+          products[b] = temp;
+        }
+       }
+    }
+    res.status(200).json(products);
+  } catch (error:any) {
+    res.status(500).json({ message: error.message});
+  }
+};
