@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { saveProduct, searchProducts, getAllProducts } from "../services/productService";
+import { saveProduct, searchProducts, getAllProducts, getProductById, fetchSimilarProducts } from "../services/productService";
 import Product from "../database/models/product";
 import { checkVendorModifyPermission, checkVendorPermission } from "../services/PermisionService";
 import { PRODUCT_ADDED, PRODUCT_REMOVED, PRODUCT_UPDATED, productLifecycleEmitter } from "../helpers/events";
@@ -9,39 +9,51 @@ import Vendor from "../database/models/vendor";
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const tokenData = (req as any).token
-    const vendorId: string = req.params.id
-    const permissionCheck: any = await checkVendorPermission(tokenData, vendorId)
+    const tokenData = (req as any).token;
+    const vendorId: string = req.params.id;
+    const permissionCheck: any = await checkVendorPermission(tokenData, vendorId);
+    
     if (!permissionCheck.allowed) {
-      return res.status(permissionCheck.status).json({ message: permissionCheck.message })
+      return res.status(permissionCheck.status).json({ message: permissionCheck.message });
     }
-    const { name, image, description, discount, price, quantity, category, expiringDate } = req.body
-    if (!name || !image || !description || !price || !quantity || !category) {
-      return res.status(200).json("All Field are required")
+    
+    const { name, images, description, discount, price, quantity, category, expiringDate } = req.body;
+
+    if (!name || !images || !description || !price || !quantity || !category) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+    if (!Array.isArray(images) || images.length !== 4) {
+      return res.status(400).json({ message: "Exactly 4 images are required" });
+    }
+
+    const imageArray: string[] = images;
+
     const data = {
       name,
-      image,
+      images: imageArray,
       description,
       discount: discount ? discount : 0,
       price,
       quantity,
       category,
       vendorId: vendorId,
-      expiringDate
-    }
-    const save = await saveProduct(data)
+      expiringDate,
+    };
+
+    const save = await saveProduct(data);
+
     if (!save) {
-      return res.status(500).json({ error: "Failed to save data" })
+      return res.status(500).json({ error: "Failed to save data" });
     }
+
     productLifecycleEmitter.emit(PRODUCT_ADDED, data);
 
-    return res.status(201).json({ message: "Product Created", data: save })
+    return res.status(201).json({ message: "Product Created", data: save });
 
   } catch (error: any) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: error.message });
   }
-
 };
 
 export const readProduct = async (req: Request, res: Response) => {
@@ -55,6 +67,31 @@ export const readProduct = async (req: Request, res: Response) => {
     return res.status(200).json(product);
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
+  }
+};
+
+export const similarProducts = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    const product = await getProductById(productId);
+
+    if (!product) {
+
+      return res.status(404).json({ error: "Product not found" });
+    }
+ console.log("hhhhhggggggggghhhhh",product)
+    const category = product.category;
+    const similarProducts = await fetchSimilarProducts(productId, category);
+
+    if (similarProducts.length === 0) {
+      return res.status(404).json({ error: "No similar products found" });
+    }
+    console.log("hhhhhhhhhh",similarProducts)
+
+    return res.status(200).json(similarProducts);
+    
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -75,6 +112,7 @@ export const readAllProducts = async (req: Request, res: Response) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 export const searchProduct = async (req: Request, res: Response) => {
   try {

@@ -10,6 +10,7 @@
   "test": "jest --detectOpenHandles",
   "migrate": "sequelize-cli db:migrate",
   "seed": "sequelize-cli db:seed:all"
+  
  },
  "keywords": [],
  "author": "",
@@ -39,7 +40,7 @@
   "otpauth": "^9.2.4",
   "passport": "^0.7.0",
   "passport-google-oauth20": "^2.0.0",
-  "pg": "^8.11.5",
+  "pg": "^8.12.0",
   "pg-hstore": "^2.3.4",
   "pusher": "^5.2.0",
   "sequelize": "^6.37.3",

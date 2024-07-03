@@ -8,7 +8,7 @@ class Product extends Model {
  public vendorId: any;
  public name!: string;
  public description!: string;
- public image!: string;
+ public image!: any[];
  public discount!: number;
  public price!: string;
  public quantity!: number;
@@ -46,7 +46,7 @@ class Product extends Model {
     },
     name: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: false },
-    image: { type: DataTypes.STRING, allowNull: false },
+    image: { type: DataTypes.JSONB, allowNull: false },
     discount: { type: DataTypes.INTEGER, allowNull: false },
     price: { type: DataTypes.INTEGER, allowNull: false },
     quantity: { type: DataTypes.INTEGER, allowNull: true },

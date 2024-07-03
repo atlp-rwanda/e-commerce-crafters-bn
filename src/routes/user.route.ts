@@ -11,7 +11,7 @@ import {
 } from "../controllers/user.controller";
 import { VerifyAccessToken } from "../middleware/verfiyToken";
 
-import { addFeedback, addReview } from "../controllers/review.controller";
+import { addFeedback, addReview, selectFeedback } from "../controllers/review.controller";
 
 
 const route = express.Router();
@@ -25,6 +25,7 @@ route.delete("/deleteuser/:id",VerifyAccessToken,deleteUser);
 route.post("/login",twoFAController, login);
 route.post("/addreview/:id", addReview);
 route.post("/addfeedback/:id", addFeedback);
+route.get("/getfeedback/:id", selectFeedback);
 route.get("/verfiy-email", verifyEmail);
 
 export default route;

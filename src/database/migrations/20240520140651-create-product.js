@@ -1,4 +1,7 @@
 'use strict';
+
+const { JSONB } = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -22,7 +25,7 @@ module.exports = {
         allowNull: false
       },
       image: {
-        type: Sequelize.STRING,
+        type: JSONB,
         allowNull: false
       },
       description: {

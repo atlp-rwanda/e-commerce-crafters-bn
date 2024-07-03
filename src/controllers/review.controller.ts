@@ -68,17 +68,19 @@ export const selectFeedback = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
     const ratings = await Rating.findAll({
-      where:{
+      where: {
         productId
-      }
+      },
+      order: [['createdAt', 'DESC']] 
     });
+
     if (!ratings || ratings.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "There in no Ratings in your products" });
+      return res.status(400).json({ message: "There are no ratings for your product" });
     }
-    return res.status(200).json({ ratings: ratings });
+
+    return res.status(200).json({ ratings });
   } catch (error: any) {
+    console.error("Error fetching ratings:", error);
     res.status(500).json({ message: error.message });
   }
 };
